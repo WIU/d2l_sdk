@@ -39,7 +39,7 @@ $app_key = 'ybZu7fm_JKJTFwKEHfoZ7Q'
 $user_id = 'sNdpIGdXMBbjpNtXGSBXVO'
 $user_key = 'vnRxMIDYeGbd0E9-vNeN42'
 
-$hostname = 'devsandbox.wiu.edu.desire2learnvalence.com'
+$hostname = 'wiutest.desire2learn.com'
 path = '/d2l/api/lp/1.0/users/whoami'
 httpmethod = 'GET'
 
@@ -108,14 +108,12 @@ ap response
 exit
 
 API_TOKEN_PATH = '/d2l/auth/api/token'
-URL = 'https://westernonline-beta.wiu.edu'
+URL = 'https://wiutest.desire2learn.comu'
 
 USER_ID = 'Badm7gxucDxEbLzE0YO4e3'
 
 USER_KEY = 'xUIxUIiemgANTr2n-E3zz0'
 
-# https://westernonline-beta.wiu.edu/d2l/auth/api/token?x+target=http://www.wiu.edu&x_a=G9nUpvbZQyiPrk3um2YAkQ&x_b=ybZu7fm_JKJTFwKEHfoZ7Q
-
-response = RestClient.get "https://westernonline-beta.wiu.edu/d2l/auth/api/lp/1.0/users/whoami?x_a=#{APP_ID}&x_b=#{USER_ID}&"
+response = RestClient.get "https://wiutest.desire2learn.com/d2l/auth/api/lp/1.0/users/whoami?x_a=#{APP_ID}&x_b=#{USER_ID}&"
 
 puts response
