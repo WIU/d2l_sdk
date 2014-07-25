@@ -3,6 +3,8 @@ require 'ap' # awesome_print gem
 require 'base64'
 require 'hmac-sha2' # ruby-hmac gem
 require 'rest_client' # rest-client gem
+require 'date'
+
 
 def build_authenticated_uri_query_string(signature, timestamp)
   "?x_a=#{$app_id}&x_b=#{$user_id}&x_c=#{get_base64_hash_string($app_key, signature)}&x_d=#{get_base64_hash_string($user_key, signature)}&x_t=#{timestamp}"
@@ -10,7 +12,7 @@ end
 
 def create_authenticated_uri(path, httpmethod)
   query_string = get_query_string(path, httpmethod)
-  "http://#{$hostname}#{path}#{query_string}"
+  "https://#{$hostname}#{path}#{query_string}"
 end
 
 def format_signature(path, httpmethod, timestamp)
@@ -26,18 +28,18 @@ def get_base64_hash_string(key, signature)
 end
 
 def get_query_string(path, httpmethod)
-  timestamp = Time.now.to_i + 3600
+  timestamp = Time.now.to_i
   signature = format_signature(path, httpmethod, timestamp)
   query_string = build_authenticated_uri_query_string(signature, timestamp)
 end
 
-# devsandbox.wiu.edu.desire2learnvalence.com
-$app_id = 'G9nUpvbZQyiPrk3um2YAkQ'
-$app_key = 'ybZu7fm_JKJTFwKEHfoZ7Q'
+# wiutest.desire2learn.com
+$app_id = 'ysuBVIqmRDaJpnVEOb8Ylg'
+$app_key = 't3Rro3P91i_U1let5vd8Wg'
 
-# admin:mencel6377e943
-$user_id = 'sNdpIGdXMBbjpNtXGSBXVO'
-$user_key = 'vnRxMIDYeGbd0E9-vNeN42'
+# user
+$user_id = 'oI-nFkgoF0SSknq1OWCATy'
+$user_key = 'wKlZ6ZCyqNn9ZRq-6r5anQ'
 
 $hostname = 'wiutest.desire2learn.com'
 path = '/d2l/api/lp/1.0/users/whoami'
@@ -54,6 +56,8 @@ RestClient.get(the_uri){ |response, request, result, &block|
     ap response
   when 423
     fail SomeCustomExceptionIfYouWant
+  when 403
+    ap response
   else
     response.return!(request, result, &block)
   end
@@ -88,7 +92,7 @@ ap "BASE64:  #{app_key_base64.chomp}"
 # 5) Pass these generated signature-bytes in all the query parameters where you’re expected to provide a signature.
 unix_timestamp = Time.now.to_i
 # api_sample_url = "http://devsandbox.wiu.edu.desire2learnvalence.com/d2l/auth/api/token?x_a=#{app_id}&x_b=#{app_key_base64}&x_target=myrubyprog://something"
-api_sample_url = "http://devsandbox.wiu.edu.desire2learnvalence.com/d2l/api/lp/1.0/users/whoami?x_a=#{app_id}&x_b=#{user_id}&x_c=#{app_key_base64}&x_d=#{user_key_base64}&x_t=#{unix_timestamp}"
+api_sample_url = "http://wiutest.desire2learn.com/d2l/api/lp/1.0/users/whoami?x_a=#{app_id}&x_b=#{user_id}&x_c=#{app_key_base64}&x_d=#{user_key_base64}&x_t=#{unix_timestamp}"
 ap api_sample_url
 
 RestClient.get(api_sample_url){ |response, request, result, &block|
@@ -108,7 +112,7 @@ ap response
 exit
 
 API_TOKEN_PATH = '/d2l/auth/api/token'
-URL = 'https://wiutest.desire2learn.comu'
+URL = 'https://wiutest.desire2learn.com'
 
 USER_ID = 'Badm7gxucDxEbLzE0YO4e3'
 
