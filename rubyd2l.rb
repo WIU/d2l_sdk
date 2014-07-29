@@ -1,9 +1,9 @@
 require 'ap'
 require 'ruby-d2l'
 
-puts "USERNAME: "
+puts 'USERNAME: '
 username = gets.chomp
-puts "PASSWORD: "
+puts 'PASSWORD: '
 password = gets.chomp
 
 RubyD2L.configure do |config|

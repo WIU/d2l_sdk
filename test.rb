@@ -5,7 +5,6 @@ require 'hmac-sha2' # ruby-hmac gem
 require 'rest_client' # rest-client gem
 require 'date'
 
-
 def build_authenticated_uri_query_string(signature, timestamp)
   "?x_a=#{$app_id}&x_b=#{$user_id}&x_c=#{get_base64_hash_string($app_key, signature)}&x_d=#{get_base64_hash_string($user_key, signature)}&x_t=#{timestamp}"
 end
