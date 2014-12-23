@@ -1,7 +1,9 @@
+
 require 'rubygems'
 require 'ap' # awesome_print gem
 require 'base64'
 require 'hmac-sha2' # ruby-hmac gem
+require 'json'
 require 'restclient' # rest-client gem
 require 'openssl'
 require 'open-uri'
@@ -17,16 +19,19 @@ $user_id = 'rV5wdZwBbnT4prgaLlqx05'
 $user_key = 'xVee4KJhixBCQphf-3Wuf9'
 $app_id = 'ysuBVIqmRDaJpnVEOb8Ylg'
 $app_key = 't3Rro3P91i_U1let5vd8Wg'
-path = '/d2l/api/lp/1.2/enrollments/users/47892/orgUnits/'
-path = '/d2l/api/lp/1.0/users/whoami'
+path = '/d2l/api/lp/1.4/users/'
+path = '/d2l/api/lp/1.4/enrollments/users/47892/orgUnits/'
+#path = '/d2l/api/lp/1.4/users/whoami'
+#path = '/d2l/api/versions/'
 http_method = 'GET'
 $timestamp = Time.now.to_i # current hour
+#$timestamp = 1406652368
 
 def create_authenticated_uri(path, http_method)
-  parsed_url = URI.parse(path)
+  parsed_url = URI.parse(path.downcase)
   uri_scheme = 'https'
   query_string = get_query_string(parsed_url.path, http_method)
-  uri = uri_scheme + '://' + $hostname + ':443' + parsed_url.path + query_string
+  uri = uri_scheme + '://' + $hostname + parsed_url.path + query_string
   uri << '&' + parsed_url.query if parsed_url.query
   return uri
 end
@@ -98,6 +103,10 @@ end
 # # user_bytes = Base64URL.encode(user_hash).gsub('=', '')
 # ap user_hash
 #
+
+hash = OpenSSL::HMAC.digest('sha256', "#{$user_id}&#{$user_key}", $app_key)
+x_c = Base64.urlsafe_encode64(hash).gsub('=', '')
+puts x_c
 # version_uri = "https://#{$hostname}#{the_uri}?x_a=#{$app_id}&x_b=#{$user_id}&x_c=#{app_hash}&x_d=#{user_hash}&x_t=#{unix_ts}"
 # puts version_uri
 
@@ -107,7 +116,7 @@ RestClient.get(test_uri){ |response, request, result, &block|
   case response.code
   when 200
     p 'It worked !'
-    ap response
+    ap JSON.parse(response)
   when 423
     fail SomeCustomExceptionIfYouWant
   when 403
