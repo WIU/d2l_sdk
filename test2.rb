@@ -2,12 +2,13 @@
 require 'rubygems'
 require 'ap' # awesome_print gem
 require 'base64'
-require 'hmac-sha2' # ruby-hmac gem
+# require 'hmac-sha2' # ruby-hmac gem
 require 'json'
 require 'restclient' # rest-client gem
 require 'openssl'
 require 'open-uri'
 require 'launchy'
+
 
 # vars
 $hostname = 'wiutest.desire2learn.com'
@@ -116,6 +117,8 @@ RestClient.get(test_uri){ |response, request, result, &block|
   case response.code
   when 200
     p 'It worked !'
+    p JSON.parse(response).class
+    p JSON.parse(response)
     ap JSON.parse(response)
   when 423
     fail SomeCustomExceptionIfYouWant
