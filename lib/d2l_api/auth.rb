@@ -6,7 +6,7 @@ require 'restclient' # NEEDED
 require 'openssl' # NEEDED
 require 'open-uri' # NEEDED
 require 'colorize' # useful
-require_relative 'D2L_Config'
+require_relative 'config'
 
 # Global variables initialized through require_relative 'D2L_Config'
 
