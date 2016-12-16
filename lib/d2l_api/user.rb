@@ -41,23 +41,29 @@ end
 def multithreaded_user_search(username_string)
   max_users = 50000
   range_min = 1
-  num_of_threads = 10
+  num_of_threads = 50
   range_max = max_users / num_of_threads + 1
   threads = []
   thread_results = []
   ap "creating #{num_of_threads.to_s} threads..."
   (0...num_of_threads - 1).each do |iteration|
-    range = create_range(range_min + 4900*iteration, range_max + 4900*iteration)
+    min = range_min + range_max * iteration
+    max = range_max + (range_max - 1) * iteration
+    range = create_range(min,max)
     threads[iteration] = Thread.new{
-      puts "Starting thread: " + iteration.to_s
-      thread_results.push(get_user_by_string(username_string, range))
-      puts "Thread #{iteration.to_s} has completed."
+      #puts "Starting thread: " + iteration.to_s
+      get_user_by_string(username_string, range).each do |match|
+        #ap match
+        thread_results.push(match)
+        #ap thread_results
+      end
+      #puts "Thread #{iteration.to_s} has completed."
     }
   end
   puts "joining threads..."
   threads.each {|i| i.join}
-  puts "retrieving uniq users..."
-  thread_results.uniq!
+  puts "returning search results for #{username}"
+  thread_results
 end
 # Theory: multitask/multithread by running multiple searches simultaneously...
 # only 50,000 users, so create 10 that search 5,000
@@ -68,24 +74,26 @@ end
 #FIX PATHING
 # Fix Range usage
 def get_user_by_string(username_string, range)
-  puts "searching from #{range.min.to_s} to #{range.max.to_s}"
+  #puts "searching from #{range.min.to_s} to #{range.max.to_s}"
   i = range.min
   matching_names = []
   #Average difference between each paged bookmarks beginnings is 109.6
   while i.to_i < range.max do
-    path = "/d2l/api/lp/#{$version}/users/?bookmark=" + i
-    new_response = _get(path)
-    if new_response == 404
+    path = "/d2l/api/lp/#{$version}/users/?bookmark=" + i.to_s
+    response = _get(path)
+    if response == 404
+      ap "response returned a 404, last page possible for this thread.."
       return
     end
     response["Items"].each do |user|
       if user["UserName"].include? username_string
         matching_names.push(user)
-        puts "Found a matching user!!!"
-        ap user
+        #ap user
+        #puts "Found a matching user!!!"
+        #ap user
       end
     end
-    i = new_response["PagingInfo"]["Bookmark"]
+    i = response["PagingInfo"]["Bookmark"]
   end
   matching_names
 end
