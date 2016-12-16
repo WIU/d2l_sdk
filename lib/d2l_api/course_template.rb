@@ -1,4 +1,4 @@
-
+require_relative 'requests'
 ########################
 # COURSE TEMPLATES:#####
 ########################

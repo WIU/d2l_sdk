@@ -38,19 +38,12 @@ def create_custom_orgunit
     # POST /d2l/api/lp/(version)/orgstructure/
 end
 
-def update_course_orgunit
+def update_orgunit
     # PUT /d2l/api/lp/(version)/orgstructure/(orgUnitId)
 end
 =end
 def get_organization_info
     path = "/d2l/api/lp/#{$version}/organization/info"
-    ap $version
-    ap $user_id
-    ap $user_key
-    # #OG app ID and key
-    ap $app_id 
-    ap $app_key
-
     _get(path)
 end
 
