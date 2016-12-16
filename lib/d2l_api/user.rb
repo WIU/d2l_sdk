@@ -45,14 +45,18 @@ def multithreaded_user_search(username_string)
   range_max = max_users / num_of_threads + 1
   threads = []
   thread_results = []
+  ap "creating #{num_of_threads.to_s} threads..."
   (0...num_of_threads - 1).each do |iteration|
     range = create_range(range_min + 4900*iteration, range_max + 4900*iteration)
     threads[iteration] = Thread.new{
       puts "Starting thread: " + iteration.to_s
       thread_results.push(get_user_by_string(username_string, range))
+      puts "Thread #{iteration.to_s} has completed."
     }
   end
+  puts "joining threads..."
   threads.each {|i| i.join}
+  puts "retrieving uniq users..."
   thread_results.uniq!
 end
 # Theory: multitask/multithread by running multiple searches simultaneously...
@@ -77,6 +81,8 @@ def get_user_by_string(username_string, range)
     response["Items"].each do |user|
       if user["UserName"].include? username_string
         matching_names.push(user)
+        puts "Found a matching user!!!"
+        ap user
       end
     end
     i = new_response["PagingInfo"]["Bookmark"]
