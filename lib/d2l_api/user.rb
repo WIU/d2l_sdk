@@ -1,5 +1,5 @@
-require_relative "requests"
-require "thread"
+require_relative 'requests'
+require 'thread'
 
 ########################
 # USERS:################
@@ -35,73 +35,64 @@ def get_user_by_username(username)
 end
 
 def create_range(min, max)
-  (min..max)
+    (min..max)
 end
 
-def multithreaded_user_search(username_string)
-  max_users = 50000
-  range_min = 1
-  num_of_threads = 50
-  range_max = max_users / num_of_threads + 1
-  threads = []
-  thread_results = []
-  ap "creating #{num_of_threads.to_s} threads..."
-  (0...num_of_threads - 1).each do |iteration|
-    min = range_min + range_max * iteration
-    max = range_max + (range_max - 1) * iteration
-    range = create_range(min,max)
-    threads[iteration] = Thread.new{
-      #puts "Starting thread: " + iteration.to_s
-      get_user_by_string(username_string, range).each do |match|
-        #ap match
-        thread_results.push(match)
-        #ap thread_results
-      end
-      #puts "Thread #{iteration.to_s} has completed."
-    }
-  end
-  puts "joining threads..."
-  threads.each {|i| i.join}
-  puts "returning search results for #{username}"
-  thread_results
+def multithreaded_user_search(username_string, num_of_threads)
+    # Assumed: there is only up to 50,000 users.
+    # Start from 1, go up to max number of users for this search...
+    max_users = 50_000
+    range_min = 1
+    # range max = the upper limit for the search for a thread
+    range_max = max_users / num_of_threads + 1
+    threads = []
+    thread_results = []
+    ap "creating #{num_of_threads} threads..."
+    # from 0 up until max number of threads..
+    (0...num_of_threads - 1).each do |iteration|
+        # setup range limits for the specific thread
+        min = range_min + range_max * iteration
+        max = range_max + (range_max - 1) * iteration
+        range = create_range(min, max)
+        # push thread to threads arr and start thread search of specified range.
+        threads[iteration] = Thread.new do
+            get_user_by_string(username_string, range).each do |match|
+                thread_results.push(match)
+            end
+        end
+    end
+    # Join all of the threads
+    threads.each(&:join)
+    puts "returning search results for #{username_string}"
+    # Return an array of users that exist with the username_string in the username
+    thread_results
 end
-# Theory: multitask/multithread by running multiple searches simultaneously...
-# only 50,000 users, so create 10 that search 5,000
-# pseudocode:
-# for range [1,10]
-#Thread.new {search 1-5000} (add 5000 to min and max range, repeat)
 
-#FIX PATHING
-# Fix Range usage
 def get_user_by_string(username_string, range)
-  #puts "searching from #{range.min.to_s} to #{range.max.to_s}"
-  i = range.min
-  matching_names = []
-  #Average difference between each paged bookmarks beginnings is 109.6
-  while i.to_i < range.max do
-    path = "/d2l/api/lp/#{$version}/users/?bookmark=" + i.to_s
-    response = _get(path)
-    if response == 404
-      ap "response returned a 404, last page possible for this thread.."
-      return
+    # puts "searching from #{range.min.to_s} to #{range.max.to_s}"
+    i = range.min
+    matching_names = []
+    # Average difference between each paged bookmarks beginnings is 109.6
+    while i.to_i < range.max
+        path = "/d2l/api/lp/#{$version}/users/?bookmark=" + i.to_s
+        response = _get(path)
+        if response == 404
+            ap 'response returned a 404, last page possible for this thread..'
+            return
+        end
+        response['Items'].each do |user|
+            matching_names.push(user) if user['UserName'].include? username_string
+        end
+        i = response['PagingInfo']['Bookmark']
     end
-    response["Items"].each do |user|
-      if user["UserName"].include? username_string
-        matching_names.push(user)
-        #ap user
-        #puts "Found a matching user!!!"
-        #ap user
-      end
-    end
-    i = response["PagingInfo"]["Bookmark"]
-  end
-  matching_names
+    matching_names
 end
 
 def get_user_by_user_id(user_id)
     path = "/d2l/api/lp/#{$version}/users/" + user_id.to_s
     _get(path)
 end
+
 # Updates the user's data (identified by userId)
 def update_user_data(user_id, new_data)
     # Define a valid, empty payload and merge! with the user_data. Print it.
