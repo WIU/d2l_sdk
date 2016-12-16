@@ -45,7 +45,7 @@ def multithreaded_user_search(username_string)
   range_max = max_users / num_of_threads + 1
   threads = []
   thread_results = []
-  (0...10).each do |iteration|
+  (0...num_of_threads - 1).each do |iteration|
     range = create_range(range_min + 4900*iteration, range_max + 4900*iteration)
     threads[iteration] = Thread.new{
       puts "Starting thread: " + iteration.to_s
@@ -64,23 +64,22 @@ end
 #FIX PATHING
 # Fix Range usage
 def get_user_by_string(username_string, range)
-  path = "/d2l/api/lp/#{$version}/users/"
-  ap path
-  response = _get(path)
+  puts "searching from #{range.min.to_s} to #{range.max.to_s}"
   i = range.min
   matching_names = []
   #Average difference between each paged bookmarks beginnings is 109.6
-  while response!=404 && i.to_i < range.max do
-    path = "/d2l/api/lp/#{$version}/users/?bookmark=" + response["PagingInfo"]["Bookmark"]
+  while i.to_i < range.max do
+    path = "/d2l/api/lp/#{$version}/users/?bookmark=" + i
     new_response = _get(path)
+    if new_response == 404
+      return
+    end
     response["Items"].each do |user|
       if user["UserName"].include? username_string
         matching_names.push(user)
       end
     end
-    response.merge(new_response)
     i = new_response["PagingInfo"]["Bookmark"]
-    response["PagingInfo"]["Bookmark"] = i
   end
   matching_names
 end
