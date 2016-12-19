@@ -83,6 +83,6 @@ def delete_all_course_templates_with_name(name)
   get_course_template_by_name(name).each do |course_template|
     puts "[!] Deleting the following course:".red
     ap course_template
-    delete_ct(course_template["Identifier"])
+    delete_course_template(course_template["Identifier"])
   end
 end

@@ -10,6 +10,7 @@ class TestCourseCreation < Test::Unit::TestCase
     def teardown
         #recycle_semester_by_name('Winter 2055 Semester')
         get_courses_by_name("Webdev_test").each do |match|
+          print match["Identifier"]
             delete_course_by_id(match["Identifier"])
         end
     end

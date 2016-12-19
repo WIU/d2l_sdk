@@ -36,7 +36,7 @@ def get_courses_by_name(org_unit_name)
     class_not_found = true
     puts '[+] Searching for courses using search string: '.yellow + org_unit_name
     courses_results = []
-    path = "/d2l/api/lp/#{$version}/orgstructure/6606/descendants/?outTypeId=3"
+    path = "/d2l/api/lp/#{$version}/orgstructure/6606/descendants/?ouTypeId=3"
     results = _get(path)
     results.each do |x|
         if x['Name'].downcase.include? org_unit_name.downcase
@@ -71,7 +71,8 @@ end
 
 # Deletes a course based, referencing it via its org_unit_id
 def delete_course_by_id(org_unit_id)
-    path = "/d2l/api/lp/#{$version}/courses/" + org_unit_id.to_s # setup user path
+    path = "/d2l/api/lp/#{$version}/courses/#{org_unit_id}" # setup user path
+    ap path
     _delete(path)
     puts '[+] Course data deleted successfully'.green
 end
