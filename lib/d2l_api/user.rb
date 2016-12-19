@@ -4,7 +4,12 @@ require 'thread'
 ########################
 # USERS:################
 ########################
-# Creates the user (identified by userId)
+# Creates the user using user_data as an argument.
+# A Hash is merged with the user_data. The data types for each Hash key is
+# specified below. For the ExternalEmail, there must be either nil for the value
+# or a WELL FORMED email address. The username must be unique, meaning no other
+# user has that name. All of the rest can remain the same, assuming roleId 110
+# exists in your system.
 def create_user_data(user_data)
     # Define a valid, empty payload and merge! with the user_data. Print it.
     payload = { 'OrgDefinedId' => '', # String
@@ -24,30 +29,48 @@ def create_user_data(user_data)
     puts '[+] User creation completed successfully'.green
 end
 
+#Retrieves the whoami of the user authenticated through the config file.
+#returns: JSON whoami response
 def get_whoami
     path = "/d2l/api/lp/#{$version}/users/whoami"
     _get(path)
 end
 
+# Retrieves a user based upon an explicitly defined username.
+# Returns: JSON response of this user.
 def get_user_by_username(username)
     path = "/d2l/api/lp/#{$version}/users/?userName=#{username}"
     _get(path)
 end
 
+# Uses a min and max to create a range.
+# returns: range obj
 def create_range(min, max)
     (min..max)
 end
 
+# Checks whether a username already exists
+# returns: true if the the user exists already
 def does_user_exist(username)
-    if get_user_by_username(username) != nil
+    if get_user_by_username(username.to_s) != nil
       return true
     else
       return false
     end
 end
 
+# Initiates a multithreaded search to streamline the search of a user based upon
+# a part of their username. This calls +get_user_by_string+, which is actually
+# using a bookmarked search. This brings the search time down from 15+ minutes
+# to only ~10-13 seconds, depending upon the computer. This can be sped up MUCH
+# more by using a computer with more cores. Anyways, based upon the number of
+# threads used, iterations are performed, specifying certain ranges for each
+# thread to search by using +get_user_by_string+. Upon all of the threads
+# joining, the thread_results are returned (as they are all the matching names)
+#
+# returns: Array::usernames_with_string_included
 def multithreaded_user_search(username_string, num_of_threads)
-    # Assumed: there is only up to 50,000 users.
+    # Assumed: there is only up to 60,000 users.
     # Start from 1, go up to max number of users for this search...
     max_users = 60_000
     range_min = 1
@@ -65,11 +88,8 @@ def multithreaded_user_search(username_string, num_of_threads)
         # push thread to threads arr and start thread search of specified range.
         threads[iteration] = Thread.new do
             get_user_by_string(username_string, range).each do |match|
-                #ap match
                 thread_results.push(match)
             end
-            #puts "thread #{iteration} ended"
-
         end
     end
     # Join all of the threads
@@ -79,6 +99,14 @@ def multithreaded_user_search(username_string, num_of_threads)
     thread_results
 end
 
+# get_user_by_string uses arguments username_string and range. To use these,
+# a range is created, an array of matching names is initialized, and then
+# the entire range is iterated to check for names that have the username_string
+# in them. Upon reaching a page that has an empty items JSON array, the search
+# ends. This is due to the fact that pages with zero items will not have any
+# more users past them. The array of matching names is then returned.
+#
+# returns: array::matching_names
 def get_user_by_string(username_string, range)
     # puts "searching from #{range.min.to_s} to #{range.max.to_s}"
     i = range.min
@@ -99,12 +127,21 @@ def get_user_by_string(username_string, range)
     matching_names
 end
 
+# Retrieves a user based upon an explicitly pre-defined user_id. This is also
+# known as the Identifier of this user object. Upon retrieving the user, it
+# is then returned.
+#
+# returns: JSON user object.
 def get_user_by_user_id(user_id)
     path = "/d2l/api/lp/#{$version}/users/" + user_id.to_s
     _get(path)
 end
 
-# Updates the user's data (identified by userId)
+# Updates the user's data (identified by user_id)
+# By merging input, named new_data, with a payload, the user_data is guarenteed
+# to at least be formatted correctly. The data, itself, depends upon the api
+# user. Once this is merged, a put http method is utilized to update the user
+# data.
 def update_user_data(user_id, new_data)
     # Define a valid, empty payload and merge! with the user_data. Print it.
     payload = {
@@ -124,9 +161,12 @@ def update_user_data(user_id, new_data)
     puts '[+] User data updated successfully'.green
 end
 
-def delete_user_data(userId)
+# Deletes the user's data (identified by user_id). By forming a path that is
+# correctly referencing this user's data, a delete http method is executed and
+# effectively deleted the user that is referenced.
+def delete_user_data(user_id)
     # Define a path referencing the user data using the user_id
-    path = "/d2l/api/lp/#{$version}/users/" + userId.to_s # setup user path
+    path = "/d2l/api/lp/#{$version}/users/" + user_id.to_s # setup user path
     _delete(path)
     puts '[+] User data deleted successfully'.green
 end

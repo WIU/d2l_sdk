@@ -2,6 +2,10 @@ require_relative 'requests'
 ########################
 # COURSE TEMPLATES:#####
 ########################
+# This method creates a course template using a merged payload between a
+# pre-formatted payload and the argument "course_template_data". Upon this merge
+# the path is defined for the POST http method that is then executed to create
+# the course_template object.
 # Required: "Name", "Code"
 # /d2l/api/lp/(version)/coursetemplates/ [POST]
 def create_course_template(course_template_data)
@@ -22,18 +26,37 @@ def create_course_template(course_template_data)
     _post(path, payload)
     puts '[+] Course template creation completed successfully'.green
 end
-
+# Retrieves a course template based upon an explicitly defined course template
+# org_unit_id or Identifier. This is done by using the identifier as a component
+# of the path, and then performing a GET http method that is then returned.
+#
+# returns: JSON course template data
 # /d2l/api/lp/(version)/coursetemplates/(orgUnitId) [GET]
 def get_course_template(org_unit_id)
     path = "/d2l/api/lp/#{$version}/coursetemplates/" + org_unit_id.to_s
     _get(path)
 end
 
+# Instead of explicitly retrieving a single course template, this method uses
+# the routing table to retrieve all of the organizations descendants with the
+# outTypeId of 2. What this means is that it is literally retrieving any and all
+# course templates that have an ancestor of the organization...which should be
+# all of them.
+#
+# returns: JSON array of course template data objects
 def get_all_course_templates
   path = "/d2l/api/lp/#{$version}/orgstructure/6606/descendants/?ouTypeId=2"
   _get(path)
 end
 
+# This method retrieves all course templates that have a specific string, as
+# specified by org_unit_name, within their names. This is done by first defining
+# that none are found yet and initializing an empty array. Then, by searching
+# through all course templates for ones that do have a particular string within
+# their name, the matches are pushed into the previously empty array of matches.
+# This array is subsequently returned; if none were found, a message is returned
+#
+# returns: JSON array of matching course template data objects
 def get_course_template_by_name(org_unit_name)
   course_template_not_found = true
   course_template_results = []
