@@ -2,6 +2,7 @@ require_relative 'requests'
 ########################
 # COURSE TEMPLATES:#####
 ########################
+
 # This method creates a course template using a merged payload between a
 # pre-formatted payload and the argument "course_template_data". Upon this merge
 # the path is defined for the POST http method that is then executed to create
@@ -26,6 +27,7 @@ def create_course_template(course_template_data)
     _post(path, payload)
     puts '[+] Course template creation completed successfully'.green
 end
+
 # Retrieves a course template based upon an explicitly defined course template
 # org_unit_id or Identifier. This is done by using the identifier as a component
 # of the path, and then performing a GET http method that is then returned.
@@ -74,12 +76,21 @@ def get_course_template_by_name(org_unit_name)
   course_template_results
 end
 
+# Moreso a helper method, but this really just returns the schema of the
+# course templates. This is predefined in the routing table, and retrieved via
+# a GET http method.
+#
+# returns: JSON of course templates schema
 # /d2l/api/lp/(version)/coursetemplates/schema [GET]
 def get_course_templates_schema
     path = "/d2l/api/lp/#{$version}/coursetemplates/schema"
     _get(path)
 end
 
+# This is the primary method utilized to update course templates. As only the
+# Name and the Code can be changed in an update, they are pre-defined to
+# conform to the required update data. The update is then performed via a
+# PUT http method that is executed using a path referencing the course template.
 # /d2l/api/lp/(version)/coursetemplates/(orgUnitId) [PUT]
 def update_course_template(org_unit_id, new_data)
     # Define a valid, empty payload and merge! with the new data.
@@ -87,13 +98,17 @@ def update_course_template(org_unit_id, new_data)
                 'Code' => 'off_SEMESTERCODE_STARNUM', # String
               }.merge!(new_data)
     puts "Updating course template #{org_unit_id}"
-    ap payload
+    #ap payload
     # Define a path referencing the courses path
     path = "/d2l/api/lp/#{$version}/coursetemplates/" + org_unit_id.to_s
     _put(path, payload)
     puts '[+] Course template update completed successfully'.green
 end
 
+
+# Simply, a course template can be deleted by refencing it using its Identifier
+# as an argument for this method. The argument is then used to refernce the obj
+# by a path and then the path is passed in for a delete http method.
 # /d2l/api/lp/(version)/coursetemplates/(orgUnitId) [DELETE]
 def delete_course_template(org_unit_id)
     path = "/d2l/api/lp/#{$version}/coursetemplates/" + org_unit_id.to_s
@@ -101,6 +116,11 @@ def delete_course_template(org_unit_id)
     puts '[+] Course template data deleted successfully'.green
 end
 
+# As a more streamlined approach to deleting many course templates conforming to
+# a particular naming style, this function performs deletions based on a string.
+# Using the name argument, +get_course_template_by_name+ is called in order to
+# retrieve all matching templates. They are then deleted by referencing each
+# of their Identifiers as arguments for +delete_course_template+.
 def delete_all_course_templates_with_name(name)
   puts "[!] Deleting all course templates with the name: #{name}"
   get_course_template_by_name(name).each do |course_template|
@@ -108,4 +128,8 @@ def delete_all_course_templates_with_name(name)
     ap course_template
     delete_course_template(course_template["Identifier"])
   end
+#TO DO:
+def delete_course_templates_by_regex(regex)
+
+end
 end
