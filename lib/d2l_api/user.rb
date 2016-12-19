@@ -17,7 +17,7 @@ def create_user_data(user_data)
                 'IsActive' => false, # bool
                 'SendCreationEmail' => false, # bool
               }.merge!(user_data)
-    ap payload
+    #ap payload
     # Define a path referencing the course data using the course_id
     path = "/d2l/api/lp/#{$version}/users/"
     _post(path, payload)
@@ -38,16 +38,24 @@ def create_range(min, max)
     (min..max)
 end
 
+def does_user_exist(username)
+    if get_user_by_username(username) != nil
+      return true
+    else
+      return false
+    end
+end
+
 def multithreaded_user_search(username_string, num_of_threads)
     # Assumed: there is only up to 50,000 users.
     # Start from 1, go up to max number of users for this search...
-    max_users = 50_000
+    max_users = 60_000
     range_min = 1
     # range max = the upper limit for the search for a thread
     range_max = max_users / num_of_threads + 1
     threads = []
     thread_results = []
-    ap "creating #{num_of_threads} threads..."
+    #ap "creating #{num_of_threads} threads..."
     # from 0 up until max number of threads..
     (0...num_of_threads - 1).each do |iteration|
         # setup range limits for the specific thread
@@ -57,8 +65,11 @@ def multithreaded_user_search(username_string, num_of_threads)
         # push thread to threads arr and start thread search of specified range.
         threads[iteration] = Thread.new do
             get_user_by_string(username_string, range).each do |match|
+                #ap match
                 thread_results.push(match)
             end
+            #puts "thread #{iteration} ended"
+
         end
     end
     # Join all of the threads
@@ -76,9 +87,9 @@ def get_user_by_string(username_string, range)
     while i.to_i < range.max
         path = "/d2l/api/lp/#{$version}/users/?bookmark=" + i.to_s
         response = _get(path)
-        if response == 404
-            ap 'response returned a 404, last page possible for this thread..'
-            return
+        if response['Items'] == []
+            #ap 'response returned zero items, last page possible for this thread..'
+            return matching_names
         end
         response['Items'].each do |user|
             matching_names.push(user) if user['UserName'].include? username_string

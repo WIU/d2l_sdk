@@ -11,10 +11,10 @@ def _get(path)
             # ap JSON.parse(response) # Here is the JSON fmt'd response printed
             JSON.parse(response)
         else
-            handle_response(response.code) # display informaiton on the err code
+            display_reponse_code(response.code) # display informaiton on the err code
             # response.return!(request, result, &block)
             # response.return!
-            puts '[!] Get query failed, see above response code'.red
+            # puts '[!] Get query failed, see above response code'.red
         end
     end
 end
@@ -35,7 +35,7 @@ def _delete(path)
     RestClient.delete(auth_uri, content_type: :json)
 end
 
-def handle_response(code)
+def display_reponse_code(code)
     case code
     when 400
         puts '[!] 400: Bad Request'
@@ -59,7 +59,7 @@ def handle_response(code)
         puts '[!] 415: Unsupported Media Type'\
           'A PUT or POST payload cannot be accepted.'
     when 423
-        raise SomeCustomExceptionIfYouWant
+        puts "[!] 423"
     when 500
         puts '[!] 500: General Service Error\n'\
           'Empty response body. The service has encountered an unexpected'\

@@ -17,6 +17,21 @@ end
 
 def multithreaded_search_test
     #ap multithreaded_user_search("test", (17))
-    multithreaded_search_timed_test("jon",(17..17))
+    if ARGV.size != 0
+      puts "looking for user #{ARGV[0]}"
+      multithreaded_search_timed_test(ARGV[0].to_s,(17..17))
+    else
+      multithreaded_search_timed_test("jon",(17..17))
+    end
 end
-multithreaded_search_test
+
+def test_out_of_range
+    path = "/d2l/api/lp/#{$version}/users/?bookmark=" + "99000"
+    ap _get(path)
+    #Should return a response with an empty array "Items"
+end
+
+#delete_user_data(48606)
+get_user_by_username('test-ruby-user123')
+#multithreaded_search_test
+#test_out_of_range
