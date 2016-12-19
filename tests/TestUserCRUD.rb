@@ -1,4 +1,4 @@
-require_relative 'lib/d2l_api'
+require_relative '../lib/d2l_api'
 require 'test/unit'
 require_relative 'test_create_user'
 #require_relative 'test_read_user'

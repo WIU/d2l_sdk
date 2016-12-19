@@ -1,4 +1,4 @@
-require_relative 'lib/d2l_api'
+require_relative '../../lib/d2l_api'
 require 'test/unit'
 
 class TestUserCreation < Test::Unit::TestCase

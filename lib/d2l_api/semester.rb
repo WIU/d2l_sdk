@@ -25,8 +25,7 @@ def get_semester_by_name(org_unit_name)
   semester_not_found = true
   semester_results = []
   puts "[+] Searching for semesters using search string: \'#{org_unit_name}\'".yellow
-  path = "/d2l/api/lp/#{$version}/orgstructure/6606/children/?outTypeId=5"
-  results = _get(path)
+  results = get_all_semesters
   results.each do |x|
       if x['Name'].downcase.include? org_unit_name.downcase
           semester_not_found = false
@@ -39,6 +38,10 @@ def get_semester_by_name(org_unit_name)
   semester_results
 end
 
+def create_semester_formatted_path(org_id, code)
+    "/content/enforced/#{org_id}-#{code}/"
+end
+
 def update_semester_data(org_unit_id, semester_data)
     # Define a valid, empty payload and merge! with the semester_data. Print it.
     payload = { # Can only update NAME, CODE, and PATH variables
@@ -47,7 +50,7 @@ def update_semester_data(org_unit_id, semester_data)
         # String #YearNUM where NUM{sp:01,su:06,fl:08}  | nil
         'Code' => 'REQUIRED',
         # String: /content/enforced/IDENTIFIER-CODE/
-        'Path' => '/content/enforced/' + org_unit_id.to_s + '-YEAR01/',
+        'Path' => create_semester_formatted_path(org_unit_id.to_s, 'YEAR01'),
         'Type' => { # DO NOT CHANGE THESE
             'Id' => 5, # <number:D2LID>
             'Code' => 'Semester', # <string>
@@ -70,4 +73,13 @@ def recycle_semester_data(org_unit_id)
     path = "/d2l/api/lp/#{$version}/orgstructure/recyclebin/" + org_unit_id.to_s + '/recycle' # setup user path
     _post(path, {})
     puts '[+] Semester data recycled successfully'.green
+end
+
+def recycle_semester_by_name(name)
+  results = get_semester_by_name(name)
+  results.each do |semester_match|
+    if semester_match["Name"] == name
+      recycle_semester_data(semester_match["Identifier"])
+    end
+  end
 end
