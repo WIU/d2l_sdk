@@ -1,9 +1,9 @@
 require_relative '../lib/d2l_api'
 require 'test/unit'
-require_relative 'test_create_user'
+require_relative 'user/test_create_user'
 #require_relative 'test_read_user'
-require_relative 'test_update_user'
-require_relative 'test_delete_user'
+require_relative 'user/test_update_user'
+require_relative 'user/test_delete_user'
 
 class TestUserCRUD < Test::Unit::TestCase
     # indepentently create a user.

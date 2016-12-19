@@ -1,4 +1,4 @@
-require_relative 'lib/d2l_api'
+require_relative '../lib/d2l_api'
 
 def multithreaded_search_timed_test(search_string,range)
     times = []
@@ -32,6 +32,6 @@ def test_out_of_range
 end
 
 #delete_user_data(48606)
-get_user_by_username('test-ruby-user123')
-#multithreaded_search_test
+#get_user_by_username('test-ruby-user123')
+multithreaded_search_test
 #test_out_of_range

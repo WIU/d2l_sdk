@@ -31,11 +31,17 @@ def add_child_org_unit(org_unit_id, child_org_unit_id)
     _post(path, child_org_unit_id)
 end
 
-
+def recycle_org_unit(org_unit_id)
+    path = "/d2l/api/lp/#{$version}/orgstructure/recyclebin/#{org_unit_id}/recycle"
+    _post(path, {})
+end
 #Functions considered for basic added functionality to api, not sure if needed.
 =begin
 def create_custom_orgunit
     # POST /d2l/api/lp/(version)/orgstructure/
+    payload = {
+      "Identifier" =>...
+  }
 end
 
 def update_orgunit

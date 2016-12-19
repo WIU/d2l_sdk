@@ -21,7 +21,7 @@ def create_course_data(course_data)
                 'ForceLocale' => false, # bool
                 'ShowAddressBook' => false # bool
               }.merge!(course_data)
-    ap payload
+    #ap payload
     path = "/d2l/api/lp/#{$version}/courses/"
     _post(path, payload)
     puts '[+] Course creation completed successfully'.green
@@ -59,18 +59,18 @@ def update_course_data(course_id, new_data)
                 'EndDate' => nil, # String: UTCDateTime | nil
                 'IsActive' => false # bool
               }.merge!(new_data)
-    ap payload
+    #ap payload
     # Define a path referencing the courses path
     path = "/d2l/api/lp/#{$version}/courses/" + course_id.to_s
     _put(path, payload)
-    puts '[+] Course creation completed successfully'.green
+    puts '[+] Course update completed successfully'.green
     # Define a path referencing the course data using the course_id
     # Perform the put action that replaces the old data
     # Provide feedback that the update was successful
 end
 
 # Deletes a course based, referencing it via its org_unit_id
-def delete_course_data(org_unit_id)
+def delete_course_by_id(org_unit_id)
     path = "/d2l/api/lp/#{$version}/courses/" + org_unit_id.to_s # setup user path
     _delete(path)
     puts '[+] Course data deleted successfully'.green
