@@ -14,7 +14,6 @@ def create_semester_data(semester_data)
                 'Parents' => [6606], # ARR of Number:D2LID
               }.merge!(semester_data)
     #ap payload
-    # Define a path referencing the course data using the course_id
     path = "/d2l/api/lp/#{$version}/orgstructure/"
     _post(path, payload)
     puts '[+] Semester creation completed successfully'.green

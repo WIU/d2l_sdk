@@ -123,25 +123,28 @@ def restore_recycled_org_unit(org_unit_id)
 end
 
 # Functions considered for basic added functionality to api, not sure if needed.
-def create_custom_org_unit
-    # POST /d2l/api/lp/(version)/orgstructure/
-    payload = { 'Type' => 6, # Number:D2LID
+def create_custom_org_unit(org_unit_data)
+    # Requires the type to have the correct parent. This will work fine in this
+    # sample, as the department (101) can have the parent Organiation (6606)
+    payload = { 'Type' => 101, # Number:D2LID
                 'Name' => 'custom_ou_name', # String
                 'Code' => 'custom_ou_code', # String
                 'Parents' => [6606], # Number:D2LID
-              }.merge!(semester_data)
+              }.merge!(org_unit_data)
+    path = "/d2l/api/lp/#{$version}/orgstructure/"
+    _post(path, payload)
 end
 
 def update_org_unit(org_unit_id, org_unit_data)
     previous_data = get_org_unit_properties(org_unit_id)
     payload = { # Can only update NAME, CODE, and PATH variables
         'Identifier' => org_unit_id.to_s, # String: D2LID // DO NOT CHANGE
-        'Name' => previous_data["Name"], # String
+        'Name' => previous_data['Name'], # String
         # String #YearNUM where NUM{sp:01,su:06,fl:08}  | nil
-        'Code' => previous_data["Code"],
+        'Code' => previous_data['Code'],
         # String: /content/enforced/IDENTIFIER-CODE/
-        'Path' => create_semester_formatted_path(org_unit_id.to_s, previous_data["Code"]),
-        'Type' => previous_data["Type"]
+        'Path' => "/content/enforced/#{org_unit_id}-#{previous_data['Code']}/",
+        'Type' => previous_data['Type']
         # example:
         # { # DO NOT CHANGE THESE
         #    'Id' => 5, # <number:D2LID>
@@ -160,6 +163,11 @@ end
 def get_organization_info
     path = "/d2l/api/lp/#{$version}/organization/info"
     _get(path)
+end
+
+def get_all_org_units_by_type_id(outype_id)
+  path = "/d2l/api/lp/#{$version}/orgstructure/6606/children/?ouTypeId=#{outype_id}"
+  _get(path)
 end
 
 # This retrieves information about a partituclar org unit type, referenced via
