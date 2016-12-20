@@ -5,7 +5,7 @@ def multithreaded_search_timed_test(search_string,range)
     (range).each do |threads|
       start = Time.now
       #print "testing with #{threads}..."
-      result = multithreaded_user_search(search_string, threads)
+      result = multithreaded_user_search("UserName", search_string, threads)
       time_info = {
         "thread-amt"=> threads,
         "time"=> (Time.now - start).to_s

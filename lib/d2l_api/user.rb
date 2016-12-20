@@ -69,7 +69,7 @@ end
 # joining, the thread_results are returned (as they are all the matching names)
 #
 # returns: Array::usernames_with_string_included
-def multithreaded_user_search(username_string, num_of_threads)
+def multithreaded_user_search(parameter, search_string, num_of_threads)
     # Assumed: there is only up to 60,000 users.
     # Start from 1, go up to max number of users for this search...
     max_users = 60_000
@@ -87,14 +87,14 @@ def multithreaded_user_search(username_string, num_of_threads)
         range = create_range(min, max)
         # push thread to threads arr and start thread search of specified range.
         threads[iteration] = Thread.new do
-            get_user_by_string(username_string, range).each do |match|
+            get_user_by_string(parameter, search_string, range).each do |match|
                 thread_results.push(match)
             end
         end
     end
     # Join all of the threads
     threads.each(&:join)
-    puts "returning search results for #{username_string}"
+    puts "returning search results for #{parameter}::#{search_string}"
     # Return an array of users that exist with the username_string in the username
     thread_results
 end
@@ -107,7 +107,7 @@ end
 # more users past them. The array of matching names is then returned.
 #
 # returns: array::matching_names
-def get_user_by_string(username_string, range)
+def get_user_by_string(parameter, search_string, range)
     # puts "searching from #{range.min.to_s} to #{range.max.to_s}"
     i = range.min
     matching_names = []
@@ -115,12 +115,12 @@ def get_user_by_string(username_string, range)
     while i.to_i < range.max
         path = "/d2l/api/lp/#{$version}/users/?bookmark=" + i.to_s
         response = _get(path)
-        if response['Items'] == []
+        if response['PagingInfo']["HasMoreItems"] == false
             #ap 'response returned zero items, last page possible for this thread..'
             return matching_names
         end
         response['Items'].each do |user|
-            matching_names.push(user) if user['UserName'].include? username_string
+            matching_names.push(user) if user[parameter].include? search_string
         end
         i = response['PagingInfo']['Bookmark']
     end
