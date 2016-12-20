@@ -1,6 +1,8 @@
 # A sample Gemfile
 source "https://rubygems.org"
 
-# gem "rails"
-gem "launchy"
-gem "ruby-hmac"
+gem "awesome_print"
+gem "rest-client"
+gem "json"
+gem "test-unit"
+gem "colorize"
