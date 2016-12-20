@@ -48,7 +48,14 @@ $ vim config.rb
 
 ## Usage
 Complete the installation, require the 'd2l_api' gem in your ruby file, and use the many functions supported by the api to perform CRUD methods.
-
+Example:
+```sh
+$ irb
+$ require "d2l_api"
+$ x =  multithreaded_user_search("FirstName", "test", 17) #searches using 17 threads for a user based on 'test' being in the first name.
+$ get_user_by_user_id(x[0])
+$ update_user_data(x[0]["Identifier"], x[0].merge!('FirstName'=>"Test2"))
+```
 ## Contributing
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
