@@ -8,10 +8,10 @@ require_relative "requests"
 # via executing a POST http method using a predefined path and the new payload.
 def create_semester_data(semester_data)
     # Define a valid, empty payload and merge! with the semester_data. Print it.
-    payload = { 'Type' => 5, # String
+    payload = { 'Type' => 5, # Number:D2LID
                 'Name' => 'Winter 2013 Semester', # String
                 'Code' => '201701', # String #YearNUM where NUM{sp:01,su:06,fl:08}
-                'Parents' => [6606], # String
+                'Parents' => [6606], # ARR of Number:D2LID
               }.merge!(semester_data)
     #ap payload
     # Define a path referencing the course data using the course_id
@@ -29,6 +29,11 @@ def get_all_semesters
   _get(path)
 end
 
+def get_semester_by_id(org_unit_id)
+  path = "/d2l/api/lp/#{$version}/orgstructure/" + org_unit_id.to_s
+  _get(path)
+  # return json of org_unit properties
+end
 # Rather than retrieving all semesters, this retrieves all semesters by a
 # particular string. First, a boolean is created where it is assumed the
 # semester is not found. Then an array is created with all the 'found' semesters
@@ -79,7 +84,7 @@ def update_semester_data(org_unit_id, semester_data)
             'Id' => 5, # <number:D2LID>
             'Code' => 'Semester', # <string>
             'Name' => 'Semester', # <string>
-        } # String #YearNUM where NUM{sp:01,su:06,fl:08}
+        }
     }.merge!(semester_data)
     # print out the projected new data
     #puts '[-] New Semester Data:'.yellow

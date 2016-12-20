@@ -36,11 +36,15 @@ end
 # and all classes withiin the department are returned as JSON objects in an arr.
 #
 # returns: JSON array of classes.
-def get_org_department_classes(org_unit)
-    path = "/d2l/api/lp/#{$version}/orgstructure/" + org_unit
+def get_org_department_classes(org_unit_id)
+    path = "/d2l/api/lp/#{$version}/orgstructure/" + org_unit_id
     _get(path)
 end
 
+def get_course_by_id(org_unit_id)
+    path = "/d2l/api/lp/#{$version}/courses/#{org_unit_id}"
+    _get(path)
+end
 # Retrieves all courses that have a particular string (org_unit_name) within
 # their names. This is done by first defining that none are found yet and then
 # searching through all course  for ones that do have a particular string within
