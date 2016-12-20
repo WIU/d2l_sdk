@@ -128,8 +128,8 @@ def delete_all_course_templates_with_name(name)
     ap course_template
     delete_course_template(course_template["Identifier"])
   end
+end
 #TO DO:
 def delete_course_templates_by_regex(regex)
-
-end
+  
 end

@@ -60,7 +60,7 @@ def does_user_exist(username)
 end
 
 # Initiates a multithreaded search to streamline the search of a user based upon
-# a part of their username. This calls +get_user_by_string+, which is actually
+# a part of their search str. This calls +get_user_by_string+, which is actually
 # using a bookmarked search. This brings the search time down from 15+ minutes
 # to only ~10-13 seconds, depending upon the computer. This can be sped up MUCH
 # more by using a computer with more cores. Anyways, based upon the number of
@@ -68,7 +68,7 @@ end
 # thread to search by using +get_user_by_string+. Upon all of the threads
 # joining, the thread_results are returned (as they are all the matching names)
 #
-# returns: Array::usernames_with_string_included
+# returns: Array::param_values_with_string_included
 def multithreaded_user_search(parameter, search_string, num_of_threads)
     # Assumed: there is only up to 60,000 users.
     # Start from 1, go up to max number of users for this search...
@@ -95,13 +95,13 @@ def multithreaded_user_search(parameter, search_string, num_of_threads)
     # Join all of the threads
     threads.each(&:join)
     puts "returning search results for #{parameter}::#{search_string}"
-    # Return an array of users that exist with the username_string in the username
+    # Return an array of users that exist with the search_string in the param.
     thread_results
 end
 
-# get_user_by_string uses arguments username_string and range. To use these,
+# get_user_by_string uses arguments search_string and range. To use these,
 # a range is created, an array of matching names is initialized, and then
-# the entire range is iterated to check for names that have the username_string
+# the entire range is iterated to check for names that have the search_string
 # in them. Upon reaching a page that has an empty items JSON array, the search
 # ends. This is due to the fact that pages with zero items will not have any
 # more users past them. The array of matching names is then returned.

@@ -45,7 +45,7 @@ end
 def get_semester_by_name(search_string)
   semester_not_found = true
   semester_results = []
-  puts "[+] Searching for semesters using search string: \'#{org_unit_name}\'".yellow
+  puts "[+] Searching for semesters using search string: \'#{search_string}\'".yellow
   results = get_all_semesters
   results.each do |x|
       if x['Name'].downcase.include? search_string.downcase

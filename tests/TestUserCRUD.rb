@@ -22,7 +22,7 @@ class TestUserCRUD < Test::Unit::TestCase
     end
 
     def test_get_user_by_string_in_username
-        assert_not_nil(multithreaded_user_search('api-user', 17), 'multithreaded search for api-user failed')
+        assert_not_nil(multithreaded_user_search("UserName",'api-user', 17), 'multithreaded search for api-user failed')
     end
 
 end
