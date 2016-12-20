@@ -64,7 +64,8 @@ $ update_user_data(x[0]["Identifier"], x[0].merge!('FirstName'=>"Test2"))
 5. Submit a pull request :)
 
 ## History
-TODO: Write history
+December 1: Project began
+December 20: Release version 0.1.2 published to RubyGems.org
 
 ## Credits
 Matt Mencel: Assigning and assisting in this project.
