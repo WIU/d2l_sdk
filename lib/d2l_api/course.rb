@@ -3,8 +3,8 @@ require_relative 'requests'
 # COURSES:##############
 ########################
 
-# Creates the course based upon a merged result of the arguemtn course_data
-# and a preformmated payload. This is then passed as a new payload in the
+# Creates the course based upon a merged result of the argument course_data
+# and a preformatted payload. This is then passed as a new payload in the
 # +_post+ method in order to create the defined course.
 # Required: "Name", "Code"
 # Creates the course offering
