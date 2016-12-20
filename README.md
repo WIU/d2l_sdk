@@ -29,16 +29,25 @@ The Ruby Valence API uses a number of required libraries and gems:
 
 Of course, this requires a Desire2Learn/Valence server to work with.
 
-## Installation
-TODO: This project requires a multitude of gems...
-I should probably denote these in the gemfile.
+### Installation
 
-###### Anyways:
+Ruby Valence API can be installed using the following statement:
 
-This project requires numerous gems, so simply install them via the gemfile and have all the files hierarchically the same in your directory, and they should work fine. If they do not, simply put in an issue with me and I will look into it ASAP.
+```sh
+$ gem install d2l_api
+```
+
+Once installed, the config file of the gem must be setup. To do this, you must first unpack the gem, go to bin/lib/ and alter config.rb with your own api and user keys. 
+
+Example:
+```sh
+$ gem unpack d2l_api
+$ cd d2l_api-0.1.1/lib/d2l_api/
+$ vim config.rb
+```
 
 ## Usage
-Complete the installation, require the 'd2l_api.rb' file in your ruby file, and use the many functions supported by the api to perform CRUD methods.
+Complete the installation, require the 'd2l_api' gem in your ruby file, and use the many functions supported by the api to perform CRUD methods.
 
 ## Contributing
 1. Fork it!
