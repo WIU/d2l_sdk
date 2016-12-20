@@ -53,21 +53,26 @@ end
 #
 # returns: JSON array of matching course  data objects
 def get_courses_by_name(org_unit_name)
-    class_not_found = true
-    puts '[+] Searching for courses using search string: '.yellow + org_unit_name
-    courses_results = []
-    path = "/d2l/api/lp/#{$version}/orgstructure/6606/descendants/?ouTypeId=3"
-    results = _get(path)
-    results.each do |x|
-        if x['Name'].downcase.include? org_unit_name.downcase
-            class_not_found = false
-            courses_results.push(x)
-        end
-    end
-    if class_not_found
-        puts '[-] No courses could be found based upon the search string.'.yellow
-    end
-    courses_results
+    get_courses_by_property_by_string("Name", org_unit_name)
+end
+
+def get_courses_by_property_by_string(property, search_string)
+  class_not_found = true
+  puts "[+] Searching for courses using search string: #{search_string}".yellow +
+        + " -- And property: #{property}"
+  courses_results = []
+  path = "/d2l/api/lp/#{$version}/orgstructure/6606/descendants/?ouTypeId=3"
+  results = _get(path)
+  results.each do |x|
+      if x[property].downcase.include? search_string.downcase
+          class_not_found = false
+          courses_results.push(x)
+      end
+  end
+  if class_not_found
+      puts '[-] No courses could be found based upon the search string.'.yellow
+  end
+  courses_results
 end
 
 # Update the course based upon the first argument. This course object is first
