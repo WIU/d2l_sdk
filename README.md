@@ -1,6 +1,5 @@
 # Ruby Valence API
-[![N|Solid](http://docs.valence.desire2learn.com/_static/d2l-logo.png)](http://docs.valence.desire2learn.com/)
-
+[![Gem Version](https://badge.fury.io/rb/d2l_api.svg)](https://badge.fury.io/rb/d2l_api)
 
 The Ruby Valence API is a CRUD based API that facilitates HTTP methods coinciding with Brightspace's routing table to perform common CRUD functions.
 
