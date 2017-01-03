@@ -1,8 +1,17 @@
 require_relative 'requests'
 require_relative 'org_unit'
+require 'json-schema'
 ########################
 # SEMESTER:#############
 ########################
+
+# Checks if the created semester data conforms to the valence api for the
+# semester JSON object. If it does conform, then nothing happens and it
+# simply returns true. If it does not conform, then the JSON validator raises
+# an exception.
+def check_semester_data_validity(semester_data)
+    check_org_unit_data_validity(semester_data)
+end
 
 # Creates a semester based upon a merged result from merging a preformatted
 # payload and the inputed semester data. This is then created server-side
@@ -15,6 +24,7 @@ def create_semester_data(semester_data)
                 'Parents' => [6606], # ARR of Number:D2LID
               }.merge!(semester_data)
     # ap payload
+    check_semester_data_validity(payload)
     path = "/d2l/api/lp/#{$version}/orgstructure/"
     _post(path, payload)
     puts '[+] Semester creation completed successfully'.green
@@ -87,6 +97,14 @@ def create_semester_formatted_path(org_id, code)
     "/content/enforced/#{org_id}-#{code}/"
 end
 
+# Checks if the updated semester data conforms to the valence api for the
+# semester JSON object. If it does conform, then nothing happens and it
+# simply returns true. If it does not conform, then the JSON validator raises
+# an exception.
+def check_semester_updated_data_validity(semester_data)
+    check_org_unit_updated_data_validity(semester_data)
+end
+
 # Updates a semester's data via merging a preformatted payload with the new
 # semester data. The 'path' is then initialized using a defined org_unit_id
 # and the semester is then updated via the newly defined payload and the path.
@@ -105,6 +123,7 @@ def update_semester_data(org_unit_id, semester_data)
             'Name' => 'Semester', # <string>
         }
     }.merge!(semester_data)
+    check_semester_updated_data_validity(payload)
     # print out the projected new data
     # puts '[-] New Semester Data:'.yellow
     # ap payload

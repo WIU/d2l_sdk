@@ -1,9 +1,36 @@
 require_relative 'requests'
 require 'thread'
+require 'json-schema'
 
 ########################
 # USERS:################
 ########################
+
+# Checks whether the created user data conforms to the valence api for the
+# user data JSON object. If it does conform, then nothing happens and it
+# simply returns true. If it does not conform, then the JSON validator raises
+# an exception.
+def check_user_data_validity(user_data)
+    schema = {
+        'type' => 'object',
+        'required' => %w(OrgDefinedId FirstName MiddleName
+                         LastName ExternalEmail UserName
+                         RoleId IsActive SendCreationEmail),
+        'properties' => {
+            'OrgDefinedId' => { 'type' => 'string' },
+            'FirstName' => { 'type' => 'string' },
+            'MiddleName' => { 'type' => 'string' },
+            'LastName' => { 'type' => 'string' },
+            'ExternalEmail' => { 'type' => %w(string null) },
+            'UserName' => { 'type' => 'string' },
+            'RoleId' => { 'type' => 'integer' },
+            'IsActive' => { 'type' => 'boolean' },
+            'SendCreationEmail' => { 'type' => 'boolean' }
+        }
+    }
+    JSON::Validator.validate!(schema, user_data, validate_schema: true)
+end
+
 # Creates the user using user_data as an argument.
 # A Hash is merged with the user_data. The data types for each Hash key is
 # specified below. For the ExternalEmail, there must be either nil for the value
@@ -24,6 +51,7 @@ def create_user_data(user_data)
               }.merge!(user_data)
     # ap payload
     # Define a path referencing the course data using the course_id
+    check_user_data_validity(payload)
     path = "/d2l/api/lp/#{$version}/users/"
     _post(path, payload)
     puts '[+] User creation completed successfully'.green
@@ -163,6 +191,36 @@ def get_user_by_user_id(user_id)
     _get(path)
 end
 
+# Checks whether the updated user data conforms to the valence api for the
+# user data JSON object. If it does conform, then nothing happens and it
+# simply returns true. If it does not conform, then the JSON validator raises
+# an exception.
+def check_updated_user_data_validity(user_data)
+    schema = {
+        'type' => 'object',
+        'required' => %w(OrgDefinedId FirstName MiddleName
+                         LastName ExternalEmail UserName
+                         Activation),
+        'properties' => {
+            'OrgDefinedId' => { 'type' => 'string' },
+            'FirstName' => { 'type' => 'string' },
+            'MiddleName' => { 'type' => 'string' },
+            'LastName' => { 'type' => 'string' },
+            'ExternalEmail' => { 'type' => %w(string null) },
+            'UserName' => { 'type' => 'string' },
+            'Activation' => {
+                'required' => ['IsActive'],
+                'properties' => {
+                    'IsActive' => {
+                        'type' => 'boolean'
+                    }
+                }
+            }
+        }
+    }
+    JSON::Validator.validate!(schema, user_data, validate_schema: true)
+end
+
 # Updates the user's data (identified by user_id)
 # By merging input, named new_data, with a payload, the user_data is guarenteed
 # to at least be formatted correctly. The data, itself, depends upon the api
@@ -181,6 +239,7 @@ def update_user_data(user_id, new_data)
             'IsActive' => false
         }
     }.merge!(new_data)
+    check_updated_user_data_validity(payload)
     # Define a path referencing the user data using the user_id
     path = "/d2l/api/lp/#{$version}/users/" + user_id.to_s
     _put(path, payload)

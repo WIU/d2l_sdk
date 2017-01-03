@@ -1,4 +1,5 @@
 require_relative 'requests'
+require 'json-schema'
 ########################
 # Org Units:############
 ########################
@@ -184,6 +185,26 @@ def restore_recycled_org_unit(org_unit_id)
     _post(path, {})
 end
 
+# Checks whether the created org unit data conforms to the valence api for the
+# org unit data JSON object. If it does conform, then nothing happens and it
+# simply returns true. If it does not conform, then the JSON validator raises
+# an exception.
+def check_org_unit_data_validity(org_unit_data)
+    schema = {
+        'type' => 'object',
+        'required' => %w(Type Name Code Parents),
+        'properties' => {
+            'Type' => { 'type' => 'integer' },
+            'Name' => { 'type' => 'string' },
+            'Code' => { 'type' => 'string' },
+            'Parents' => { 'type' => 'array',
+                           'items' => { 'type' => 'integer', 'minItems' => 1 }
+                         }
+        }
+    }
+    JSON::Validator.validate!(schema, org_unit_data, validate_schema: true)
+end
+
 # Functions considered for basic added functionality to api, not sure if needed.
 def create_custom_org_unit(org_unit_data)
     # Requires the type to have the correct parent. This will work fine in this
@@ -193,8 +214,35 @@ def create_custom_org_unit(org_unit_data)
                 'Code' => 'custom_ou_code', # String
                 'Parents' => [6606], # Number:D2LID
               }.merge!(org_unit_data)
+    check_org_unit_data_validity(payload)
     path = "/d2l/api/lp/#{$version}/orgstructure/"
     _post(path, payload)
+end
+
+# Checks whether the updated org unit data conforms to the valence api for the
+# org unit data JSON object. If it does conform, then nothing happens and it
+# simply returns true. If it does not conform, then the JSON validator raises
+# an exception.
+def check_org_unit_updated_data_validity(org_unit_data)
+    schema = {
+        'type' => 'object',
+        'required' => %w(Identifier Name Code Path Type),
+        'properties' => {
+            'Identifier' => { 'type' => 'string' },
+            'Name' => { 'type' => 'string' },
+            'Code' => { 'type' => 'string' },
+            'Path' => { 'type' => 'string' },
+            'Type' => {
+                'required' => %w(Id Code Name),
+                'properties' => {
+                    'Id' => { 'type' => 'integer' },
+                    'Code' => { 'type' => 'string' },
+                    'Name' => { 'type' => 'string' }
+                }
+            }
+        }
+    }
+    JSON::Validator.validate!(schema, org_unit_data, validate_schema: true)
 end
 
 def update_org_unit(org_unit_id, org_unit_data)
@@ -214,6 +262,7 @@ def update_org_unit(org_unit_id, org_unit_data)
         #    'Name' => 'Semester', # <string>
         # }
     }.merge!(org_unit_data)
+    check_org_unit_updated_data_validity(payload)
     path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}"
     puts '[-] Attempting put request (updating orgunit)...'
     _put(path, payload)

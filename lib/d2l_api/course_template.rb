@@ -1,7 +1,28 @@
 require_relative 'requests'
+require 'json-schema'
 ########################
 # COURSE TEMPLATES:#####
 ########################
+
+# Checks if the created course template data conforms to the valence api for the
+# course template JSON object. If it does conform, then nothing happens and it
+# simply returns true. If it does not conform, then the JSON validator raises
+# an exception.
+def check_course_template_data_validity(course_template_data)
+    schema = {
+        'type' => 'object',
+        'required' => %w(Name Code Path ParentOrgUnitIds),
+        'properties' => {
+            'Name' => { 'type' => 'string' },
+            'Code' => { 'type' => 'string' },
+            'Path' => { 'type' => 'string' },
+            'ParentOrgUnitIds' => { 'type' => 'array',
+                                    'items' => { 'type' => 'integer', 'minItems' => 1 }
+                         }
+        }
+    }
+    JSON::Validator.validate!(schema, course_template_data, validate_schema: true)
+end
 
 # This method creates a course template using a merged payload between a
 # pre-formatted payload and the argument "course_template_data". Upon this merge
@@ -20,7 +41,8 @@ def create_course_template(course_template_data)
                 'Path' => '', # String
                 'ParentOrgUnitIds' => [99_989], # number: D2L_ID
               }.merge!(course_template_data)
-    puts "Creating Course Template:"
+    check_course_template_data_validity(payload)
+    puts 'Creating Course Template:'
     ap payload
     # Define a path referencing the courses path
     path = "/d2l/api/lp/#{$version}/coursetemplates/"
@@ -47,8 +69,8 @@ end
 #
 # returns: JSON array of course template data objects
 def get_all_course_templates
-  path = "/d2l/api/lp/#{$version}/orgstructure/6606/descendants/?ouTypeId=2"
-  _get(path)
+    path = "/d2l/api/lp/#{$version}/orgstructure/6606/descendants/?ouTypeId=2"
+    _get(path)
 end
 
 # This method retrieves all course templates that have a specific string, as
@@ -60,20 +82,20 @@ end
 #
 # returns: JSON array of matching course template data objects
 def get_course_template_by_name(org_unit_name)
-  course_template_not_found = true
-  course_template_results = []
-  puts "[+] Searching for templates using search string: \'#{org_unit_name}\'".yellow
-  results = get_all_course_templates
-  results.each do |x|
-      if x['Name'].downcase.include? org_unit_name.downcase
-          course_template_not_found = false
-          course_template_results.push(x)
-      end
-  end
-  if course_template_not_found
-      puts '[-] No templates could be found based upon the search string.'.yellow
-  end
-  course_template_results
+    course_template_not_found = true
+    course_template_results = []
+    puts "[+] Searching for templates using search string: \'#{org_unit_name}\'".yellow
+    results = get_all_course_templates
+    results.each do |x|
+        if x['Name'].downcase.include? org_unit_name.downcase
+            course_template_not_found = false
+            course_template_results.push(x)
+        end
+    end
+    if course_template_not_found
+        puts '[-] No templates could be found based upon the search string.'.yellow
+    end
+    course_template_results
 end
 
 # Moreso a helper method, but this really just returns the schema of the
@@ -87,6 +109,22 @@ def get_course_templates_schema
     _get(path)
 end
 
+# Checks if the updated course template data conforms to the valence api for the
+# course template JSON object. If it does conform, then nothing happens and it
+# simply returns true. If it does not conform, then the JSON validator raises
+# an exception.
+def check_course_template_updated_data_validity(course_template_data)
+    schema = {
+        'type' => 'object',
+        'required' => %w(Name Code),
+        'properties' => {
+            'Name' => { 'type' => 'string' },
+            'Code' => { 'type' => 'string' }
+        }
+    }
+    JSON::Validator.validate!(schema, course_template_data, validate_schema: true)
+end
+
 # This is the primary method utilized to update course templates. As only the
 # Name and the Code can be changed in an update, they are pre-defined to
 # conform to the required update data. The update is then performed via a
@@ -98,13 +136,13 @@ def update_course_template(org_unit_id, new_data)
                 'Code' => 'off_SEMESTERCODE_STARNUM', # String
               }.merge!(new_data)
     puts "Updating course template #{org_unit_id}"
-    #ap payload
+    check_course_template_updated_data_validity(payload)
+    # ap payload
     # Define a path referencing the courses path
     path = "/d2l/api/lp/#{$version}/coursetemplates/" + org_unit_id.to_s
     _put(path, payload)
     puts '[+] Course template update completed successfully'.green
 end
-
 
 # Simply, a course template can be deleted by refencing it using its Identifier
 # as an argument for this method. The argument is then used to refernce the obj
@@ -122,14 +160,14 @@ end
 # retrieve all matching templates. They are then deleted by referencing each
 # of their Identifiers as arguments for +delete_course_template+.
 def delete_all_course_templates_with_name(name)
-  puts "[!] Deleting all course templates with the name: #{name}"
-  get_course_template_by_name(name).each do |course_template|
-    puts "[!] Deleting the following course:".red
-    ap course_template
-    delete_course_template(course_template["Identifier"])
-  end
+    puts "[!] Deleting all course templates with the name: #{name}"
+    get_course_template_by_name(name).each do |course_template|
+        puts '[!] Deleting the following course:'.red
+        ap course_template
+        delete_course_template(course_template['Identifier'])
+    end
 end
-#TO DO:
+
+# TO DO:
 def delete_course_templates_by_regex(regex)
-  
 end

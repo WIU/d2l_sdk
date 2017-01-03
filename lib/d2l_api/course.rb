@@ -1,7 +1,34 @@
 require_relative 'requests'
+require 'json-schema'
 ########################
 # COURSES:##############
 ########################
+
+# Checks whether the created course data conforms to the valence api for the
+# course data JSON object. If it does conform, then nothing happens and it
+# simply returns true. If it does not conform, then the JSON validator raises
+# an exception.
+def check_course_data_validity(course_data)
+    schema = {
+        'type' => 'object',
+        'required' => %w(Name Code CourseTemplateId SemesterId
+                         StartDate EndDate LocaleId ForceLocale
+                         ShowAddressBook),
+        'properties' => {
+            'Name' => { 'type' => 'string' },
+            'Code' => { 'type' => 'string' },
+            'CourseTemplateId' => { 'type' => 'integer' },
+            'SemesterId' => { 'type' => %w(integer null) },
+            'StartDate' => { 'type' => %w(string null) },
+            'EndDate' => { 'type' => %w(string null) },
+            'LocaleId' => { 'type' => %w(integer null) },
+            'ForceLocale' => { 'type' => 'boolean' },
+            'ShowAddressBook' => { 'type' => 'boolean' }
+        }
+    }
+    JSON::Validator.validate!(schema, course_data, validate_schema: true)
+end
+
 
 # Creates the course based upon a merged result of the argument course_data
 # and a preformatted payload. This is then passed as a new payload in the
@@ -25,6 +52,7 @@ def create_course_data(course_data)
                 'ForceLocale' => false, # bool
                 'ShowAddressBook' => false # bool
               }.merge!(course_data)
+    check_course_data_validity(payload)
     # ap payload
     path = "/d2l/api/lp/#{$version}/courses/"
     _post(path, payload)
@@ -106,6 +134,25 @@ def get_courses_by_property_by_regex(property, regex)
     # returns array of all matching courses in JSON format.
 end
 
+# Checks whether the updated course data conforms to the valence api for the
+# update data JSON object. If it does conform, then nothing happens and it
+# simply returns true. If it does not conform, then the JSON validator raises
+# an exception.
+def check_updated_course_data_validity(course_data)
+    schema = {
+        'type' => 'object',
+        'required' => %w(Name Code StartDate EndDate IsActive),
+        'properties' => {
+            'Name' => { 'type' => 'string' },
+            'Code' => { 'type' => 'string' },
+            'StartDate' => { 'type' => ['string', "null"] },
+            'EndDate' => { 'type' => ['string', "null"] },
+            'IsActive' => { 'type' => "boolean" },
+        }
+    }
+    JSON::Validator.validate!(schema, course_data, validate_schema: true)
+end
+
 # Update the course based upon the first argument. This course object is first
 # referenced via the first argument and its data formatted via merging it with
 # a predefined payload. Then, a PUT http method is executed using the new
@@ -119,6 +166,7 @@ def update_course_data(course_id, new_data)
                 'EndDate' => nil, # String: UTCDateTime | nil
                 'IsActive' => false # bool
               }.merge!(new_data)
+    check_updated_course_data_validity(payload)
     # ap payload
     # Define a path referencing the courses path
     path = "/d2l/api/lp/#{$version}/courses/" + course_id.to_s
