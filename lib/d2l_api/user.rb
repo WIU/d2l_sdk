@@ -22,21 +22,21 @@ def create_user_data(user_data)
                 'IsActive' => false, # bool
                 'SendCreationEmail' => false, # bool
               }.merge!(user_data)
-    #ap payload
+    # ap payload
     # Define a path referencing the course data using the course_id
     path = "/d2l/api/lp/#{$version}/users/"
     _post(path, payload)
     puts '[+] User creation completed successfully'.green
 end
 
-#Retrieves the whoami of the user authenticated through the config file.
-#returns: JSON whoami response
+# Retrieves the whoami of the user authenticated through the config file.
+# returns: JSON whoami response
 def get_whoami
     path = "/d2l/api/lp/#{$version}/users/whoami"
     _get(path)
 end
 
-def get_users(org_defined_id="", username = "", bookmark = "")
+def get_users(org_defined_id = '', username = '', bookmark = '')
     path = "/d2l/api/lp/#{$version}/users/"
     path += "?orgDefinedId=#{org_defined_id}" if org_defined_id != ''
     path += "?userName=#{username}" if username != ''
@@ -47,11 +47,13 @@ end
 # Retrieves a user based upon an explicitly defined username.
 # Returns: JSON response of this user.
 def get_user_by_username(username)
-    get_users("", username)
+    get_users('', username)
 end
-def get_users_by_bookmark(bookmark = "")
-    get_users("","", bookmark)
+
+def get_users_by_bookmark(bookmark = '')
+    get_users('', '', bookmark)
 end
+
 # Uses a min and max to create a range.
 # returns: range obj
 def create_range(min, max)
@@ -61,10 +63,10 @@ end
 # Checks whether a username already exists
 # returns: true if the the user exists already
 def does_user_exist(username)
-    if get_user_by_username(username.to_s) != nil
-      return true
+    if !get_user_by_username(username.to_s).nil?
+        return true
     else
-      return false
+        return false
     end
 end
 
@@ -87,7 +89,7 @@ def multithreaded_user_search(parameter, search_string, num_of_threads)
     range_max = max_users / num_of_threads + 1
     threads = []
     thread_results = []
-    #ap "creating #{num_of_threads} threads..."
+    # ap "creating #{num_of_threads} threads..."
     # from 0 up until max number of threads..
     (0...num_of_threads - 1).each do |iteration|
         # setup range limits for the specific thread
@@ -122,15 +124,15 @@ def get_user_by_string(parameter, search_string, range)
     matching_names = []
     # Average difference between each paged bookmarks beginnings is 109.6
     while i.to_i < range.max
-        #path = "/d2l/api/lp/#{$version}/users/?bookmark=" + i.to_s
+        # path = "/d2l/api/lp/#{$version}/users/?bookmark=" + i.to_s
         response = get_users_by_bookmark(i.to_s)
-        if response['PagingInfo']["HasMoreItems"] == false
-            #ap 'response returned zero items, last page possible for this thread..'
+        if response['PagingInfo']['HasMoreItems'] == false
+            # ap 'response returned zero items, last page possible for this thread..'
             return matching_names
         end
         response['Items'].each do |user|
-            if user[parameter]!=nil
-              matching_names.push(user) if user[parameter].include? search_string
+            unless user[parameter].nil?
+                matching_names.push(user) if user[parameter].include? search_string
             end
         end
         i = response['PagingInfo']['Bookmark']

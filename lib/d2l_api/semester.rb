@@ -1,5 +1,5 @@
-require_relative "requests"
-require_relative "org_unit"
+require_relative 'requests'
+require_relative 'org_unit'
 ########################
 # SEMESTER:#############
 ########################
@@ -14,7 +14,7 @@ def create_semester_data(semester_data)
                 'Code' => '201701', # String #YearNUM where NUM{sp:01,su:06,fl:08}
                 'Parents' => [6606], # ARR of Number:D2LID
               }.merge!(semester_data)
-    #ap payload
+    # ap payload
     path = "/d2l/api/lp/#{$version}/orgstructure/"
     _post(path, payload)
     puts '[+] Semester creation completed successfully'.green
@@ -25,8 +25,8 @@ end
 #
 # Returns: Array of all semester JSON formatted data
 def get_all_semesters
-  path = "/d2l/api/lp/#{$version}/orgstructure/6606/children/?ouTypeId=5"
-  _get(path)
+    path = "/d2l/api/lp/#{$version}/orgstructure/6606/children/?ouTypeId=5"
+    _get(path)
 end
 
 # Retrieves a semester by a particular id. This is done by referencing it by
@@ -34,9 +34,9 @@ end
 #
 # return: JSON of org unit properties.
 def get_semester_by_id(org_unit_id)
-  path = "/d2l/api/lp/#{$version}/orgstructure/" + org_unit_id.to_s
-  _get(path)
-  # return json of org_unit properties
+    path = "/d2l/api/lp/#{$version}/orgstructure/" + org_unit_id.to_s
+    _get(path)
+    # return json of org_unit properties
 end
 
 # Rather than retrieving all semesters, this retrieves all semesters by a
@@ -49,20 +49,20 @@ end
 #
 # Returns: Array of all semester JSON formatted data (with search string in name)
 def get_semester_by_name(search_string)
-  semester_not_found = true
-  semester_results = []
-  puts "[+] Searching for semesters using search string: \'#{search_string}\'".yellow
-  results = get_all_semesters
-  results.each do |x|
-      if x['Name'].downcase.include? search_string.downcase
-          semester_not_found = false
-          semester_results.push(x)
-      end
-  end
-  if semester_not_found
-      puts '[-] No semesters could be found based upon the search string.'.yellow
-  end
-  semester_results
+    semester_not_found = true
+    semester_results = []
+    puts "[+] Searching for semesters using search string: \'#{search_string}\'".yellow
+    results = get_all_semesters
+    results.each do |x|
+        if x['Name'].downcase.include? search_string.downcase
+            semester_not_found = false
+            semester_results.push(x)
+        end
+    end
+    if semester_not_found
+        puts '[-] No semesters could be found based upon the search string.'.yellow
+    end
+    semester_results
 end
 
 # This is simply a helper function that can assist in preformatting a path
@@ -92,8 +92,8 @@ def update_semester_data(org_unit_id, semester_data)
         }
     }.merge!(semester_data)
     # print out the projected new data
-    #puts '[-] New Semester Data:'.yellow
-    #ap payload
+    # puts '[-] New Semester Data:'.yellow
+    # ap payload
     # Define a path referencing the course data using the course_id
     path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}"
     puts '[-] Attempting put request (updating orgunit)...'
@@ -117,10 +117,10 @@ end
 # as the "name" argument. Each name that is the exact same as this argument is
 # then recycled, iteratively.
 def recycle_semester_by_name(name)
-  results = get_semester_by_name(name)
-  results.each do |semester_match|
-    if semester_match["Name"] == name
-      recycle_semester_data(semester_match["Identifier"])
+    results = get_semester_by_name(name)
+    results.each do |semester_match|
+        if semester_match['Name'] == name
+            recycle_semester_data(semester_match['Identifier'])
+        end
     end
-  end
 end

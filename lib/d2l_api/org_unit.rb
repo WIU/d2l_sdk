@@ -112,7 +112,7 @@ end
 #
 # return: JSON array of childless org units.
 def get_all_childless_org_units(org_unit_type = '', org_unit_code = '', org_unit_name = '',
-                    bookmark = '')
+                                bookmark = '')
     path = "/d2l/api/lp/#{$version}/orgstructure/childless/"
     path += "?orgUnitType=#{org_unit_type}" if org_unit_type != ''
     path += "?orgUnitCode=#{org_unit_code}" if org_unit_code != ''

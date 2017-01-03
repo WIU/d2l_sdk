@@ -1,6 +1,5 @@
 # Ruby Valence API
-[![N|Solid](http://docs.valence.desire2learn.com/_static/d2l-logo.png)](http://docs.valence.desire2learn.com/)
-
+[![Gem Version](https://badge.fury.io/rb/d2l_api.svg)](https://badge.fury.io/rb/d2l_api)
 
 The Ruby Valence API is a CRUD based API that facilitates HTTP methods coinciding with Brightspace's routing table to perform common CRUD functions.
 
@@ -30,17 +29,33 @@ The Ruby Valence API uses a number of required libraries and gems:
 
 Of course, this requires a Desire2Learn/Valence server to work with.
 
-## Installation
-TODO: This project requires a multitude of gems...
-I should probably denote these in the gemfile.
+### Installation
 
-###### Anyways:
+Ruby Valence API can be installed using the following statement:
 
-This project requires numerous gems, so simply install them via the gemfile and have all the files hierarchically the same in your directory, and they should work fine. If they do not, simply put in an issue with me and I will look into it ASAP.
+```sh
+$ gem install d2l_api
+```
+
+Once installed, the config file of the gem must be setup. To do this, you must first unpack the gem, go to bin/lib/ and alter config.rb with your own api and user keys.
+
+Example:
+```sh
+$ gem unpack d2l_api
+$ cd d2l_api-0.1.1/lib/d2l_api/
+$ vim config.rb
+```
 
 ## Usage
-Complete the installation, require the 'd2l_api.rb' file in your ruby file, and use the many functions supported by the api to perform CRUD methods.
-
+Complete the installation, require the 'd2l_api' gem in your ruby file, and use the many functions supported by the api to perform CRUD methods.
+Example:
+```sh
+$ irb
+$ require "d2l_api"
+$ x =  multithreaded_user_search("FirstName", "test", 17) #searches using 17 threads for a user based on 'test' being in the first name.
+$ get_user_by_user_id(x[0])
+$ update_user_data(x[0]["Identifier"], x[0].merge!('FirstName'=>"Test2"))
+```
 ## Contributing
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
@@ -49,7 +64,8 @@ Complete the installation, require the 'd2l_api.rb' file in your ruby file, and 
 5. Submit a pull request :)
 
 ## History
-TODO: Write history
+* December 1, 2016: Project began
+* December 20, 2016: Release version 0.1.2 published to RubyGems.org
 
 ## Credits
 Matt Mencel: Assigning and assisting in this project.
