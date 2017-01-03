@@ -36,6 +36,11 @@ def get_whoami
     _get(path)
 end
 
+# Simple get users function that assists in retrieving users by particular
+# paramerters. These parameters are then appended to the query string if
+# they are defined by the user.
+#
+# Returns: JSON of all users matching the parameters given.
 def get_users(org_defined_id = '', username = '', bookmark = '')
     path = "/d2l/api/lp/#{$version}/users/"
     path += "?orgDefinedId=#{org_defined_id}" if org_defined_id != ''
@@ -50,6 +55,10 @@ def get_user_by_username(username)
     get_users('', username)
 end
 
+# Helper function that retrieves the first 100 users after the specified
+# bookmark.
+#
+# Returns: JSON array of user objects.
 def get_users_by_bookmark(bookmark = '')
     get_users('', '', bookmark)
 end
@@ -80,7 +89,9 @@ end
 # joining, the thread_results are returned (as they are all the matching names)
 #
 # returns: Array::param_values_with_string_included
-def multithreaded_user_search(parameter, search_string, num_of_threads)
+# example--- multithreaded_user_search("UserName", "api", 17)
+# example 2--- multithreaded_user_search("UserName", /pap/, 17, true)
+def multithreaded_user_search(parameter, search_string, num_of_threads, regex = false)
     # Assumed: there is only up to 60,000 users.
     # Start from 1, go up to max number of users for this search...
     max_users = 60_000
@@ -98,7 +109,7 @@ def multithreaded_user_search(parameter, search_string, num_of_threads)
         range = create_range(min, max)
         # push thread to threads arr and start thread search of specified range.
         threads[iteration] = Thread.new do
-            get_user_by_string(parameter, search_string, range).each do |match|
+            get_user_by_string(parameter, search_string, range, regex).each do |match|
                 thread_results.push(match)
             end
         end
@@ -118,7 +129,7 @@ end
 # more users past them. The array of matching names is then returned.
 #
 # returns: array::matching_names
-def get_user_by_string(parameter, search_string, range)
+def get_user_by_string(parameter, search_string, range, regex = false)
     # puts "searching from #{range.min.to_s} to #{range.max.to_s}"
     i = range.min
     matching_names = []
@@ -131,7 +142,9 @@ def get_user_by_string(parameter, search_string, range)
             return matching_names
         end
         response['Items'].each do |user|
-            unless user[parameter].nil?
+            if regex && !user[parameter].nil?
+                matching_names.push(user) if (user[parameter] =~ search_string) != nil
+            elsif !user[parameter].nil?
                 matching_names.push(user) if user[parameter].include? search_string
             end
         end

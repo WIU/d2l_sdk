@@ -39,6 +39,20 @@ def get_semester_by_id(org_unit_id)
     # return json of org_unit properties
 end
 
+# Moreso a bridge function, but assists in adding a course to a particular
+# semester. This is done by referencing each of these resources by ids.
+# This returns a 200 response is the ids are correct.
+def add_course_to_semester(course_id, semester_id)
+    add_child_org_unit(semester_id, course_id)
+end
+
+# Same as adding a course to a semester, in regards to being a bridge function.
+# Obviously, this is used to delete the relationship between this course and
+# this particular semester.
+def remove_course_from_semester(course_id, semester_id)
+    delete_relationship_of_child_with_parent(semester_id, course_id)
+end
+
 # Rather than retrieving all semesters, this retrieves all semesters by a
 # particular string. First, a boolean is created where it is assumed the
 # semester is not found. Then an array is created with all the 'found' semesters

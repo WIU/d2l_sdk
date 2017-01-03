@@ -25,7 +25,7 @@ def create_course_data(course_data)
                 'ForceLocale' => false, # bool
                 'ShowAddressBook' => false # bool
               }.merge!(course_data)
-    #ap payload
+    # ap payload
     path = "/d2l/api/lp/#{$version}/courses/"
     _post(path, payload)
     puts '[+] Course creation completed successfully'.green
@@ -51,6 +51,11 @@ def get_course_by_id(org_unit_id)
     _get(path)
 end
 
+def get_all_courses
+    path = "/d2l/api/lp/#{$version}/orgstructure/6606/descendants/?ouTypeId=3"
+    _get(path)
+end
+
 # Retrieves all courses that have a particular string (org_unit_name) within
 # their names. This is done by first defining that none are found yet and then
 # searching through all course  for ones that do have a particular string within
@@ -59,7 +64,7 @@ end
 #
 # returns: JSON array of matching course  data objects
 def get_courses_by_name(org_unit_name)
-    get_courses_by_property_by_string("Name", org_unit_name)
+    get_courses_by_property_by_string('Name', org_unit_name)
 end
 
 # Retrieves all matching courses that are found using a property and a search
@@ -71,22 +76,34 @@ end
 #
 # returns: array of JSON course objects (that match the search string/property)
 def get_courses_by_property_by_string(property, search_string)
-  class_not_found = true
-  puts "[+] Searching for courses using search string: #{search_string}".yellow +
-        + " -- And property: #{property}"
-  courses_results = []
-  path = "/d2l/api/lp/#{$version}/orgstructure/6606/descendants/?ouTypeId=3"
-  results = _get(path)
-  results.each do |x|
-      if x[property].downcase.include? search_string.downcase
-          class_not_found = false
-          courses_results.push(x)
-      end
-  end
-  if class_not_found
-      puts '[-] No courses could be found based upon the search string.'.yellow
-  end
-  courses_results
+    puts "[+] Searching for courses using search string: #{search_string}".yellow +
+         + " -- And property: #{property}"
+    courses_results = []
+    results = get_all_courses
+    results.each do |x|
+        if x[property].downcase.include? search_string.downcase
+            courses_results.push(x)
+        end
+    end
+    courses_results
+    # returns array of all matching courses in JSON format.
+end
+
+# Retrieves all courses that have the specified prop match a regular expression.
+# This is done by iterating through all courses and returning an array of all
+# that match a regular expression.
+#
+# returns: array of JSON course objects (with property that matches regex)
+def get_courses_by_property_by_regex(property, regex)
+    puts "[+] Searching for courses using regex: #{regex}".yellow +
+         + " -- And property: #{property}"
+    courses_results = []
+    results = get_all_courses
+    results.each do |x|
+        courses_results.push(x) if (x[property] =~ regex) != nil
+    end
+    courses_results
+    # returns array of all matching courses in JSON format.
 end
 
 # Update the course based upon the first argument. This course object is first
@@ -102,7 +119,7 @@ def update_course_data(course_id, new_data)
                 'EndDate' => nil, # String: UTCDateTime | nil
                 'IsActive' => false # bool
               }.merge!(new_data)
-    #ap payload
+    # ap payload
     # Define a path referencing the courses path
     path = "/d2l/api/lp/#{$version}/courses/" + course_id.to_s
     _put(path, payload)
