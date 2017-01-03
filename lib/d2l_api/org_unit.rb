@@ -6,53 +6,76 @@ require_relative 'requests'
 # gets all descendents of a particular org unit, as referenced by the
 # "org_unit_id" argument. A get request is then performed by a preformatted
 # path.
-def get_org_unit_descendants(org_unit_id)
+def get_org_unit_descendants(org_unit_id, ou_type_id = 0)
     path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}/descendants/"
+    path += "?ouTypeId=#{ou_type_id}" if ou_type_id != 0
     _get(path)
     # return json of org_unit descendants
 end
 
-def get_paged_org_unit_descendants(org_unit_id)
+# gets a paged result of the org unit's descendants. The descendants are
+# first referenced by a preformatted path; then if there is a defined bookmark,
+# the bookmark parameter is appended to the path.
+#
+# return: JSON array of org unit descendants (paged)
+def get_paged_org_unit_descendants(org_unit_id, ou_type_id = 0, bookmark = '')
     path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}/descendants/paged/"
+    path += "?ouTypeId=#{ou_type_id}" if ou_type_id != 0
+    path += "?bookmark=#{bookmark}" if bookmark != ''
     _get(path)
-    # return json of org_unit descendants
+    # return paged json of org_unit descendants
 end
 
 # gets all parents of a particular org unit, as referenced by the
 # "org_unit_id" argument. A get request is then performed by a preformatted
 # path.
-def get_org_unit_parents(org_unit_id)
+def get_org_unit_parents(org_unit_id, ou_type_id = 0)
     path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}/parents/"
+    path += "?ouTypeId=#{ou_type_id}" if ou_type_id != 0
     _get(path)
     # return json of org_unit parents
 end
 
+# performs a post method to assign a parent to a particular child org unit.
+# This is done by first referencing all the parents of the +child_ou+ and then
+# POSTing the id of another org unit that is to be added to the parents.
 def add_parent_to_org_unit(parent_ou_id, child_ou_id)
     # Must follow structure of data
     # (course <-- semester <== org -->custom dept--> dept -->templates--> courses)
     # Refer to valence documentation for further structural understanding..
     path = "/d2l/api/lp/#{$version}/orgstructure/#{child_ou_id}/parents/"
     _post(path, parent_ou_id)
-    # return json of org_unit parents
 end
 
-def get_org_unit_ancestors(org_unit_id)
+# Gets all org unit ancestors. Simply, this method references all of the
+# ancestors of the particular org unit and then returns them in a JSON array.
+#
+# return: JSON array of org_unit ancestors.
+def get_org_unit_ancestors(org_unit_id, ou_type_id = 0)
     path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}/ancestors/"
+    path += "?ouTypeId=#{ou_type_id}" if ou_type_id != 0
     _get(path)
-    # return json of org_unit parents
+    # return json of org_unit ancestors
 end
 
 # gets all children of a particular org unit, as referenced by the
 # "org_unit_id" argument. A get request is then performed by a preformatted
 # path.
-def get_org_unit_children(org_unit_id)
+def get_org_unit_children(org_unit_id, ou_type_id = 0)
     path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}/children/"
+    path += "?ouTypeId=#{ou_type_id}" if ou_type_id != 0
     _get(path)
     # return json of org_unit children
 end
 
-def get_paged_org_unit_children(org_unit_id)
+# Gets all children of the org unit, but in a paged result. These are first
+# referenced via the org_unit_id argument, and then a bookmark is appended
+# if there is one specified. This is then returned as a json array.
+#
+# return: JSON array of org unit children.
+def get_paged_org_unit_children(org_unit_id, bookmark = '')
     path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}/children/paged/"
+    path += "?bookmark=#{bookmark}" if bookmark != ''
     _get(path)
     # return json of org_unit children
 end
@@ -66,24 +89,52 @@ def get_org_unit_properties(org_unit_id)
     # return json of org_unit properties
 end
 
+# This deletes the relationship between a parent ou and a child ou by
+# performing a delete method from the parent's children and specifying this
+# child through its id.
 def delete_relationship_of_child_with_parent(parent_ou_id, child_ou_id)
     path = "/d2l/api/lp/#{$version}/orgstructure/#{parent_ou_id}/children/#{child_ou_id}"
     _delete(path)
 end
 
+# This deletes the relationship between a child ou and a parent ou by
+# performing a delete method from the child's parents and specifying this
+# parent through its id.
 def delete_relationship_of_parent_with_child(parent_ou_id, child_ou_id)
     path = "/d2l/api/lp/#{$version}/orgstructure/#{child_ou_id}/parents/#{parent_ou_id}"
     _delete(path)
 end
 
-def get_all_childless_org_units
+# This retrieves a paged result of all the childless org units within the
+# organization. As this is paged, it only retrieves the first 100 from the
+# beginning of the request. If bookmark is not specified, then it only retrieves
+# the first 100 results.
+#
+# return: JSON array of childless org units.
+def get_all_childless_org_units(org_unit_type = '', org_unit_code = '', org_unit_name = '',
+                    bookmark = '')
     path = "/d2l/api/lp/#{$version}/orgstructure/childless/"
+    path += "?orgUnitType=#{org_unit_type}" if org_unit_type != ''
+    path += "?orgUnitCode=#{org_unit_code}" if org_unit_code != ''
+    path += "?orgUnitName=#{org_unit_name}" if org_unit_name != ''
+    path += "?bookmark=#{bookmark}" if bookmark != ''
     _get(path)
     # ONLY RETRIEVES FIRST 100
 end
 
-def get_all_orphans
+# Retrieves a paged result of all orphaned org units within the organization.
+# This is a paged result, so only for the first 100 from the beginning bookmark
+# are retrieved. Simply put, if the bookmark is not defined, it only gets the
+# first 100 orphans.
+#
+# return: JSON array of orphaned org units.
+def get_all_orphans(org_unit_type = '', org_unit_code = '', org_unit_name = '',
+                    bookmark = '')
     path = "/d2l/api/lp/#{$version}/orgstructure/orphans/"
+    path += "?orgUnitType=#{org_unit_type}" if org_unit_type != ''
+    path += "?orgUnitCode=#{org_unit_code}" if org_unit_code != ''
+    path += "?orgUnitName=#{org_unit_name}" if org_unit_name != ''
+    path += "?bookmark=#{bookmark}" if bookmark != ''
     _get(path)
 end
 
@@ -98,8 +149,14 @@ def add_child_org_unit(org_unit_id, child_org_unit_id)
     _post(path, child_org_unit_id)
 end
 
-def get_recycled_org_units
+# Retrieves a paged result of all recycled org units. Thus, only the first 100
+# are retrieved since the first referenced org unit. As such, if the bookmark is
+# not defined, then it only retrieves the first 100.
+#
+# return: JSON array of recycled org units.
+def get_recycled_org_units(bookmark = '')
     path = "/d2l/api/lp/#{$version}/orgstructure/recyclebin/"
+    path += "?bookmark=#{bookmark}" if bookmark != ''
     _get(path)
     # GETS ONLY FIRST 100
 end
@@ -112,11 +169,16 @@ def recycle_org_unit(org_unit_id)
     _post(path, {})
 end
 
+# deletes a particular org unit. This is done via referencing the org unit by
+# its id and performing a delete method.
 def delete_recycled_org_unit(org_unit_id)
     path = "/d2l/api/lp/#{$version}/orgstructure/recyclebin/#{org_unit_id}"
     _delete(path)
 end
 
+# Restores a recycled org unit. This is done by referencing the org unit by its
+# id in the recycling bin and then appending '/restore'. This is then used in a
+# post method that performs the restoring process.
 def restore_recycled_org_unit(org_unit_id)
     path = "/d2l/api/lp/#{$version}/orgstructure/recyclebin/#{org_unit_id}/restore"
     _post(path, {})
@@ -165,9 +227,13 @@ def get_organization_info
     _get(path)
 end
 
+# Retrieves the org units that are a particular id. This is done by obtaining
+# all of the children of the organization and then filtering by this id.
+#
+# return: JSON array of all org units of an outype.
 def get_all_org_units_by_type_id(outype_id)
-  path = "/d2l/api/lp/#{$version}/orgstructure/6606/children/?ouTypeId=#{outype_id}"
-  _get(path)
+    path = "/d2l/api/lp/#{$version}/orgstructure/6606/children/?ouTypeId=#{outype_id}"
+    _get(path)
 end
 
 # This retrieves information about a partituclar org unit type, referenced via

@@ -36,13 +36,22 @@ def get_whoami
     _get(path)
 end
 
-# Retrieves a user based upon an explicitly defined username.
-# Returns: JSON response of this user.
-def get_user_by_username(username)
-    path = "/d2l/api/lp/#{$version}/users/?userName=#{username}"
+def get_users(org_defined_id="", username = "", bookmark = "")
+    path = "/d2l/api/lp/#{$version}/users/"
+    path += "?orgDefinedId=#{org_defined_id}" if org_defined_id != ''
+    path += "?userName=#{username}" if username != ''
+    path += "?bookmark=#{bookmark}" if bookmark != ''
     _get(path)
 end
 
+# Retrieves a user based upon an explicitly defined username.
+# Returns: JSON response of this user.
+def get_user_by_username(username)
+    get_users("", username)
+end
+def get_users_by_bookmark(bookmark = "")
+    get_users("","", bookmark)
+end
 # Uses a min and max to create a range.
 # returns: range obj
 def create_range(min, max)
@@ -113,14 +122,16 @@ def get_user_by_string(parameter, search_string, range)
     matching_names = []
     # Average difference between each paged bookmarks beginnings is 109.6
     while i.to_i < range.max
-        path = "/d2l/api/lp/#{$version}/users/?bookmark=" + i.to_s
-        response = _get(path)
+        #path = "/d2l/api/lp/#{$version}/users/?bookmark=" + i.to_s
+        response = get_users_by_bookmark(i.to_s)
         if response['PagingInfo']["HasMoreItems"] == false
             #ap 'response returned zero items, last page possible for this thread..'
             return matching_names
         end
         response['Items'].each do |user|
-            matching_names.push(user) if user[parameter].include? search_string
+            if user[parameter]!=nil
+              matching_names.push(user) if user[parameter].include? search_string
+            end
         end
         i = response['PagingInfo']['Bookmark']
     end

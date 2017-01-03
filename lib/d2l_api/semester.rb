@@ -1,4 +1,5 @@
 require_relative "requests"
+require_relative "org_unit"
 ########################
 # SEMESTER:#############
 ########################
@@ -28,11 +29,16 @@ def get_all_semesters
   _get(path)
 end
 
+# Retrieves a semester by a particular id. This is done by referencing it by
+# its org unit id in the organization and then performing a get request on it.
+#
+# return: JSON of org unit properties.
 def get_semester_by_id(org_unit_id)
   path = "/d2l/api/lp/#{$version}/orgstructure/" + org_unit_id.to_s
   _get(path)
   # return json of org_unit properties
 end
+
 # Rather than retrieving all semesters, this retrieves all semesters by a
 # particular string. First, a boolean is created where it is assumed the
 # semester is not found. Then an array is created with all the 'found' semesters

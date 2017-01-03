@@ -41,10 +41,16 @@ def get_org_department_classes(org_unit_id)
     _get(path)
 end
 
+# Performs a get request to retrieve a particular course using the org_unit_id
+# of this particular course. If the course does not exist, as specified by the
+# org_unit_id, the response is typically a 404 error.
+#
+# returns: JSON object of the course
 def get_course_by_id(org_unit_id)
     path = "/d2l/api/lp/#{$version}/courses/#{org_unit_id}"
     _get(path)
 end
+
 # Retrieves all courses that have a particular string (org_unit_name) within
 # their names. This is done by first defining that none are found yet and then
 # searching through all course  for ones that do have a particular string within
@@ -56,6 +62,14 @@ def get_courses_by_name(org_unit_name)
     get_courses_by_property_by_string("Name", org_unit_name)
 end
 
+# Retrieves all matching courses that are found using a property and a search
+# string. First, it is considered that the class is not found. Then, all courses
+# are retrieved and stored as a JSON array in the varaible +results+. After this
+# each of the +results+ is iterated, downcased, and checked for their matching
+# of the particular search string. If there is a match, they are pushed to
+# an array called +courses_results+. This is returned at the end of this op.
+#
+# returns: array of JSON course objects (that match the search string/property)
 def get_courses_by_property_by_string(property, search_string)
   class_not_found = true
   puts "[+] Searching for courses using search string: #{search_string}".yellow +
