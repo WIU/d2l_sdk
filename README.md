@@ -13,6 +13,9 @@ The Valence API
 
 While not all functions have been implemented for the Learning Platform of the Valence API, all critical CRUD functionalities have been implemented.
 
+### Index
+[Installation] (#Installation)
+
 ### Tech
 
 The Ruby Valence API uses a number of required libraries and gems:
