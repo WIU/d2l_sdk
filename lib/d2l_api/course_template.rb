@@ -57,7 +57,7 @@ end
 # returns: JSON course template data
 # /d2l/api/lp/(version)/coursetemplates/(orgUnitId) [GET]
 def get_course_template(org_unit_id)
-    path = "/d2l/api/lp/#{$version}/coursetemplates/" + org_unit_id.to_s
+    path = "/d2l/api/lp/#{$version}/coursetemplates/#{org_unit_id}"
     _get(path)
 end
 
@@ -149,7 +149,7 @@ end
 # by a path and then the path is passed in for a delete http method.
 # /d2l/api/lp/(version)/coursetemplates/(orgUnitId) [DELETE]
 def delete_course_template(org_unit_id)
-    path = "/d2l/api/lp/#{$version}/coursetemplates/" + org_unit_id.to_s
+    path = "/d2l/api/lp/#{$version}/coursetemplates/#{org_unit_id}"
     _delete(path)
     puts '[+] Course template data deleted successfully'.green
 end

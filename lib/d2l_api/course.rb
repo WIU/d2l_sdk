@@ -65,7 +65,7 @@ end
 #
 # returns: JSON array of classes.
 def get_org_department_classes(org_unit_id)
-    path = "/d2l/api/lp/#{$version}/orgstructure/" + org_unit_id
+    path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}"
     _get(path)
 end
 
