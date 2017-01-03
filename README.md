@@ -18,10 +18,10 @@ While not all functions have been implemented for the Learning Platform of the V
 2. [Installation] (#installation)
 3. [Usage] (#usage)
 4. [List Of Methods] (#list-of-methods)
-5. [Contributing] (#Contributing)
-6. [History] (#History)
-7. [Credits] (#Credits)
-8. [License] (#License)
+5. [Contributing] (#contributing)
+6. [History] (#history)
+7. [Credits] (#credits)
+8. [License] (#license)
 
 ### Tech
 
