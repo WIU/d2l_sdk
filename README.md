@@ -14,7 +14,14 @@ The Valence API
 While not all functions have been implemented for the Learning Platform of the Valence API, all critical CRUD functionalities have been implemented.
 
 ### Index
-[Installation] (#Installation)
+1. [Tech] (#tech)
+2. [Installation] (#installation)
+3. [Usage] (#usage)
+4. [List Of Methods] (#list-of-methods)
+5. [Contributing] (#Contributing)
+6. [History] (#History)
+7. [Credits] (#Credits)
+8. [License] (#License)
 
 ### Tech
 
@@ -49,7 +56,7 @@ $ cd d2l_api-0.1.1/lib/d2l_api/
 $ vim config.rb
 ```
 
-## Usage
+### Usage
 Complete the installation, require the 'd2l_api' gem in your ruby file, and use the many functions supported by the api to perform CRUD methods.
 Example:
 ```sh
@@ -60,7 +67,9 @@ $ get_user_by_user_id(x[0])
 $ update_user_data(x[0]["Identifier"], x[0].merge!('FirstName'=>"Test2"))
 ```
 
-##List of Methods
+
+### List of Methods
+
 1. Users
   * create_user_data(JSON user_data)
   * get_whoami
