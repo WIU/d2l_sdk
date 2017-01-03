@@ -37,7 +37,11 @@ Ruby Valence API can be installed using the following statement:
 $ gem install d2l_api
 ```
 
+<<<<<<< HEAD
 Once installed, the config file of the gem must be setup. To do this, you must first unpack the gem, go to bin/lib/ and alter config.rb with your own api and user keys.
+=======
+Once installed, the config file of the gem must be setup. To do this, you must first unpack the gem, go to bin/lib/ and alter config.rb with your own api and user keys. 
+>>>>>>> 54dd9c7f8b9225bf5e7b3b25dd1b12352ed7480f
 
 Example:
 ```sh
