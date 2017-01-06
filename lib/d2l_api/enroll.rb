@@ -1,7 +1,7 @@
 require_relative 'requests'
 require 'json-schema'
 ########################
-# Enrollments:##############
+# Enrollments:##########
 ########################
 
 # Check the validity of the CreateEnrollmentData that is passed as a payload

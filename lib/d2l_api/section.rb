@@ -1,7 +1,7 @@
 require_relative 'requests'
 require 'json-schema'
 ########################
-# SECTIONS:##############
+# SECTIONS:#############
 ########################
 
 # Delete a section from a provided org unit.
