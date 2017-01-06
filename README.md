@@ -13,6 +13,16 @@ The Valence API
 
 While not all functions have been implemented for the Learning Platform of the Valence API, all critical CRUD functionalities have been implemented.
 
+### Index
+1. [Tech] (#tech)
+2. [Installation] (#installation)
+3. [Usage] (#usage)
+4. [List Of Methods] (#list-of-methods)
+5. [Contributing] (#contributing)
+6. [History] (#history)
+7. [Credits] (#credits)
+8. [License] (#license)
+
 ### Tech
 
 The Ruby Valence API uses a number of required libraries and gems:
@@ -46,7 +56,7 @@ $ cd d2l_api-0.1.1/lib/d2l_api/
 $ vim config.rb
 ```
 
-## Usage
+### Usage
 Complete the installation, require the 'd2l_api' gem in your ruby file, and use the many functions supported by the api to perform CRUD methods.
 Example:
 ```sh
@@ -56,6 +66,76 @@ $ x =  multithreaded_user_search("FirstName", "test", 17) #searches using 17 thr
 $ get_user_by_user_id(x[0])
 $ update_user_data(x[0]["Identifier"], x[0].merge!('FirstName'=>"Test2"))
 ```
+
+
+### List of Methods
+
+1. Users
+  * create_user_data(JSON user_data)
+  * get_whoami
+  * get_users(String org_defined_id, String username, String bookmark)
+  * get_user_by_username(String username)
+  * get_users_by_bookmark(String bookmark)
+  * does_user_exist(String username)
+  * multithreaded_user_search(String parameter, String search_string, Int num_of_threads, Boolean regex)
+  * get_user_by_user_id(String user_id)
+  * update_user_data(String user_id, JSON new_data)
+  * delete_user_data(String user_id)
+2. Semesters
+  * create_semester_data(JSON semester_data)
+  * get_all_semesters
+  * get_semester_by_id(String org_unit_id)
+  * add_course_to_semester(Int course_id, Int semester_id)
+  * remove_course_from_semester(Int course_id, Int semester_id)
+  * get_semester_by_name(String search_string)
+  * update_semester_data(String org_unit_id, JSON semester_data)
+  * recycle_semester_data(String org_unit_id)
+  * recycle_semester_by_name(String name)
+3. Courses
+  * create_course_data(JSON course_data)
+  * get_org_department_classes(String org_unit_id)
+  * get_course_by_id(String org_unit_id)
+  * get_all_courses
+  * get_courses_by_name(String org_unit_name)
+  * get_courses_by_property_by_string(String property, String search_string)
+  * get_courses_by_property_by_regex(String property, regular-expression regex)
+  * update_course_data(String course_id, JSON new_data)
+  * delete_course_by_id(String org_unit_id)
+4. Course Templates
+  * create_course_template(JSON course_template_data)
+  * get_course_template(String org_unit_id)
+  * get_all_course_templates
+  * get_course_template_by_name(String org_unit_name)
+  * get_course_templates_by_schema
+  * update_course_template(String org_unit_id, JSON new_data)
+  * delete_course_template(String org_unit_id)
+  * delete_all_course_templates_with_name(String name)
+5. Org Units
+  * get_org_unit_descendants(String org_unit_id, Int ou_type_id)
+  * get_paged_org_unit_descendants(String org_unit_id, Int ou_type_id, String bookmark)
+  * get_org_unit_parents(String org_unit_id, Int ou_type_id)
+  * add_parent_to_org_unit(Int parent_ou_id, Int child_ou_id)
+  * get_org_unit_ancestors(String org_unit_id, Int ou_type_id)
+  * get_org_unit_children(String org_unit_id, Int ou_type_id)
+  * get_paged_org_unit_children(String org_unit_id, String bookmark)
+  * get_org_unit_properties(String org_unit_id)
+  * delete_relationship_of_child_with_parent(Int parent_ou_id, Int child_ou_id)
+  * delete_relationship_of_parent_with_child(Int parent_ou_id, Int child_ou_id)
+  * get_all_childless_org_units(String org_unit_type String org_unit_code, String org_unit_name, String bookmark)
+  * get_all_orphans(String org_unit_type String org_unit_code, String org_unit_name, String bookmark)
+  * add_child_org_unit(String org_unit_id, Int child_org_unit_id)
+  * get_recycled_org_units(String bookmark)
+  * recycle_org_unit(String org_unit_id)
+  * delete_recycled_org_unit(String org_unit_id)
+  * restore_recyced_org_unit(string org_unit_id)
+  * create_custom_org_unit(JSON org_unit_data)
+  * update_org_unit(String org_unit_id, JSON org_unit_data)
+  * get_organization_info
+  * get_all_org_units_by_type_id(Int outype_id)
+  * get_outype(Int outype_id)
+  * get_all_outypes
+
+
 ## Contributing
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
