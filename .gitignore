@@ -52,3 +52,4 @@ pkg
 #*.rbc
 
 conf/*.yml
+process_mainframe_data
