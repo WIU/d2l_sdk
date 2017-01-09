@@ -36,6 +36,7 @@ The Ruby Valence API uses a number of required libraries and gems:
 * [openssl](http://ruby-doc.org/stdlib-2.0.0/libdoc/openssl/rdoc/OpenSSL.html) - provides SSL, TLS and general purpose cryptography
 * [open-uri](https://ruby-doc.org/stdlib-2.1.0/libdoc/open-uri/rdoc/OpenURI.html) - an easy-to-use wrapper for Net::HTTP, Net::HTTPS and Net::FTP.
 * [colorize](https://rubygems.org/gems/colorize) - Awesome colors for clarity in terminal/cmd
+* [json schema](https://github.com/ruby-json-schema/json-schema) - Validates all POST and PUT JSON payloads against their schema
 
 Of course, this requires a Desire2Learn/Valence server to work with.
 
@@ -134,7 +135,37 @@ $ update_user_data(x[0]["Identifier"], x[0].merge!('FirstName'=>"Test2"))
   * get_all_org_units_by_type_id(Int outype_id)
   * get_outype(Int outype_id)
   * get_all_outypes
-
+6. Enrollments
+  * create_user_enrollment(JSON course_enrollment_data)
+  * get_user_enrollment_data_by_org_unit(String user_id, String org_unit_id)
+  * get_all_enrollments_of_user(String user_id, optional String org_unit_type_id, optional String role_d, optional String bookmark)
+  * get_org_unit_enrollment_data_by_user(String org_unit_id, String user_id)
+  * get_enrollments_details_of_current_user
+  * get_all_enrollments_of_current_user(optional String bookmark, optional String sort_by, optional boolean is_active, optional UTCDATETIME start_date_time, optional UTCDATETIME end_date_time, optional boolean can_access)
+  * get_enrolled_users_in_classlist(String org_unit_id)
+  * delete_user_enrollment(String user_id, String org_unit_id)
+7. Groups
+  * delete_group_category(String org_unit_id, String group_category_id)
+  * delete_group(String org_unit_id, String group_category_id, String group_id)
+  * remove_user_from_group(String org_unit_id, String group_category_id, String group_id, String user_id)
+  * get_all_org_unit_group_categories(String org_unit_id)
+  * get_org_unit_group_category(String org_unit_id, String group_category_id)
+  * get_all_group_category_groups(String org_unit_id, String group_category_id)
+  * get_org_unit_group(String org_unit_id, String group_category_id, String group_id)
+  * create_org_unit_group_category(String org_unit_id, JSON group_category_data)
+  * create_org_unit_group(String org_unit_id String group_category_id, JSON group_data)
+  * update_org_unit_group(String org_unit_id, String group_category_id, String group_id, JSON group_data)
+  * enroll_user_in_group(String org_unit_id, String group_category_id, String group_id, String user_id)
+  * update_org_unit_group_category(String org_unit_id, String group_category_id, JSON group_category_data)
+8. Sections
+  * delete_section(String org_unit_id, String section_id)
+  * get_org_unit_sections(String org_unit_id)
+  * get_org_unit_section_property_data(String org_unit_id)
+  * get_section_date(String org_unit_id, String section_id)
+  * create_org_unit_section(String org_unit_id JSON section_data)
+  * enroll_user_in_org_section(String org_unit_id, String section_id, JSON section_data)
+  * update_org_unit_section_properties(String org_unit_id, JSON section_property_data)
+  * update_org_unit_section_info(String org_unit_id, String section_id, JSON section_data)
 
 ## Contributing
 1. Fork it!
