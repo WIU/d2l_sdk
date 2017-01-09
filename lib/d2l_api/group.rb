@@ -68,7 +68,33 @@ def create_org_unit_group_category(org_unit_id, group_category_data)
               'SelfEnrollmentExpiryDate' => nil, # string: UTCDateTime | nil
               'GroupPrefix' => nil, # String | nil
             }.merge!(group_category_data)
-  # ap payload
+  # Requires: JSON block of GroupCategoryData
   path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/"
   _post(path, payload)
+  # returns a GroupCategoryData JSON block, in the Fetch form, of the new categ.
+end
+
+# Create a new group for an org unit.
+def create_org_unit_group(org_unit_id, group_category_id, group_data)
+  # Requires: JSON block of GroupData
+  # path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/"
+  # _post(path, payload)
+  # returns a GroupData JSON block, in the Fetch form, of the new group
+end
+
+# Enroll a user in a group
+def enroll_user_in_group(org_unit_id, group_category_id, group_id, group_enrollment_data)
+  # Requires: JSON block of GroupEnrollment
+end
+
+# update a particular group category for an org unit
+def update_org_unit_group_category(org_unit_id, group_category_id, group_category_data)
+  # Requires: JSON block of GroupCategoryData
+  # Returns a GroupCategoryData JSON block, in the Fetch form, of updated grp. cat.
+end
+
+# Update a particular group for an org unit
+def update_org_unit_group(org_unit_id, group_category_id, group_id, group_data)
+  # Requires: JSON block of GroupData
+  # returns a GroupData JSON block, in the Fetch form, of the updated group.
 end

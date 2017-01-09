@@ -49,12 +49,13 @@ def create_user_data(user_data)
                 'IsActive' => false, # bool
                 'SendCreationEmail' => false, # bool
               }.merge!(user_data)
-    # ap payload
+    # requires: UserData JSON block
     # Define a path referencing the course data using the course_id
     check_user_data_validity(payload)
     path = "/d2l/api/lp/#{$version}/users/"
     _post(path, payload)
     puts '[+] User creation completed successfully'.green
+    # returns a UserData JSON block for the newly created user
 end
 
 # Retrieves the whoami of the user authenticated through the config file.
@@ -62,6 +63,7 @@ end
 def get_whoami
     path = "/d2l/api/lp/#{$version}/users/whoami"
     _get(path)
+    # returns a WhoAmIUser JSON block for the current user context
 end
 
 # Simple get users function that assists in retrieving users by particular
@@ -75,6 +77,10 @@ def get_users(org_defined_id = '', username = '', bookmark = '')
     path += "?userName=#{username}" if username != ''
     path += "?bookmark=#{bookmark}" if bookmark != ''
     _get(path)
+    # If- username is defined, this RETURNS a single UserData JSON block
+    # else if- org_defined_id is defined, this returns a UserData JSON array
+    # else- if neither is defined, this RETURNS a paged result set of users after
+    # the bookmark
 end
 
 # Retrieves a user based upon an explicitly defined username.
@@ -89,12 +95,14 @@ end
 # Returns: JSON array of user objects.
 def get_users_by_bookmark(bookmark = '')
     get_users('', '', bookmark)
+    # Returns: JSON array of user objects.
 end
 
 # Uses a min and max to create a range.
 # returns: range obj
 def create_range(min, max)
     (min..max)
+    # returns: range obj
 end
 
 # Checks whether a username already exists
@@ -137,7 +145,7 @@ def multithreaded_user_search(parameter, search_string, num_of_threads, regex = 
         range = create_range(min, max)
         # push thread to threads arr and start thread search of specified range.
         threads[iteration] = Thread.new do
-            get_user_by_string(parameter, search_string, range, regex).each do |match|
+            _get_user_by_string(parameter, search_string, range, regex).each do |match|
                 thread_results.push(match)
             end
         end
@@ -157,7 +165,7 @@ end
 # more users past them. The array of matching names is then returned.
 #
 # returns: array::matching_names
-def get_user_by_string(parameter, search_string, range, regex = false)
+def _get_user_by_string(parameter, search_string, range, regex = false)
     # puts "searching from #{range.min.to_s} to #{range.max.to_s}"
     i = range.min
     matching_names = []
@@ -187,8 +195,10 @@ end
 #
 # returns: JSON user object.
 def get_user_by_user_id(user_id)
-    path = "/d2l/api/lp/#{$version}/users/" + user_id.to_s
+    # Retrieve data for a particular user
+    path = "/d2l/api/lp/#{$version}/users/#{user_id}"
     _get(path)
+    # returns a UserData JSON block
 end
 
 # Checks whether the updated user data conforms to the valence api for the
@@ -239,11 +249,13 @@ def update_user_data(user_id, new_data)
             'IsActive' => false
         }
     }.merge!(new_data)
+    # Requires: UpdateUserData JSON block
     check_updated_user_data_validity(payload)
     # Define a path referencing the user data using the user_id
     path = "/d2l/api/lp/#{$version}/users/" + user_id.to_s
     _put(path, payload)
     puts '[+] User data updated successfully'.green
+    # Returns a UserData JSON block of the updated user's data
 end
 
 # Deletes the user's data (identified by user_id). By forming a path that is
