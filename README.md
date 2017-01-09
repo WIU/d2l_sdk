@@ -68,6 +68,15 @@ $ get_user_by_user_id(x[0])
 $ update_user_data(x[0]["Identifier"], x[0].merge!('FirstName'=>"Test2"))
 ```
 
+One may also simply clone this repository, edit the lib/d2l_api/config.rb, run rake build within a local repository and gem install that gem. This can be done as follows:
+$ git clone -b restructuring git@gitlab.wiu.edu:ajk142/valence_testing.git
+Edit the config.rb for your api keys, version, and hostname
+$ rake build
+$ gem install d2l_api pkg/d2l_api-[VERSION].gem
+Uninstalling the previous version can be done by this command:
+$ gem uninstall d2l_api --version [PREVIOUS-VERSION]
+
+
 
 ### List of Methods
 
