@@ -45,9 +45,11 @@ def create_course_template(course_template_data)
     puts 'Creating Course Template:'
     ap payload
     # Define a path referencing the courses path
+    # requires: CreateCourseTemplate JSON block
     path = "/d2l/api/lp/#{$version}/coursetemplates/"
     _post(path, payload)
     puts '[+] Course template creation completed successfully'.green
+    # returns: CourseTemplate JSON block containing the new data.
 end
 
 # Retrieves a course template based upon an explicitly defined course template
@@ -107,6 +109,7 @@ end
 def get_course_templates_schema
     path = "/d2l/api/lp/#{$version}/coursetemplates/schema"
     _get(path)
+    # This action returns a JSON array of SchemaElement blocks.
 end
 
 # Checks if the updated course template data conforms to the valence api for the
@@ -138,6 +141,7 @@ def update_course_template(org_unit_id, new_data)
     puts "Updating course template #{org_unit_id}"
     check_course_template_updated_data_validity(payload)
     # ap payload
+    # requires: CourseTemplateInfo JSON block
     # Define a path referencing the courses path
     path = "/d2l/api/lp/#{$version}/coursetemplates/" + org_unit_id.to_s
     _put(path, payload)

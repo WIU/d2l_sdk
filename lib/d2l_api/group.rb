@@ -49,11 +49,53 @@ end
 ######
 
 def validate_create_group_category_data(group_category_data)
-# TO DO
+  schema = {
+      'type' => 'object',
+      'required' => %w(Name Description EnrollmentStyle
+                      EnrollmentQuality AutoEnroll RandomizeEnrollments
+                      NumberOfGroups MaxUsersPerGroup AllocateAfterExpiry
+                      SelfEnrollmentExpiryDate GroupPrefix),
+      'properties' => {
+          'Name' => { 'type' => 'string' },
+          'Description' =>
+          {
+            'type' => 'object',
+            'properties'=>{
+              "Content" => "string",
+              "Type" => "string" #"Text|HTML"
+            }
+          }, #RichTextInput
+          # if set to SingleUserMemberSpecificGroup, values set for NumberOfGroups
+          # and MaxUsersPerGroup are IGNORED
+          # ----------------------------------
+          # GPRENROLL_T integer value meanings
+          # 0 = NumberOfGrupsNoEnrollment ^
+          # 1 = PeoplePerGroupAutoEnrollment
+          # 2 = NumerOfGroupsAutoEnrollment
+          # 3 = PeoplePerGroupSelfEnrollment
+          # 4 = SelfEnrollmentNumberOfGroups
+          # 5 = PeoplePerNumberOfGroupsSelfEnrollment
+          # ----------------------------------
+          'EnrollmentStyle' => { 'type' => 'integer' }, #num GRPENROLL_T
+           # if non-nil, values for NumberOfGroups and MaxUsersPerGroup are IGNORED
+          'EnrollmentQuantity' => { 'type' => %w(integer null) },
+          'AutoEnroll' => { 'type' => 'boolean'},
+          'RandomizeEnrollments' => { 'type' => 'boolean' },
+          'NumberOfGroups' => { 'type' => %w(integer null) }, #nil, 0, 1, 3, 5
+          'MaxUsersPerGroup' => { 'type' => %w(integer null) }, #1, 3, 5
+          # if MaxUsersPerGroup has a value, then set this to true.
+          'AllocateAfterExpiry' => { 'type' => 'boolean' },
+          'SelfEnrollmentExpiryDate' => { 'type' => %w(string null) }, #UTCDATETIME
+          # Prepends group prefix to GroupName and GroupCode
+          'GroupPrefix' => { 'type' => %w(string null) }
+      }
+  }
+  JSON::Validator.validate!(schema, course_data, validate_schema: true)
 end
 
-#####
 ####
+#### See +validate_create_group_category_data+ for details on schema formal
+#### requirements of values
 # Create a new group category for an org unit.
 def create_org_unit_group_category(org_unit_id, group_category_data)
   payload = { 'Name' => '', # String
@@ -74,27 +116,111 @@ def create_org_unit_group_category(org_unit_id, group_category_data)
   # returns a GroupCategoryData JSON block, in the Fetch form, of the new categ.
 end
 
+def validate_group_data(group_data)
+  schema =
+  {
+      'type' => 'object',
+      'required' => %w(Name Code Description),
+      'properties' =>
+      {
+          'Name' => { 'type' => 'string' },
+          "Code" => {'type' => 'string'},
+          'Description' =>
+          {
+            'type' => 'object',
+            'properties'=>
+            {
+              "Content" => "string",
+              "Type" => "string" #"Text|HTML"
+            }
+          }
+      }
+  }
+  JSON::Validator.validate!(schema, course_data, validate_schema: true)
+end
+
 # Create a new group for an org unit.
 def create_org_unit_group(org_unit_id, group_category_id, group_data)
+  payload =
+  {
+    "Name" => "string",
+    "Code" => "string",
+    "Description" => {}
+  }.merge!(group_data)
   # Requires: JSON block of GroupData
-  # path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/"
-  # _post(path, payload)
+  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/"
+  _post(path, payload)
   # returns a GroupData JSON block, in the Fetch form, of the new group
-end
-
-# Enroll a user in a group
-def enroll_user_in_group(org_unit_id, group_category_id, group_id, group_enrollment_data)
-  # Requires: JSON block of GroupEnrollment
-end
-
-# update a particular group category for an org unit
-def update_org_unit_group_category(org_unit_id, group_category_id, group_category_data)
-  # Requires: JSON block of GroupCategoryData
-  # Returns a GroupCategoryData JSON block, in the Fetch form, of updated grp. cat.
 end
 
 # Update a particular group for an org unit
 def update_org_unit_group(org_unit_id, group_category_id, group_id, group_data)
+  payload = {
+    "Name" => "string",
+    "Code" => "string",
+    "Description" => {}
+  }.merge!(group_data)
   # Requires: JSON block of GroupData
+  validate_group_data(payload)
+  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/#{group_id}"
   # returns a GroupData JSON block, in the Fetch form, of the updated group.
+  _put(path, payload)
+end
+
+def validate_group_enrollment_data(group_enrollment_data)
+  schema = {
+      'type' => 'object',
+      'required' => %w(UserId),
+      'properties' => {
+          'UserId' => { 'type' => 'integer' }
+      }
+  }
+  JSON::Validator.validate!(schema, course_data, validate_schema: true)
+end
+
+# Enroll a user in a group
+def enroll_user_in_group(org_unit_id, group_category_id, group_id, user_id)
+  payload = {
+    "UserId" => user_id
+  }
+  # Requires: JSON block of GroupEnrollment
+  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/#{group_id}/enrollments/"
+  validate_group_enrollment_data(payload)
+  _post(path, payload)
+end
+
+def validate_update_group_category_data(group_category_data)
+  schema = {
+      'type' => 'object',
+      'required' => %w(Name Description AutoEnroll RandomizeEnrollments),
+      'properties' => {
+          'Name' => { 'type' => 'string' },
+          'Description' =>
+          {
+            'type' => 'object',
+            'properties'=>{
+              "Content" => "string",
+              "Type" => "string" #"Text|HTML"
+            }
+          },
+          'AutoEnroll' => { 'type' => 'boolean'},
+          'RandomizeEnrollments' => { 'type' => 'boolean' }
+      }
+  }
+  JSON::Validator.validate!(schema, course_data, validate_schema: true)
+end
+
+# update a particular group category for an org unit
+def update_org_unit_group_category(org_unit_id, group_category_id, group_category_data)
+
+  payload = { 'Name' => '', # String
+              'Description' => {}, # RichTextInput
+              'AutoEnroll' => false, # bool
+              'RandomizeEnrollments' => false, # bool
+            }.merge!(group_category_data)
+  # Requires: JSON block of GroupCategoryData
+  validate_update_group_category_data(payload)
+  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/#{group_category_data}"
+  _put(path, payload)
+  # Returns a GroupCategoryData JSON block, in the Fetch form, of updated grp. cat.
 end

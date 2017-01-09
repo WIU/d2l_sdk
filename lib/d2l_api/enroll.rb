@@ -25,6 +25,7 @@ def create_user_enrollment(course_enrollment_data)
                 'RoleId' => '', # String
               }.merge!(course_enrollment_data)
     # ap payload
+    # requires: CreateEnrollmentData JSON block
     path = "/d2l/api/lp/#{$version}/enrollments/"
     _post(path, payload)
     puts '[+] User successfully enrolled'.green
@@ -32,7 +33,7 @@ def create_user_enrollment(course_enrollment_data)
 end
 
 # Retrieve enrollment details in an org unit for the provided user.
-# Same as +get_org_unit_enrollment_data_by_user+ -- speed of access may differ?
+# Same as +get_org_unit_enrollment_data_by_user+
 def get_user_enrollment_data_by_org_unit(user_id, org_unit_id)
     path = "/d2l/api/lp/#{$version}/enrollments/users/#{user_id}/orgUnits/#{org_unit_id}"
     _get(path)
@@ -44,14 +45,21 @@ end
 # --orgUnitTypeId (CSV of D2LIDs)
 # --roleId: D2LIDs
 # --bookmark: string
-def get_all_enrollments_of_user(user_id)
+def get_all_enrollments_of_user(user_id, org_unit_type_id = 0, role_id = 0,
+                                bookmark = '')
     path = "/d2l/api/lp/#{$version}/users/#{user_id}/orgUnits/"
+    path += "?orgUnitTypeId=#{org_unit_type_id}" if org_unit_type_id != 0
+    path += "?roleId=#{role_id}" if role_id != 0
+    path += "?bookmark=#{bookmark}" if bookmark != ''
     _get(path)
     # Returns: paged result set w/ the resulting UserOrgUnit data blocks
 end
 
 # Retrieve enrollment details for a user in the provided org unit.
-# Same as +get_user_enrollment_data_by_org_unit+ -- speed of access may differ?
+# Note:
+# Same as +get_user_enrollment_data_by_org_unit+
+# This call is equivalent to the route that fetches by specifying the user first,
+# and then the org unit.
 def get_org_unit_enrollment_data_by_user(org_unit_id, user_id)
     path = "/d2l/api/lp/#{$version}/orgUnits/#{org_unit_id}/users/#{user_id}"
     _get(path)
@@ -62,8 +70,10 @@ end
 # Optional params:
 # --roleId: D2LID
 # --bookmark: String
-def get_org_unit_enrollments(org_unit_id)
+def get_org_unit_enrollments(org_unit_id, role_id = 0, bookmark = '')
     path = "/d2l/api/lp/#{$version}/enrollments/orgUnits/#{org_unit_id}/users/"
+    path += "?roleId=#{role_id}" if role_id != 0
+    path += "?bookmark=#{bookmark}" if bookmark != ''
     _get(path)
     # Returns: paged result set containing the resulting OrgUnitUser data blocks
 end
@@ -84,8 +94,16 @@ end
 # --startDateTime: UTCDateTime
 # --endDateTime: UTCDateTime
 # --canAccess: bool
-def get_all_enrollments_of_current_user
+def get_all_enrollments_of_current_user(bookmark = '', sort_by = '', is_active = nil,
+                                        start_date_time = '', end_date_time = '',
+                                        can_access = nil)
     path = "/d2l/api/lp/#{$version}/enrollments/myenrollments/"
+    path += "?bookmark=#{bookmark}" if bookmark != ''
+    path += "?sortBy=#{sort_by}" if sort_by != ''
+    path += "?isActive=#{is_active}" if is_active != nil
+    path += "?startDateTime=#{start_date_time}" if start_date_time != ''
+    path += "?endDateTime=#{end_date_time}" if end_date_time != ''
+    path += "?canAccess=#{can_access}" if can_access != nil
     _get(path)
     # Returns: paged result set containing the resulting MyOrgUnitInfo data blocks
 end

@@ -78,8 +78,10 @@ def create_export_job(create_export_job_data)
 end
 
 # List all available export jobs that you have previously submitted
-def get_all_export_jobs # optional parameter page -- integer
-    _get("/d2l/api/lp/#{$version}/dataExport/jobs")
+def get_all_export_jobs(bookmark = '') # optional parameter page -- integer
+    path = "/d2l/api/lp/#{$version}/dataExport/jobs"
+    path += "?bookmark=#{bookmark}" if bookmark != ''
+    _get(path)
     # returns: JSON array of paged ExportJobData blocks, sorted by SubmitDate
 end
 

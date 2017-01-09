@@ -16,6 +16,7 @@ require_relative 'config'
 def prompt(*args)
     print(*args)
     gets.chomp.downcase
+    # returns: String::downcased_user_input
 end
 
 # Creates an authenticated uniform resource identifier that works with Valence
@@ -35,6 +36,7 @@ def create_authenticated_uri(path, http_method)
     uri = uri_scheme + '://' + $hostname + parsed_url.path + query_string
     uri << '&' + parsed_url.query if parsed_url.query
     uri
+    # returns: String::uri
 end
 
 # Builds an authenticated uniform resource identifier query string that
@@ -50,6 +52,7 @@ def build_authenticated_uri_query_string(signature, timestamp)
     "&x_c=#{get_base64_hash_string($app_key, signature)}"\
     "&x_d=#{get_base64_hash_string($user_key, signature)}"\
     "&x_t=#{timestamp}"
+    # returns: String::'authenticated_uri'
 end
 
 # uses the path, http_method, and timestamp arguments to create a properly
@@ -58,6 +61,7 @@ end
 # returns: String::signature
 def format_signature(path, http_method, timestamp)
     http_method.upcase + '&' + path.encode('UTF-8') + '&' + timestamp.to_s
+    # returns: String::signature
 end
 
 # uses the key and signature as arguments to create a hash using
@@ -69,6 +73,7 @@ end
 def get_base64_hash_string(key, signature)
     hash = OpenSSL::HMAC.digest('sha256', key, signature)
     Base64.urlsafe_encode64(hash).delete('=')
+    # returns: String::base64_hash_string
 end
 
 # Used as a helper method for create_authenticated_uri in order to properly
@@ -81,4 +86,5 @@ def _get_string(path, http_method)
     timestamp = Time.now.to_i
     signature = format_signature(path, http_method, timestamp)
     build_authenticated_uri_query_string(signature, timestamp)
+    # returns: String::query_string
 end

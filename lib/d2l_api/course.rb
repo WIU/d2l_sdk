@@ -54,6 +54,7 @@ def create_course_data(course_data)
               }.merge!(course_data)
     check_course_data_validity(payload)
     # ap payload
+    # requires: CreateCourseOffering JSON block
     path = "/d2l/api/lp/#{$version}/courses/"
     _post(path, payload)
     puts '[+] Course creation completed successfully'.green
@@ -171,6 +172,7 @@ def update_course_data(course_id, new_data)
     # Define a path referencing the courses path
     path = "/d2l/api/lp/#{$version}/courses/" + course_id.to_s
     _put(path, payload)
+    # requires: CourseOfferingInfo JSON block
     puts '[+] Course update completed successfully'.green
     # Define a path referencing the course data using the course_id
     # Perform the put action that replaces the old data

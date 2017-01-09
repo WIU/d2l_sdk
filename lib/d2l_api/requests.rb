@@ -20,6 +20,7 @@ def _get(path)
             JSON.parse(response)
         else
             display_response_code(response.code)
+            puts response
         end
     end
 end

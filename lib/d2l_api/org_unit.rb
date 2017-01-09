@@ -11,7 +11,7 @@ def get_org_unit_descendants(org_unit_id, ou_type_id = 0)
     path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}/descendants/"
     path += "?ouTypeId=#{ou_type_id}" if ou_type_id != 0
     _get(path)
-    # return json of org_unit descendants
+    # return JSON array of OrgUnit data blocks
 end
 
 # gets a paged result of the org unit's descendants. The descendants are
@@ -123,6 +123,18 @@ def get_all_childless_org_units(org_unit_type = '', org_unit_code = '', org_unit
     # ONLY RETRIEVES FIRST 100
 end
 
+def get_properties_of_all_org_units(org_unit_type = '', org_unit_code = '', org_unit_name = '',
+                                bookmark = '')
+    path = "/d2l/api/lp/#{$version}/orgstructure/"
+    path += "?orgUnitType=#{org_unit_type}" if org_unit_type != ''
+    path += "?orgUnitCode=#{org_unit_code}" if org_unit_code != ''
+    path += "?orgUnitName=#{org_unit_name}" if org_unit_name != ''
+    path += "?bookmark=#{bookmark}" if bookmark != ''
+    _get(path)
+    # ONLY RETRIEVES FIRST 100 after bookmark
+    # returns: paged result of OrgUnitProperties blocks
+end
+
 # Retrieves a paged result of all orphaned org units within the organization.
 # This is a paged result, so only for the first 100 from the beginning bookmark
 # are retrieved. Simply put, if the bookmark is not defined, it only gets the
@@ -216,7 +228,9 @@ def create_custom_org_unit(org_unit_data)
               }.merge!(org_unit_data)
     check_org_unit_data_validity(payload)
     path = "/d2l/api/lp/#{$version}/orgstructure/"
+    # Requires: OrgUnitCreateData JSON block
     _post(path, payload)
+    # returns: OrgUnit JSON data block
 end
 
 # Checks whether the updated org unit data conforms to the valence api for the
@@ -265,8 +279,10 @@ def update_org_unit(org_unit_id, org_unit_data)
     check_org_unit_updated_data_validity(payload)
     path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}"
     puts '[-] Attempting put request (updating orgunit)...'
+    # requires: OrgUnitProperties JSON block
     _put(path, payload)
     puts '[+] Semester update completed successfully'.green
+    # returns: OrgUnitProperties JSON data block
 end
 
 # Retrieves the organization info. Only gets a small amount of information,
@@ -274,6 +290,7 @@ end
 def get_organization_info
     path = "/d2l/api/lp/#{$version}/organization/info"
     _get(path)
+    # return: Organization JSON block
 end
 
 # Retrieves the org units that are a particular id. This is done by obtaining
