@@ -123,6 +123,7 @@ def delete_user_enrollment(user_id, org_unit_id)
     #          just before this action deleted the enrollment of the user
 end
 
+=begin
 # Delete a user’s enrollment in a provided org unit.
 def delete_user_enrollment(user_id, org_unit_id)
     path = "/d2l/api/lp/#{$version}/enrollments/orgUnits/#{org_unit_id}/users/#{user_id}"
@@ -130,3 +131,4 @@ def delete_user_enrollment(user_id, org_unit_id)
     # Returns: EnrollmentData JSON block showing the enrollment status
     #          just before this action deleted the enrollment of the user
 end
+=end
