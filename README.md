@@ -84,6 +84,7 @@ $ gem uninstall d2l_api --version [PREVIOUS-VERSION]
 
 
 
+
 ### List of Methods
 
 1. Users
