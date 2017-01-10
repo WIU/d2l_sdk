@@ -109,10 +109,7 @@ end
 def get_course_templates_schema
     path = "/d2l/api/lp/#{$version}/coursetemplates/schema"
     _get(path)
-<<<<<<< HEAD
     # This action returns a JSON array of SchemaElement blocks.
-=======
->>>>>>> 19a9d31ba94277d665d00668449bae2eb3758bf2
 end
 
 # Checks if the updated course template data conforms to the valence api for the

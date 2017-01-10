@@ -21,6 +21,7 @@ class TestUserCreation < Test::Unit::TestCase
                      'IsActive' => true, # bool
                      'SendCreationEmail' => false, # bool
         }
+        puts "Checking whether user #{new_data['UserName']} exists"
         if does_user_exist(new_data['UserName'])
             puts 'This user already exists. Please change your current new_data'.red
         else
