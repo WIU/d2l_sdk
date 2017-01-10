@@ -91,3 +91,74 @@ def display_response_code(code)
         puts '[!] 504: Service Error'
     end
 end
+
+#################
+###Versions######
+#################
+def get_all_products_supported_versions
+  path = "/d2l/api/versions/"
+  _get(path)
+  # returns array of product codes in a JSON block
+end
+
+# Retrieve the collection of versions supported by a specific product component
+def get_product_supported_versions(product_code)
+  path = "/d2l/api/#{product_code}/versions/"
+  _get(path)
+end
+
+def get_latest_product_version(product_code)
+  get_product_supported_versions(product_code)["SupportedVersions"][-1]
+end
+
+# init products to newest versions.
+$le_ver = get_latest_product_version('le')
+$lp_ver = get_latest_product_version('lp')
+$ep_ver = get_latest_product_version('ep')
+#lti, rp, LR, ext,
+
+# retrieve all supported versions for all product components
+def get_versions
+  path = "/d2l/api/versions/"
+  _get(path)
+  # returns: SupportedVersion JSON block
+end
+
+#determine if a specific product component supports a particular API version
+def check_if_product_supports_api_version(product_code, version)
+  path = "/d2l/api/#{product_code}/versions/#{version}"
+  _get(path)
+end
+
+def check_supported_version_request_validity(supported_version_request)
+    schema = {
+      'type' => 'array',
+      'items' =>
+        {
+            'type' => "object",
+            "properties" =>
+            {
+              "Productcode" => {'type'=>"string"},
+              "Version" => {'type'=>"string"}
+            }
+        }
+    }
+    JSON::Validator.validate!(schema, supported_version_request, validate_schema: true)
+end
+
+# determine versions supported by the back-end Brightspace API
+# requires: JSON SupportedVersionRequest data block
+def check_product_versions(supported_version_request)
+  payload =
+  [
+    {
+      "ProductCode" => "9.9",
+      "Version" => "9.9"
+    }
+  ].merge!(supported_version_request)
+  # requires: JSON SupportedVersionRequest data block
+  check_supported_version_request_validity(payload)
+  path = "/d2l/api/versions/check"
+  _post(path, payload)
+  # returns: BulkSupportedVersionResponse JSON block
+end

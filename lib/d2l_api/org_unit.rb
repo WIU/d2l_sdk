@@ -4,6 +4,7 @@ require 'json-schema'
 # Org Units:############
 ########################
 
+
 # gets all descendents of a particular org unit, as referenced by the
 # "org_unit_id" argument. A get request is then performed by a preformatted
 # path.
@@ -302,6 +303,35 @@ def get_all_org_units_by_type_id(outype_id)
     _get(path)
 end
 
+def check_create_org_unit_type_data_validity(org_unit_type_data)
+    schema = {
+        'type' => 'object',
+        'required' => %w(Code Name Description SortOrder),
+        'properties' => {
+            'Code' => { 'type' => 'string' },
+            'Name' => { 'type' => 'string' },
+            'Description' => { 'type' => 'string' },
+            'SortOrder' => { 'type' => 'integer'}
+        }
+    }
+    JSON::Validator.validate!(schema, org_unit_type_data, validate_schema: true)
+end
+
+def create_custom_outype(create_org_unit_type_data)
+  payload =
+  {
+    'Code' => '',
+    'Name' => '',
+    'Description' => '',
+    'SortOrder' => 0
+  }.merge!(create_org_unit_type_data)
+  #validate schema
+  check_create_org_unit_type_data_validity(payload)
+  path = "/d2l/api/lp/#{$lp_ver}/outypes/"
+  _post(path, payload)
+  # returns OrgUnitType JSON data block
+end
+
 # This retrieves information about a partituclar org unit type, referenced via
 # the outype_id argument. This is then returned as a JSON object.
 def get_outype(outype_id)
@@ -314,4 +344,40 @@ end
 def get_all_outypes
     path = "/d2l/api/lp/#{$version}/outypes/"
     _get(path)
+end
+
+# update a particular org unit type (with POST for some reason)
+def update_outype(outype_id, create_org_unit_type_data)
+  payload =
+  {
+    'Code' => '',
+    'Name' => '',
+    'Description' => '',
+    'SortOrder' => 0
+  }.merge!(create_org_unit_type_data)
+  #validate schema
+  check_create_org_unit_type_data_validity(payload)
+  path = "/d2l/api/lp/#{$lp_ver}/outypes/#{outype_id}"
+  _post(path, payload)
+  # returns OrgUnitType JSON data block
+end
+
+# Delete a particular org unit type
+def delete_outype(outype_id)
+  path = "/d2l/api/lp/#{$lp_ver}/outypes/#{outype_id}"
+  _delete(path)
+end
+
+# retrieve org unit type of department org units
+def get_department_outype
+  path = "/d2l/api/lp/#{$version}/outypes/department"
+  _get(path)
+  # returns OrgUnitType JSON data block
+end
+
+# retrieve org unit type of semester org units
+def get_semester_outype
+  path = "/d2l/api/lp/#{$version}/outypes/semester"
+  _get(path)
+  # returns OrgUnitType JSON data block
 end

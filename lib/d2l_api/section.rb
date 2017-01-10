@@ -32,7 +32,7 @@ def get_section_data(org_unit_id, section_id)
 end
 
 # Check the validity of the SectionData that is passed as a payload
-def check_section_data_validity(course_data)
+def check_section_data_validity(section_data)
     schema = {
         'type' => 'object',
         'required' => %w(Name Code Description),
@@ -50,7 +50,7 @@ def check_section_data_validity(course_data)
             }
         }
     }
-    JSON::Validator.validate!(schema, course_data, validate_schema: true)
+    JSON::Validator.validate!(schema, section_data, validate_schema: true)
 end
 
 # Create a new section in a particular org unit.
@@ -69,7 +69,7 @@ def create_org_unit_section(org_unit_id, section_data)
 end
 
 # Check the validity of the SectionEnrollment that is passed as a payload
-def check_section_enrollment_validity(course_data)
+def check_section_enrollment_validity(section_enrollment)
     schema = {
         'type' => 'object',
         'required' => %w(UserId),
@@ -77,7 +77,7 @@ def check_section_enrollment_validity(course_data)
             'UserId' => { 'type' => 'integer' }
         }
     }
-    JSON::Validator.validate!(schema, course_data, validate_schema: true)
+    JSON::Validator.validate!(schema, section_enrollment, validate_schema: true)
 end
 
 # Enroll a user in a section for a particular org unit.
@@ -92,7 +92,7 @@ def enroll_user_in_org_unit_section(org_unit_id,section_id, section_data)
 end
 
 # Check the validity of the SectionPropertyData that is passed as a payload
-def check_section_property_data_validity(course_data)
+def check_section_property_data_validity(section_property_data)
     schema = {
         'type' => 'object',
         'required' => %w(Name Code Description),
@@ -103,7 +103,7 @@ def check_section_property_data_validity(course_data)
             'RandomizeEnrollments' => { 'type' => 'boolean' }
         }
     }
-    JSON::Validator.validate!(schema, course_data, validate_schema: true)
+    JSON::Validator.validate!(schema, section_property_data, validate_schema: true)
 end
 
 # Initialize one or more sections for a particular org unit.

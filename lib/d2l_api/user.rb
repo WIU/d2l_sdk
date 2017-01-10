@@ -267,3 +267,24 @@ def delete_user_data(user_id)
     _delete(path)
     puts '[+] User data deleted successfully'.green
 end
+
+def get_enrolled_roles_in_org_unit(org_unit_id)
+  # this only lists ones viewable by the CALLING user
+  # also, only includes roles that are enrolled in the org unit
+  path = "/d2l/api/#{$lp_ver}/#{org_unit_id}/roles/"
+  _get(path)
+end
+
+# retrieve personal profile info for the current user context
+def get_current_user_profile
+  path = "/d2l/api/lp/#{$lp_ver}/profile/myProfile"
+  _get(path)
+  # Returns UserProfile JSON data block
+end
+
+# retrieve personal profile info of the specified user
+def get_user_profile(user_id)
+  path = "/d2l/api/lp/#{$lp_ver}/profile/user/#{user_id}"
+  _get(path)
+  # Returns UserProfile JSON data block
+end

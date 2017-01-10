@@ -184,7 +184,14 @@ end
 # Then, a delete http method is executed using this path, deleting the course.
 def delete_course_by_id(org_unit_id)
     path = "/d2l/api/lp/#{$version}/courses/#{org_unit_id}" # setup user path
-    ap path
+    #ap path
     _delete(path)
     puts '[+] Course data deleted successfully'.green
+end
+
+# retrieve the list of parent org unit type constraints for course offerings
+def get_parent_outypes_courses_schema_constraints
+  path = "/d2l/api/lp/#{$lp_ver}/courses/schema"
+  _get(path)
+  # returns a JSON array of SchemaElement blocks
 end

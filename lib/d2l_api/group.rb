@@ -90,7 +90,7 @@ def validate_create_group_category_data(group_category_data)
           'GroupPrefix' => { 'type' => %w(string null) }
       }
   }
-  JSON::Validator.validate!(schema, course_data, validate_schema: true)
+  JSON::Validator.validate!(schema, group_category_data, validate_schema: true)
 end
 
 ####
@@ -136,7 +136,7 @@ def validate_group_data(group_data)
           }
       }
   }
-  JSON::Validator.validate!(schema, course_data, validate_schema: true)
+  JSON::Validator.validate!(schema, group_data, validate_schema: true)
 end
 
 # Create a new group for an org unit.
@@ -207,7 +207,7 @@ def validate_update_group_category_data(group_category_data)
           'RandomizeEnrollments' => { 'type' => 'boolean' }
       }
   }
-  JSON::Validator.validate!(schema, course_data, validate_schema: true)
+  JSON::Validator.validate!(schema, group_category_data, validate_schema: true)
 end
 
 # update a particular group category for an org unit

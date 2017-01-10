@@ -5,7 +5,7 @@ require 'json-schema'
 ########################
 
 # Check the validity of the CreateEnrollmentData that is passed as a payload
-def check_create_enrollment_data_validity(course_data)
+def check_create_enrollment_data_validity(enrollment_data)
     schema = {
         'type' => 'object',
         'required' => %w(OrgUnitId UserId RoleId),
@@ -15,7 +15,7 @@ def check_create_enrollment_data_validity(course_data)
             'RoleId' => { 'type' => 'integer' },
         }
     }
-    JSON::Validator.validate!(schema, course_data, validate_schema: true)
+    JSON::Validator.validate!(schema, enrollment_data, validate_schema: true)
 end
 
 # Create a new enrollment for a user.
@@ -123,12 +123,11 @@ def delete_user_enrollment(user_id, org_unit_id)
     #          just before this action deleted the enrollment of the user
 end
 
-=begin
+
 # Delete a user’s enrollment in a provided org unit.
-def delete_user_enrollment(user_id, org_unit_id)
+def delete_user_enrollment_alternative(user_id, org_unit_id)
     path = "/d2l/api/lp/#{$version}/enrollments/orgUnits/#{org_unit_id}/users/#{user_id}"
     _delete(path)
     # Returns: EnrollmentData JSON block showing the enrollment status
     #          just before this action deleted the enrollment of the user
 end
-=end
