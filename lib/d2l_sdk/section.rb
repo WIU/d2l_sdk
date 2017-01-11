@@ -6,27 +6,27 @@ require 'json-schema'
 
 # Delete a section from a provided org unit.
 def delete_section(org_unit_id, section_id)
-  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/sections/#{section_id}"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/sections/#{section_id}"
   _delete(path)
 end
 
 # Retrieve all the sections for a provided org unit.
 def get_org_unit_sections(org_unit_id)
-  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/sections/"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/sections/"
   _get(path)
     # returns a JSON array of SectionData blocks in the Fetch form
 end
 
 # Retrieve the section property data for an org unit.
 def get_org_unit_section_property_data(org_unit_id)
-  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/sections/settings"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/sections/settings"
   _get(path)
     # returns a SectionPropertyData JSON block in the Fetch form.
 end
 
 # Retrieve a section from a particular org unit.
 def get_section_data(org_unit_id, section_id)
-  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/sections/#{section_id}"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/sections/#{section_id}"
   _get(path)
     # returns a SectionData JSON block in the Fetch form.
 end
@@ -61,7 +61,7 @@ def create_org_unit_section(org_unit_id, section_data)
             }.merge!(section_data)
   # Check the validity of the SectionData that is passed as a payload
   check_section_data_validity(payload)
-  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/sections/"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/sections/"
   # JSON param: SectionData
   _post(path, payload)
     # returns the SectionData JSON block, in its Fetch form, for the
@@ -86,7 +86,7 @@ def enroll_user_in_org_unit_section(org_unit_id,section_id, section_data)
             }.merge!(section_data)
   # Check the validity of the SectionEnrollment that is passed as a payload
   check_section_enrollment_validity(payload)
-  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/sections/#{section_id}/enrollments/"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/sections/#{section_id}/enrollments/"
   # JSON param: SectionEnrollment
   _post(path, payload)
 end
@@ -116,7 +116,7 @@ def initialize_org_unit_sections(org_unit_id, section_property_data)
     }.merge!(section_property_data)
     # Check the validity of the SectionPropertyData that is passed as a payload
     check_section_property_data_validity(payload)
-    path = "/d2l/api/lp/#{$version}/#{org_unit_id}/sections/"
+    path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/sections/"
     # JSON param: SectionPropertyData
     _put(path, payload)
     # returns a JSON array of SectionData data blocks, in the Fetch
@@ -133,7 +133,7 @@ def update_org_unit_section_properties(org_unit_id, section_property_data)
     }.merge!(section_property_data)
     # Check the validity of the SectionPropertyData that is passed as a payload
     check_section_property_data_validity(payload)
-    path = "/d2l/api/lp/#{$version}/#{org_unit_id}/sections/settings"
+    path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/sections/settings"
     # JSON param: SectionPropertyData
     _put(path, payload)
     # returns the SectionPropertyData JSON block, in its Fetch form,
@@ -147,7 +147,7 @@ def update_org_unit_section_info(org_unit_id, section_id, section_data)
               }.merge!(section_data)
     # Check the validity of the SectionData that is passed as a payload
     check_section_data_validity(payload)
-    path = "/d2l/api/lp/#{$version}/#{org_unit_id}/sections/section_id"
+    path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/sections/section_id"
     # JSON param: SectionData
     _put(path, payload)
     # returns the SectionData JSON block, in its Fetch form

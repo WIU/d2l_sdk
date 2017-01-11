@@ -1,4 +1,4 @@
-require_relative '../lib/d2l_api'
+require_relative '../lib/d2l_sdk'
 
 def multithreaded_search_timed_test(search_string,range)
     times = []

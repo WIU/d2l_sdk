@@ -31,7 +31,6 @@ end
 # Required: "Name", "Code"
 # /d2l/api/lp/(version)/coursetemplates/ [POST]
 def create_course_template(course_template_data)
-    # ForceLocale- course override the user’s locale preference
     # Path- root path to use for this course offering’s course content
     #       if your back-end service has path enforcement set on for
     #       new org units, leave this property as an empty string
@@ -46,7 +45,7 @@ def create_course_template(course_template_data)
     ap payload
     # Define a path referencing the courses path
     # requires: CreateCourseTemplate JSON block
-    path = "/d2l/api/lp/#{$version}/coursetemplates/"
+    path = "/d2l/api/lp/#{$lp_ver}/coursetemplates/"
     _post(path, payload)
     puts '[+] Course template creation completed successfully'.green
     # returns: CourseTemplate JSON block containing the new data.
@@ -59,8 +58,9 @@ end
 # returns: JSON course template data
 # /d2l/api/lp/(version)/coursetemplates/(orgUnitId) [GET]
 def get_course_template(org_unit_id)
-    path = "/d2l/api/lp/#{$version}/coursetemplates/#{org_unit_id}"
+    path = "/d2l/api/lp/#{$lp_ver}/coursetemplates/#{org_unit_id}"
     _get(path)
+    # return: JSON course template data
 end
 
 # Instead of explicitly retrieving a single course template, this method uses
@@ -71,8 +71,9 @@ end
 #
 # returns: JSON array of course template data objects
 def get_all_course_templates
-    path = "/d2l/api/lp/#{$version}/orgstructure/6606/descendants/?ouTypeId=2"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/6606/descendants/?ouTypeId=2"
     _get(path)
+    # return: JSON array of course template data objects
 end
 
 # This method retrieves all course templates that have a specific string, as
@@ -98,6 +99,7 @@ def get_course_template_by_name(org_unit_name)
         puts '[-] No templates could be found based upon the search string.'.yellow
     end
     course_template_results
+    # return: JSON array of matching course template data objects
 end
 
 # Moreso a helper method, but this really just returns the schema of the
@@ -107,7 +109,7 @@ end
 # returns: JSON of course templates schema
 # /d2l/api/lp/(version)/coursetemplates/schema [GET]
 def get_course_templates_schema
-    path = "/d2l/api/lp/#{$version}/coursetemplates/schema"
+    path = "/d2l/api/lp/#{$lp_ver}/coursetemplates/schema"
     _get(path)
     # This action returns a JSON array of SchemaElement blocks.
 end
@@ -143,7 +145,7 @@ def update_course_template(org_unit_id, new_data)
     # ap payload
     # requires: CourseTemplateInfo JSON block
     # Define a path referencing the courses path
-    path = "/d2l/api/lp/#{$version}/coursetemplates/" + org_unit_id.to_s
+    path = "/d2l/api/lp/#{$lp_ver}/coursetemplates/" + org_unit_id.to_s
     _put(path, payload)
     puts '[+] Course template update completed successfully'.green
 end
@@ -153,7 +155,7 @@ end
 # by a path and then the path is passed in for a delete http method.
 # /d2l/api/lp/(version)/coursetemplates/(orgUnitId) [DELETE]
 def delete_course_template(org_unit_id)
-    path = "/d2l/api/lp/#{$version}/coursetemplates/#{org_unit_id}"
+    path = "/d2l/api/lp/#{$lp_ver}/coursetemplates/#{org_unit_id}"
     _delete(path)
     puts '[+] Course template data deleted successfully'.green
 end

@@ -9,7 +9,7 @@ require 'json-schema'
 # "org_unit_id" argument. A get request is then performed by a preformatted
 # path.
 def get_org_unit_descendants(org_unit_id, ou_type_id = 0)
-    path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}/descendants/"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/#{org_unit_id}/descendants/"
     path += "?ouTypeId=#{ou_type_id}" if ou_type_id != 0
     _get(path)
     # return JSON array of OrgUnit data blocks
@@ -21,7 +21,7 @@ end
 #
 # return: JSON array of org unit descendants (paged)
 def get_paged_org_unit_descendants(org_unit_id, ou_type_id = 0, bookmark = '')
-    path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}/descendants/paged/"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/#{org_unit_id}/descendants/paged/"
     path += "?ouTypeId=#{ou_type_id}" if ou_type_id != 0
     path += "?bookmark=#{bookmark}" if bookmark != ''
     _get(path)
@@ -32,7 +32,7 @@ end
 # "org_unit_id" argument. A get request is then performed by a preformatted
 # path.
 def get_org_unit_parents(org_unit_id, ou_type_id = 0)
-    path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}/parents/"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/#{org_unit_id}/parents/"
     path += "?ouTypeId=#{ou_type_id}" if ou_type_id != 0
     _get(path)
     # return json of org_unit parents
@@ -45,7 +45,7 @@ def add_parent_to_org_unit(parent_ou_id, child_ou_id)
     # Must follow structure of data
     # (course <-- semester <== org -->custom dept--> dept -->templates--> courses)
     # Refer to valence documentation for further structural understanding..
-    path = "/d2l/api/lp/#{$version}/orgstructure/#{child_ou_id}/parents/"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/#{child_ou_id}/parents/"
     _post(path, parent_ou_id)
 end
 
@@ -54,7 +54,7 @@ end
 #
 # return: JSON array of org_unit ancestors.
 def get_org_unit_ancestors(org_unit_id, ou_type_id = 0)
-    path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}/ancestors/"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/#{org_unit_id}/ancestors/"
     path += "?ouTypeId=#{ou_type_id}" if ou_type_id != 0
     _get(path)
     # return json of org_unit ancestors
@@ -64,7 +64,7 @@ end
 # "org_unit_id" argument. A get request is then performed by a preformatted
 # path.
 def get_org_unit_children(org_unit_id, ou_type_id = 0)
-    path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}/children/"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/#{org_unit_id}/children/"
     path += "?ouTypeId=#{ou_type_id}" if ou_type_id != 0
     _get(path)
     # return json of org_unit children
@@ -76,7 +76,7 @@ end
 #
 # return: JSON array of org unit children.
 def get_paged_org_unit_children(org_unit_id, bookmark = '')
-    path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}/children/paged/"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/#{org_unit_id}/children/paged/"
     path += "?bookmark=#{bookmark}" if bookmark != ''
     _get(path)
     # return json of org_unit children
@@ -86,7 +86,7 @@ end
 # "org_unit_id" argument. A get request is then performed by a preformatted
 # path.
 def get_org_unit_properties(org_unit_id)
-    path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/#{org_unit_id}"
     _get(path)
     # return json of org_unit properties
 end
@@ -95,7 +95,7 @@ end
 # performing a delete method from the parent's children and specifying this
 # child through its id.
 def delete_relationship_of_child_with_parent(parent_ou_id, child_ou_id)
-    path = "/d2l/api/lp/#{$version}/orgstructure/#{parent_ou_id}/children/#{child_ou_id}"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/#{parent_ou_id}/children/#{child_ou_id}"
     _delete(path)
 end
 
@@ -103,7 +103,7 @@ end
 # performing a delete method from the child's parents and specifying this
 # parent through its id.
 def delete_relationship_of_parent_with_child(parent_ou_id, child_ou_id)
-    path = "/d2l/api/lp/#{$version}/orgstructure/#{child_ou_id}/parents/#{parent_ou_id}"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/#{child_ou_id}/parents/#{parent_ou_id}"
     _delete(path)
 end
 
@@ -115,7 +115,7 @@ end
 # return: JSON array of childless org units.
 def get_all_childless_org_units(org_unit_type = '', org_unit_code = '', org_unit_name = '',
                                 bookmark = '')
-    path = "/d2l/api/lp/#{$version}/orgstructure/childless/"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/childless/"
     path += "?orgUnitType=#{org_unit_type}" if org_unit_type != ''
     path += "?orgUnitCode=#{org_unit_code}" if org_unit_code != ''
     path += "?orgUnitName=#{org_unit_name}" if org_unit_name != ''
@@ -126,7 +126,7 @@ end
 
 def get_properties_of_all_org_units(org_unit_type = '', org_unit_code = '', org_unit_name = '',
                                 bookmark = '')
-    path = "/d2l/api/lp/#{$version}/orgstructure/"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/"
     path += "?orgUnitType=#{org_unit_type}" if org_unit_type != ''
     path += "?orgUnitCode=#{org_unit_code}" if org_unit_code != ''
     path += "?orgUnitName=#{org_unit_name}" if org_unit_name != ''
@@ -144,7 +144,7 @@ end
 # return: JSON array of orphaned org units.
 def get_all_orphans(org_unit_type = '', org_unit_code = '', org_unit_name = '',
                     bookmark = '')
-    path = "/d2l/api/lp/#{$version}/orgstructure/orphans/"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/orphans/"
     path += "?orgUnitType=#{org_unit_type}" if org_unit_type != ''
     path += "?orgUnitCode=#{org_unit_code}" if org_unit_code != ''
     path += "?orgUnitName=#{org_unit_name}" if org_unit_name != ''
@@ -159,7 +159,7 @@ end
 #
 # TL;DR, this adds a child org_unit to the children of an org_unit.
 def add_child_org_unit(org_unit_id, child_org_unit_id)
-    path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}/children/"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/#{org_unit_id}/children/"
     _post(path, child_org_unit_id)
 end
 
@@ -169,7 +169,7 @@ end
 #
 # return: JSON array of recycled org units.
 def get_recycled_org_units(bookmark = '')
-    path = "/d2l/api/lp/#{$version}/orgstructure/recyclebin/"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/recyclebin/"
     path += "?bookmark=#{bookmark}" if bookmark != ''
     _get(path)
     # GETS ONLY FIRST 100
@@ -179,14 +179,14 @@ end
 # path for the recycling is created using the org_unit_id argument and then the
 # post method is executed afterwards.
 def recycle_org_unit(org_unit_id)
-    path = "/d2l/api/lp/#{$version}/orgstructure/recyclebin/#{org_unit_id}/recycle"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/recyclebin/#{org_unit_id}/recycle"
     _post(path, {})
 end
 
 # deletes a particular org unit. This is done via referencing the org unit by
 # its id and performing a delete method.
 def delete_recycled_org_unit(org_unit_id)
-    path = "/d2l/api/lp/#{$version}/orgstructure/recyclebin/#{org_unit_id}"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/recyclebin/#{org_unit_id}"
     _delete(path)
 end
 
@@ -194,7 +194,7 @@ end
 # id in the recycling bin and then appending '/restore'. This is then used in a
 # post method that performs the restoring process.
 def restore_recycled_org_unit(org_unit_id)
-    path = "/d2l/api/lp/#{$version}/orgstructure/recyclebin/#{org_unit_id}/restore"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/recyclebin/#{org_unit_id}/restore"
     _post(path, {})
 end
 
@@ -228,7 +228,7 @@ def create_custom_org_unit(org_unit_data)
                 'Parents' => [6606], # Number:D2LID
               }.merge!(org_unit_data)
     check_org_unit_data_validity(payload)
-    path = "/d2l/api/lp/#{$version}/orgstructure/"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/"
     # Requires: OrgUnitCreateData JSON block
     _post(path, payload)
     # returns: OrgUnit JSON data block
@@ -278,7 +278,7 @@ def update_org_unit(org_unit_id, org_unit_data)
         # }
     }.merge!(org_unit_data)
     check_org_unit_updated_data_validity(payload)
-    path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/#{org_unit_id}"
     puts '[-] Attempting put request (updating orgunit)...'
     # requires: OrgUnitProperties JSON block
     _put(path, payload)
@@ -289,7 +289,7 @@ end
 # Retrieves the organization info. Only gets a small amount of information,
 # but may be useful in some instances.
 def get_organization_info
-    path = "/d2l/api/lp/#{$version}/organization/info"
+    path = "/d2l/api/lp/#{$lp_ver}/organization/info"
     _get(path)
     # return: Organization JSON block
 end
@@ -299,7 +299,7 @@ end
 #
 # return: JSON array of all org units of an outype.
 def get_all_org_units_by_type_id(outype_id)
-    path = "/d2l/api/lp/#{$version}/orgstructure/6606/children/?ouTypeId=#{outype_id}"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/6606/children/?ouTypeId=#{outype_id}"
     _get(path)
 end
 
@@ -335,14 +335,14 @@ end
 # This retrieves information about a partituclar org unit type, referenced via
 # the outype_id argument. This is then returned as a JSON object.
 def get_outype(outype_id)
-    path = "/d2l/api/lp/#{$version}/outypes/#{outype_id}"
+    path = "/d2l/api/lp/#{$lp_ver}/outypes/#{outype_id}"
     _get(path)
 end
 
 # retrieves all outypes that are known and visible. This is returned as a JSON
 # array of orgunittype data blocks.
 def get_all_outypes
-    path = "/d2l/api/lp/#{$version}/outypes/"
+    path = "/d2l/api/lp/#{$lp_ver}/outypes/"
     _get(path)
 end
 
@@ -370,14 +370,14 @@ end
 
 # retrieve org unit type of department org units
 def get_department_outype
-  path = "/d2l/api/lp/#{$version}/outypes/department"
+  path = "/d2l/api/lp/#{$lp_ver}/outypes/department"
   _get(path)
   # returns OrgUnitType JSON data block
 end
 
 # retrieve org unit type of semester org units
 def get_semester_outype
-  path = "/d2l/api/lp/#{$version}/outypes/semester"
+  path = "/d2l/api/lp/#{$lp_ver}/outypes/semester"
   _get(path)
   # returns OrgUnitType JSON data block
 end

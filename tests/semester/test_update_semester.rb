@@ -1,4 +1,4 @@
-require_relative '../../lib/d2l_api'
+require_relative '../../lib/d2l_sdk'
 require 'test/unit'
 
 class TestSemesterUpdate < Test::Unit::TestCase

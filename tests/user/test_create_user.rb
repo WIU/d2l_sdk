@@ -1,4 +1,4 @@
-require_relative '../../lib/d2l_api'
+require_relative '../../lib/d2l_sdk'
 require 'test/unit'
 
 class TestUserCreation < Test::Unit::TestCase
@@ -7,7 +7,9 @@ class TestUserCreation < Test::Unit::TestCase
     end
     def teardown
         # delete created user from test_user_creation
-        delete_user_data(get_user_by_username('test-ruby-user123')['UserId'])
+        username = get_user_by_username('test-ruby-user123')['UserId']
+        #puts "deleting #{username}"
+        delete_user_data(username)
     end
 
     def test_user_creation

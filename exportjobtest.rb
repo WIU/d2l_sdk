@@ -1,4 +1,4 @@
-require_relative "lib/d2l_api.rb"
+require_relative "lib/d2l_sdk.rb"
 begin
   payload = {"DataSetId" => "2", "Filters" => [{"Name"=> "startDate", "Value" => "1"}] }
   ap payload

@@ -1,4 +1,4 @@
-require_relative '../../lib/d2l_api'
+require_relative '../../lib/d2l_sdk'
 require 'test/unit'
 
 class TestCourseTemplateUpdate < Test::Unit::TestCase
@@ -32,7 +32,7 @@ class TestCourseTemplateUpdate < Test::Unit::TestCase
     It sounds a lot like your production instance
     doesn't display (or require) an associated Semester
     for a created course, and for that reason, using the
-    API to create a course requires you to pass in null
+    sdk to create a course requires you to pass in null
     for a SemesterID
 =end
 end

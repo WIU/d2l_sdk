@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'd2l_api/version'
+require 'd2l_sdk/version'
 
 Gem::Specification.new do |spec|
-    spec.name = 'd2l_api'
-    spec.version       = D2lApi::VERSION
+    spec.name = 'd2l_sdk'
+    spec.version       = D2lSdk::VERSION
     spec.authors       = ['Andrew Kulpa']
     spec.email         = ['AJ-Kulpa@wiu.edu']
 
-    spec.summary       = 'Simple Ruby Gem to utilize the Valence/D2L API'
-    spec.description   = 'Simple Ruby Gem to utilize the Valence/D2L API; requires config file to have variables declared.'
+    spec.summary       = 'Simple Ruby Gem to utilize the Valence/D2L SDK'
+    spec.description   = 'Simple Ruby Gem to utilize the Valence/D2L SDK; requires config file to have variables declared.'
     spec.homepage      = 'https://gitlab.wiu.edu/ajk142/valence_testing'
     spec.license       = 'MIT'
 

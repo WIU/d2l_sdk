@@ -5,43 +5,43 @@ require 'json-schema'
 ####################################
 # Delete a particular group category from an org unit.
 def delete_group_category(org_unit_id, group_category_id)
-   path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/#{group_category_id}"
+   path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/#{group_category_id}"
    _delete(path)
 end
 
 # Delete a particular group from an org unit.
 def delete_group(org_unit_id, group_category_id, group_id)
-  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/(groupId)"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/(groupId)"
   _delete(path)
 end
 
 # Remove a particular user from a group.
 def remove_user_from_group(org_unit_id, group_category_id, group_id, user_id)
-  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/#{group_id}/enrollments/#{user_id}"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/#{group_id}/enrollments/#{user_id}"
   _delete(path)
 end
 
 # Retrieve a list of all the group categories for the provided org unit.
 def get_all_org_unit_group_categories(org_unit_id)
-  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/"
   _get(path)
 end
 
 # Retrieve a particular group category for an org unit.
 def get_org_unit_group_category(org_unit_id, group_category_id)
-  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/#{group_category_id}"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/#{group_category_id}"
   _get(path)
 end
 
 # Retrieve a list of all the groups in a specific group category for an OrgUnit
 def get_all_group_category_groups(org_unit_id, group_category_id)
-  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/"
   _get(path)
 end
 
 # Retrieve a particular group in an org unit.
 def get_org_unit_group(org_unit_id, group_category_id, group_id)
-  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/#{group_id}"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/#{group_id}"
   _get(path)
 end
 
@@ -111,7 +111,7 @@ def create_org_unit_group_category(org_unit_id, group_category_data)
               'GroupPrefix' => nil, # String | nil
             }.merge!(group_category_data)
   # Requires: JSON block of GroupCategoryData
-  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/"
   _post(path, payload)
   # returns a GroupCategoryData JSON block, in the Fetch form, of the new categ.
 end
@@ -148,7 +148,7 @@ def create_org_unit_group(org_unit_id, group_category_id, group_data)
     "Description" => {}
   }.merge!(group_data)
   # Requires: JSON block of GroupData
-  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/"
   _post(path, payload)
   # returns a GroupData JSON block, in the Fetch form, of the new group
 end
@@ -162,7 +162,7 @@ def update_org_unit_group(org_unit_id, group_category_id, group_id, group_data)
   }.merge!(group_data)
   # Requires: JSON block of GroupData
   validate_group_data(payload)
-  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/#{group_id}"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/#{group_id}"
   # returns a GroupData JSON block, in the Fetch form, of the updated group.
   _put(path, payload)
 end
@@ -184,7 +184,7 @@ def enroll_user_in_group(org_unit_id, group_category_id, group_id, user_id)
     "UserId" => user_id
   }
   # Requires: JSON block of GroupEnrollment
-  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/#{group_id}/enrollments/"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/#{group_id}/enrollments/"
   validate_group_enrollment_data(payload)
   _post(path, payload)
 end
@@ -220,7 +220,7 @@ def update_org_unit_group_category(org_unit_id, group_category_id, group_categor
             }.merge!(group_category_data)
   # Requires: JSON block of GroupCategoryData
   validate_update_group_category_data(payload)
-  path = "/d2l/api/lp/#{$version}/#{org_unit_id}/groupcategories/#{group_category_data}"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/#{group_category_data}"
   _put(path, payload)
   # Returns a GroupCategoryData JSON block, in the Fetch form, of updated grp. cat.
 end

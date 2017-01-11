@@ -55,7 +55,7 @@ def create_course_data(course_data)
     check_course_data_validity(payload)
     # ap payload
     # requires: CreateCourseOffering JSON block
-    path = "/d2l/api/lp/#{$version}/courses/"
+    path = "/d2l/api/lp/#{$lp_ver}/courses/"
     _post(path, payload)
     puts '[+] Course creation completed successfully'.green
 end
@@ -66,8 +66,9 @@ end
 #
 # returns: JSON array of classes.
 def get_org_department_classes(org_unit_id)
-    path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/#{org_unit_id}"
     _get(path)
+    # returns: JSON array of classes.
 end
 
 # Performs a get request to retrieve a particular course using the org_unit_id
@@ -76,12 +77,13 @@ end
 #
 # returns: JSON object of the course
 def get_course_by_id(org_unit_id)
-    path = "/d2l/api/lp/#{$version}/courses/#{org_unit_id}"
+    path = "/d2l/api/lp/#{$lp_ver}/courses/#{org_unit_id}"
     _get(path)
+    # returns: JSON object of the course
 end
 
 def get_all_courses
-    path = "/d2l/api/lp/#{$version}/orgstructure/6606/descendants/?ouTypeId=3"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/6606/descendants/?ouTypeId=3"
     _get(path)
 end
 
@@ -170,7 +172,7 @@ def update_course_data(course_id, new_data)
     check_updated_course_data_validity(payload)
     # ap payload
     # Define a path referencing the courses path
-    path = "/d2l/api/lp/#{$version}/courses/" + course_id.to_s
+    path = "/d2l/api/lp/#{$lp_ver}/courses/" + course_id.to_s
     _put(path, payload)
     # requires: CourseOfferingInfo JSON block
     puts '[+] Course update completed successfully'.green
@@ -183,7 +185,7 @@ end
 # This reference is created through a formatted path appended with the id.
 # Then, a delete http method is executed using this path, deleting the course.
 def delete_course_by_id(org_unit_id)
-    path = "/d2l/api/lp/#{$version}/courses/#{org_unit_id}" # setup user path
+    path = "/d2l/api/lp/#{$lp_ver}/courses/#{org_unit_id}" # setup user path
     #ap path
     _delete(path)
     puts '[+] Course data deleted successfully'.green

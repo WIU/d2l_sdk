@@ -25,7 +25,7 @@ def create_semester_data(semester_data)
               }.merge!(semester_data)
     # ap payload
     check_semester_data_validity(payload)
-    path = "/d2l/api/lp/#{$version}/orgstructure/"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/"
     _post(path, payload)
     puts '[+] Semester creation completed successfully'.green
 end
@@ -35,7 +35,7 @@ end
 #
 # Returns: Array of all semester JSON formatted data
 def get_all_semesters
-    path = "/d2l/api/lp/#{$version}/orgstructure/6606/children/?ouTypeId=5"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/6606/children/?ouTypeId=5"
     _get(path)
 end
 
@@ -44,7 +44,7 @@ end
 #
 # return: JSON of org unit properties.
 def get_semester_by_id(org_unit_id)
-    path = "/d2l/api/lp/#{$version}/orgstructure/" + org_unit_id.to_s
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/" + org_unit_id.to_s
     _get(path)
     # return json of org_unit properties
 end
@@ -128,7 +128,7 @@ def update_semester_data(org_unit_id, semester_data)
     # puts '[-] New Semester Data:'.yellow
     # ap payload
     # Define a path referencing the course data using the course_id
-    path = "/d2l/api/lp/#{$version}/orgstructure/#{org_unit_id}"
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/#{org_unit_id}"
     puts '[-] Attempting put request (updating orgunit)...'
     _put(path, payload)
     puts '[+] Semester update completed successfully'.green
@@ -140,7 +140,7 @@ end
 def recycle_semester_data(org_unit_id)
     # Define a path referencing the user data using the user_id
     puts '[!] Attempting to recycle Semester data referenced by id: ' + org_unit_id.to_s
-    path = "/d2l/api/lp/#{$version}/orgstructure/recyclebin/" + org_unit_id.to_s + '/recycle' # setup user path
+    path = "/d2l/api/lp/#{$lp_ver}/orgstructure/recyclebin/" + org_unit_id.to_s + '/recycle' # setup user path
     _post(path, {})
     puts '[+] Semester data recycled successfully'.green
 end

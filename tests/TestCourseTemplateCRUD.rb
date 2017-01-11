@@ -1,4 +1,4 @@
-require_relative '../lib/d2l_api'
+require_relative '../lib/d2l_sdk'
 require 'test/unit'
 require_relative 'course_template/test_create_course_template'
 require_relative 'course_template/test_update_course_template'

@@ -3,7 +3,7 @@ require_relative 'auth'
 ########################
 # QUERIES/RESPONSE:#####
 ########################
-
+@debug = false
 # performs a get request on a particular path of the host.
 # To do this, a uniform resource identifier string is created using the path and
 # specifying that this is a get request. Then, the RestClient get method is
@@ -20,7 +20,7 @@ def _get(path)
             JSON.parse(response)
         else
             display_response_code(response.code)
-            puts response
+            ap JSON.parse(response.body) if @debug
         end
     end
 end

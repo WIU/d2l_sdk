@@ -52,7 +52,7 @@ def create_user_data(user_data)
     # requires: UserData JSON block
     # Define a path referencing the course data using the course_id
     check_user_data_validity(payload)
-    path = "/d2l/api/lp/#{$version}/users/"
+    path = "/d2l/api/lp/#{$lp_ver}/users/"
     _post(path, payload)
     puts '[+] User creation completed successfully'.green
     # returns a UserData JSON block for the newly created user
@@ -61,7 +61,7 @@ end
 # Retrieves the whoami of the user authenticated through the config file.
 # returns: JSON whoami response
 def get_whoami
-    path = "/d2l/api/lp/#{$version}/users/whoami"
+    path = "/d2l/api/lp/#{$lp_ver}/users/whoami"
     _get(path)
     # returns a WhoAmIUser JSON block for the current user context
 end
@@ -72,7 +72,7 @@ end
 #
 # Returns: JSON of all users matching the parameters given.
 def get_users(org_defined_id = '', username = '', bookmark = '')
-    path = "/d2l/api/lp/#{$version}/users/"
+    path = "/d2l/api/lp/#{$lp_ver}/users/"
     path += "?orgDefinedId=#{org_defined_id}" if org_defined_id != ''
     path += "?userName=#{username}" if username != ''
     path += "?bookmark=#{bookmark}" if bookmark != ''
@@ -171,7 +171,7 @@ def _get_user_by_string(parameter, search_string, range, regex = false)
     matching_names = []
     # Average difference between each paged bookmarks beginnings is 109.6
     while i.to_i < range.max
-        # path = "/d2l/api/lp/#{$version}/users/?bookmark=" + i.to_s
+        # path = "/d2l/api/lp/#{$lp_ver}/users/?bookmark=" + i.to_s
         response = get_users_by_bookmark(i.to_s)
         if response['PagingInfo']['HasMoreItems'] == false
             # ap 'response returned zero items, last page possible for this thread..'
@@ -196,7 +196,7 @@ end
 # returns: JSON user object.
 def get_user_by_user_id(user_id)
     # Retrieve data for a particular user
-    path = "/d2l/api/lp/#{$version}/users/#{user_id}"
+    path = "/d2l/api/lp/#{$lp_ver}/users/#{user_id}"
     _get(path)
     # returns a UserData JSON block
 end
@@ -252,7 +252,7 @@ def update_user_data(user_id, new_data)
     # Requires: UpdateUserData JSON block
     check_updated_user_data_validity(payload)
     # Define a path referencing the user data using the user_id
-    path = "/d2l/api/lp/#{$version}/users/" + user_id.to_s
+    path = "/d2l/api/lp/#{$lp_ver}/users/" + user_id.to_s
     _put(path, payload)
     puts '[+] User data updated successfully'.green
     # Returns a UserData JSON block of the updated user's data
@@ -263,7 +263,7 @@ end
 # effectively deleted the user that is referenced.
 def delete_user_data(user_id)
     # Define a path referencing the user data using the user_id
-    path = "/d2l/api/lp/#{$version}/users/" + user_id.to_s # setup user path
+    path = "/d2l/api/lp/#{$lp_ver}/users/#{user_id}" # setup user path
     _delete(path)
     puts '[+] User data deleted successfully'.green
 end
