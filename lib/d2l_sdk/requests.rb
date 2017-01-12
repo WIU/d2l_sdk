@@ -3,7 +3,7 @@ require_relative 'auth'
 ########################
 # QUERIES/RESPONSE:#####
 ########################
-@debug = false
+@debug = true
 # performs a get request on a particular path of the host.
 # To do this, a uniform resource identifier string is created using the path and
 # specifying that this is a get request. Then, the RestClient get method is
@@ -33,7 +33,24 @@ def _post(path, payload)
     auth_uri = create_authenticated_uri(path, 'POST')
     RestClient.post(auth_uri, payload.to_json, content_type: :json)
 end
+=begin
+# in compliance with FTC1867 HTTP file upload
+def _upload(path, json, file, method, name, filename)
+    boundary = "xxBOUNDARYxx"
+    http_req = "Content-Type: multipart/form-data; boundary=#{boundary}\n"\
+               "Content-Length: {#{method} #{file.bytesize}}\n\n"\
+               "#{boundary}\n"\
+               "Content-Type: #{content-type}\n"
+               "Content-Disposition: form-data; name = '#{name}'; filename='#{filename}'\n"\
+    # Requires Content-Type and boundary specification on line 1
+    # Requires Content-Length with specification of method on line 2
+    # Requires boundary before the content
+    # Requires Content-Disposition, name, and filename line 1 of content
+    # Requires Content-Type as line 2 of content
+    # Requires boundary after the content
 
+end
+=end
 # performs a put request using the path and the payload arguments. After first
 # creating an authenticated uri, the put request is performed using the
 # authenticated uri, the payload argument, and specifying that the payload is

@@ -288,3 +288,108 @@ def get_user_profile(user_id)
   _get(path)
   # Returns UserProfile JSON data block
 end
+
+def get_profile_image(profile_id, size = 0)
+  path = "/d2l/api/lp/#{$lp_ver}/profile/#{profile_id}/image"
+  path += "?size=#{size}" if size != 0
+  _get(path)
+end
+
+def get_current_user_profile_image(size = 0)
+  path = "/d2l/api/lp/#{$lp_ver}/profile/myProfile/image"
+  path += "?size=#{size}" if size != 0
+  _get(path)
+end
+
+def get_user_profile_image(user_id)
+  path = "/d2l/api/lp/#{$lp_ver}/profile/user/#{user_id}"
+  path += "?size=#{size}" if size != 0
+  _get(path)
+end
+#####Notifications
+def get_all_notification_carrier_channels
+  path = "/d2l/api/lp/#{$lp_ver}/notifications/instant/carriers/"
+  _get(path)
+end
+
+def get_all_subscriptions_by_carrier(carrier_id)
+  path = "/d2l/api/lp/#{$lp_ver}/notifications/instant/carriers/#{carrier_id}/subscriptions/"
+  _get(path)
+end
+
+def subscribe_to_carrier_notification(carrier_id, message_type_id)
+  path = "/d2l/api/lp/#{$lp_ver}/notifications/instant/carriers/#{carrier_id}/subscriptions/#{message_type_id}"
+  _put(path,{})
+end
+
+#####LOCALES
+=begin
+# retrieve the locale account settings for a particular user.
+def get_locale_account_settings(user_id)
+  path = "/d2l/api/lp/#{$lp_ver}/accountSettings/#{user_id}/locale/"
+  _get(path)
+  # returns Locale JSON block
+end
+
+# optional parameter 'bookmark' for querying with a paging offset
+# Retrieve the collection of all known locales.
+def get_all_locales(bookmark = '')
+  path = "/d2l/api/lp/#{$lp_ver}/locales/"
+  _get(path)
+  # returns paged result set containing Locale data blocks
+end
+
+# Retrieve the properties for a particular locale.
+def get_locale_properties(locale_id)
+  path = "/d2l/api/lp/#{$lp_ver}/locales/#{locale_id}"
+  _get(path)
+  # returns Locale JSON block
+end
+
+def is_valid_locale_id(locale_id)
+
+
+end
+
+# Update the current user's locale account settings
+def update_current_user_locale_account_settings(update_locale)
+  payload = {"LocaleId" => 0}.merge!(update_locale)
+  path = "/d2l/api/lp/#{$lp_ver}/accountSettings/mysettings/locale/"
+  # requires UpdateSettings JSON data block
+  _put(path, payload)
+end
+
+def update_user_locale_account_settings(user_id)
+  payload = {"LocaleId" => 0}.merge!(update_locale)
+  path = "/d2l/api/lp/#{$lp_ver}/accountSettings/#{user_id}/locale/"
+  # requires UpdateSettings JSON data block
+  _put(path, payload)
+end
+
+
+######IMS/LIS role configuration
+# retrieve list of known LIS roles
+def get_lis_roles(lisUrn = "")
+  path = "/d2l/api/lp/#{$lp_ver}/imsconfig/roles/"
+  path += "#{lisUrn}" if lisUrn != ""
+  _get(path)
+  # returns array of LIS role data blocks
+end
+
+# retrieve mappings between user roles and LIS roles
+def get_user_role_lis_mappings(lisUrn = "", d2lid = 0)
+  path = "/d2l/api/lp/#{$lp_ver}/imsconfig/map/roles/"
+  path += "#{lisUrn}" if lisUrn != ""
+  path += "#{d2lid}" if d2lid != 0
+  _get(path)
+  # returns JSON array of LIS role mapping data blocks
+end
+
+# retrieve mapping between a user role and a LIS role
+def get_user_role_lis_mappings(role_id, d2lid = 0)
+  path = "/d2l/api/lp/#{$lp_ver}/imsconfig/map/roles/#{role_id}"
+  path += "#{d2lid}" if d2lid != 0
+  _get(path)
+  # returns JSON array of LIS role mapping data blocks
+end
+=end

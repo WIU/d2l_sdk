@@ -7,5 +7,9 @@ require_relative 'd2l_sdk/org_unit'
 require_relative 'd2l_sdk/section'
 require_relative 'd2l_sdk/semester'
 require_relative 'd2l_sdk/user'
+require_relative 'd2l_sdk/config_variables'
+require_relative 'd2l_sdk/demographics'
+require_relative 'd2l_sdk/logging'
+
 
 puts "d2l_sdk loaded"

@@ -181,6 +181,98 @@ def update_course_data(course_id, new_data)
     # Provide feedback that the update was successful
 end
 
+def is_course_component(key)
+  valid_components = %w(AttendanceRegisters Glossary News Checklists
+                        Grades QuestionLibrary Competencies GradesSettings
+                        Quizzes Content Groups ReleaseConditions CourseFiles
+                        Homepages Rubrics Discussions IntelligentAgents
+                        Schedule DisplaySettings Links SelfAssessments
+                        Dropbox LtiLink Surveys Faq LtiTP ToolNames Forms
+                        Navbars Widgets)
+  valid_components.include?(key)
+  # returns whether the key is actually a course component
+end
+
+def check_create_copy_job_request_validity(create_copy_job_request)
+    schema = {
+        'type' => 'object',
+        'required' => %w(SourceOrgUnitId Components CallbackUrl),
+        'properties' => {
+            'SourceOrgUnitId' => { 'type' => 'integer' },
+            'Components' => {
+                'type' => ['array', "null"],
+                'items' =>
+                  {
+                      'type' => "string"
+                  }
+            },
+            'CallbackUrl' => { 'type' => ['string', 'null'] }
+        }
+    }
+    JSON::Validator.validate!(schema, create_copy_job_request, validate_schema: true)
+end
+
+
+def create_new_copy_job_request(org_unit_id, create_copy_job_request)
+  payload =
+  {
+    'SourceOrgUnitId' => 0, # int
+    'Components' => nil, # [Str,...] || nil
+    'CallbackUrl' => nil # str | nil
+  }.merge!(create_copy_job_request)
+  # Check that the payload conforms to the JSON Schema of CreateCopyJobRequest
+  check_create_copy_job_request_validity(payload)
+  # Check each one of the components to see if they are valid Component types
+  payload["Components"].each do |component|
+    # If one of the components is not valid, cancel the CopyJobRequest operation
+    if(!is_course_component(key))
+      puts "'#{component}' specified is not a valid Copy Job Request component"
+      puts "Please retry with a valid course component such as 'Dropbox' or 'Grades'"
+      break
+    end
+  end
+  path = "/d2l/api/le/#{$le_ver}/import/#{org_unit_id}/copy/"
+  _post(path, payload)
+  # Returns CreateCopyJobResponse JSON block
+end
+
+def get_copy_job_request_status(org_unit_id, job_token)
+    path = "/d2l/api/le/#{le_ver}/import/#{org_unit_id}/copy/#{job_token}"
+    _get(path)
+    # returns GetCopyJobResponse JSON block
+    # GetImportJobResponse:
+    # {"JobToken" => <string:COPYJOBSTATUS_T>,
+    #  "TargetOrgUnitID" => <number:D2LID>,
+    #  "Status" => <string:IMPORTJOBTSTATUS_T>}
+    # States of getImport: UPLOADING, PROCESSING, PROCESSED, IMPORTING,
+    #                      IMPORTFAILED, COMPLETED
+end
+#########
+=begin
+def create_course_import_request(org_unit_id, callback_url = '')
+    path = "/d2l/le/#{le_ver}/import/#{org_unit_id}/imports/"
+    path += "?callbackUrl=#{callback_url}" if callback_url != ''
+    #_post(path, payload)
+    #_upload(path, json, file, 'POST', 'file', filename)
+
+end
+=end
+def get_course_import_job_request_status(org_unit_id, job_token)
+  path = "/d2l/api/le/#{le_ver}/import/#{org_unit_id}/imports/#{job_token}"
+  _get(path)
+  # returns GetImportJobResponse JSON block
+  # example:
+  # {"JobToken" => <string:COPYJOBSTATUS_T>}
+  # States: PENDING, PROCESSING, COMPLETE, FAILED, CANCELLED
+end
+
+def get_course_import_job_request_logs(org_unit_id, job_token, bookmark = '')
+  path = "/d2l/api/le/#{le_ver}/import/#{org_unit_id}/imports/#{job_token}/logs"
+  path += "?bookmark=#{bookmark}" if bookmark != ''
+  _get(path)
+  # returns PAGED RESULT of ImportCourseLog JSON blocks following bookmark param
+end
+
 # Deletes a course based, referencing it via its org_unit_id
 # This reference is created through a formatted path appended with the id.
 # Then, a delete http method is executed using this path, deleting the course.
@@ -196,4 +288,13 @@ def get_parent_outypes_courses_schema_constraints
   path = "/d2l/api/lp/#{$lp_ver}/courses/schema"
   _get(path)
   # returns a JSON array of SchemaElement blocks
+end
+
+def get_course_image(org_unit_id, width = 0, height = 0)
+  path = "/d2l/api/lp/#{lp_ver}/courses/#{org_unit_id}/image"
+  if width > 0 && height > 0
+    path += "?width=#{width}"
+    path += "&height=#{height}"
+  end
+  _get(path)
 end

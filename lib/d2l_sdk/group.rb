@@ -224,3 +224,9 @@ def update_org_unit_group_category(org_unit_id, group_category_id, group_categor
   _put(path, payload)
   # Returns a GroupCategoryData JSON block, in the Fetch form, of updated grp. cat.
 end
+
+def is_group_category_locker_set_up(org_unit_id, group_category_id)
+    path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/#{group_category_id}/locker"
+    _get(path)["HasLocker"]
+    #returns true if the group cat. locker has been setup already
+end
