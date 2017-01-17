@@ -14,6 +14,7 @@ require_relative 'auth'
 def _get(path)
     uri_string = create_authenticated_uri(path, 'GET')
     RestClient.get(uri_string) do |response, _request, _result|
+      begin
         case response.code
         when 200
             # ap JSON.parse(response) # Here is the JSON fmt'd response printed
@@ -22,7 +23,32 @@ def _get(path)
             display_response_code(response.code)
             ap JSON.parse(response.body) if @debug
         end
+      rescue => e
+        display_response_code(response.code)
+        ap JSON.parse(response.body) if @debug
+        raise
+      end
     end
+end
+
+def _get_raw(path)
+  uri_string = create_authenticated_uri(path, 'GET')
+  RestClient.get(uri_string) do |response, _request, _result|
+    begin
+      case response.code
+      when 200
+          # ap JSON.parse(response) # Here is the JSON fmt'd response printed
+          response
+      else
+          display_response_code(response.code)
+          ap response.body
+      end
+    rescue => e
+      display_response_code(response.code)
+      ap response.body
+      raise
+    end
+  end
 end
 
 # performs a post request using the path and the payload arguments. First, an
@@ -31,7 +57,16 @@ end
 # as JSON.
 def _post(path, payload)
     auth_uri = create_authenticated_uri(path, 'POST')
-    RestClient.post(auth_uri, payload.to_json, content_type: :json)
+    RestClient.post(auth_uri, payload.to_json, content_type: :json) do |response|
+      case response.code
+      when 200
+        JSON.parse(response)
+        ap JSON.parse(response.body)
+      else
+        display_response_code(response.code)
+        ap JSON.parse(response.body) if $debug
+      end
+    end
 end
 =begin
 # in compliance with FTC1867 HTTP file upload
@@ -48,7 +83,8 @@ def _upload(path, json, file, method, name, filename)
     # Requires Content-Disposition, name, and filename line 1 of content
     # Requires Content-Type as line 2 of content
     # Requires boundary after the content
-
+    # url, payload, {:multipart => true}, req
+    # if sending a file, multipart is autodetected
 end
 =end
 # performs a put request using the path and the payload arguments. After first
@@ -133,7 +169,13 @@ $le_ver = get_latest_product_version('le')
 $lp_ver = get_latest_product_version('lp')
 $ep_ver = get_latest_product_version('ep')
 #lti, rp, LR, ext,
-
+puts "versions set to:"
+versions = {
+  "le_ver" => $le_ver,
+  "lp_ver" => $lp_ver,
+  "ep_ver" => $ep_ver
+}
+ap versions
 # retrieve all supported versions for all product components
 def get_versions
   path = "/d2l/api/versions/"

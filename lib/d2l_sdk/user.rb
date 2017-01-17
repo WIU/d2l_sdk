@@ -268,12 +268,30 @@ def delete_user_data(user_id)
     puts '[+] User data deleted successfully'.green
 end
 
+# Retrieve a list of all the enrolled user roles the calling user can view
+# in an org unit
 def get_enrolled_roles_in_org_unit(org_unit_id)
   # this only lists ones viewable by the CALLING user
   # also, only includes roles that are enrolled in the org unit
   path = "/d2l/api/#{$lp_ver}/#{org_unit_id}/roles/"
   _get(path)
+  # returns JSON array of Role data blocks
 end
+
+# retrieve list of all known user roles
+def get_all_user_roles
+  path = "/d2l/api/lp/#{$lp_ver}/roles/"
+  _get(path)
+  # returns a JSON array of Role data blocks
+end
+
+# Retrieve a particular user role
+def get_user_role(role_id)
+  path = "/d2l/api/lp/#{$lp_ver}/roles/#{role_id}"
+  _get(path)
+  # returns a Role JSON data block
+end
+
 
 # retrieve personal profile info for the current user context
 def get_current_user_profile
@@ -283,8 +301,15 @@ def get_current_user_profile
 end
 
 # retrieve personal profile info of the specified user
-def get_user_profile(user_id)
+def get_user_profile_by_user_id(user_id)
   path = "/d2l/api/lp/#{$lp_ver}/profile/user/#{user_id}"
+  _get(path)
+  # Returns UserProfile JSON data block
+end
+
+# retrieve a particular personal profile, by Profile ID
+def get_user_profile_by_profile_id(profile_id)
+  path = "/d2l/api/lp/#{$lp_ver}/profile/#{profile_id}"
   _get(path)
   # Returns UserProfile JSON data block
 end
@@ -369,17 +394,17 @@ end
 
 ######IMS/LIS role configuration
 # retrieve list of known LIS roles
-def get_lis_roles(lisUrn = "")
+def get_lis_roles(lis_urn = "")
   path = "/d2l/api/lp/#{$lp_ver}/imsconfig/roles/"
-  path += "#{lisUrn}" if lisUrn != ""
+  path += "#{lis_urn}" if lis_urn != ""
   _get(path)
   # returns array of LIS role data blocks
 end
 
 # retrieve mappings between user roles and LIS roles
-def get_user_role_lis_mappings(lisUrn = "", d2lid = 0)
+def get_user_role_lis_mappings(lis_urn = "", d2lid = 0)
   path = "/d2l/api/lp/#{$lp_ver}/imsconfig/map/roles/"
-  path += "#{lisUrn}" if lisUrn != ""
+  path += "#{lis_urn}" if lis_urn != ""
   path += "#{d2lid}" if d2lid != 0
   _get(path)
   # returns JSON array of LIS role mapping data blocks

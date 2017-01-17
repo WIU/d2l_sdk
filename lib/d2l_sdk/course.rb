@@ -41,6 +41,8 @@ def create_course_data(course_data)
     #       if your back-end service has path enforcement set on for
     #       new org units, leave this property as an empty string
     # Define a valid, empty payload and merge! with the user_data. Print it.
+    # can be an issue if more than one course template associated with
+    # a course and the last course template parent to a course cannot be deleted
     payload = { 'Name' => '', # String
                 'Code' => 'off_SEMESTERCODE_STARNUM', # String
                 'Path' => '', # String
@@ -87,6 +89,15 @@ def get_all_courses
     _get(path)
 end
 
+# much slower means of getting courses if less than 100 courses
+def get_courses_by_code(org_unit_code)
+  all_courses = get_all_courses
+  courses = []
+  all_courses.each do |course|
+    courses.push(course) if course["Code"].downcase.include? "#{org_unit_code}".downcase
+  end
+  courses
+end
 # Retrieves all courses that have a particular string (org_unit_name) within
 # their names. This is done by first defining that none are found yet and then
 # searching through all course  for ones that do have a particular string within

@@ -1,6 +1,6 @@
 require_relative 'requests'
 require 'json-schema'
-
+require 'zip'
 ##########################
 # DATA HUB Import/Export##
 ##########################
@@ -92,7 +92,7 @@ def get_data_export_job(export_job_id)
 end
 
 def get_job_status_code(export_job_id)
-  get_data_export_job(export_job_id)["Status"]
+  get_data_export_job(export_job_id)["Status"] #if 2 is OKAY/COMPLETED
 end
 
 # Returns a ZIP file containing a CSV file with the data of the requested
@@ -104,7 +104,9 @@ def download_job_csv(export_job_id)
       status = get_job_status_code(export_job_id)
       case status
       when 2 # If the status was okay, break loop + return download of job
-        break _get("/d2l/api/lp/#{$lp_ver}/dataExport/download/#{export_job_id}")
+        File.write('export.zip',_get_raw("/d2l/api/lp/#{$lp_ver}/dataExport/download/#{export_job_id}"))
+        unzip("export.zip")
+        break
       else # else, print out the status and wait 10 seconds before next attempt
         puts "The job is not currently ready to download\n Status Code: #{status}"
         puts "Sleeping for 10 seconds.."
@@ -113,4 +115,14 @@ def download_job_csv(export_job_id)
       end
       # returns: ZIP file containing a CSV file of data from the export job
     end
+end
+
+def unzip(file_path)
+  Zip::ZipFile.open(file_path) { |zip_file|
+     zip_file.each { |f|
+     f_path=File.join("export_jobs", f.name)
+     FileUtils.mkdir_p(File.dirname(f_path))
+     zip_file.extract(f, f_path) unless File.exist?(f_path)
+   }
+  }
 end
