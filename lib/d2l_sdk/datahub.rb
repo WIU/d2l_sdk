@@ -105,7 +105,7 @@ def download_job_csv(export_job_id)
       case status
       when 2 # If the status was okay, break loop + return download of job
         File.write('export.zip',_get_raw("/d2l/api/lp/#{$lp_ver}/dataExport/download/#{export_job_id}"))
-        unzip("export.zip")
+        unzip("export.zip", /sec_|off_/)
         break
       else # else, print out the status and wait 10 seconds before next attempt
         puts "The job is not currently ready to download\n Status Code: #{status}"
@@ -117,20 +117,20 @@ def download_job_csv(export_job_id)
     end
 end
 
-def unzip(file_path)
+def unzip(file_path, csv_filter = //)
   Zip::File.open(file_path) { |zip_file|
      zip_file.each { |f|
      f_path=File.join("export_jobs", f.name)
      FileUtils.mkdir_p(File.dirname(f_path))
      zip_file.extract(f, f_path) unless File.exist?(f_path)
      if f.name.include? ".csv"
-       fix_csv_format("export_jobs/#{f.name}")
+       fix_csv_format("export_jobs/#{f.name}", csv_filter)
      end
    }
   }
 end
 
-def fix_csv_format(csv_fname)
+def fix_csv_format(csv_fname, regex_filter = //)
   # for this csv file...
   File.open(csv_fname + ".csv", 'w') do |file|
     # set row num to 0 to keep track of headers
@@ -139,8 +139,13 @@ def fix_csv_format(csv_fname)
     CSV.foreach(csv_fname) do |row|
       # the line is initialized as an empty string
       line = ""
+      if row_num > 0 && !(row[3] =~ regex_filter)
+        row_num += 1
+        next
+      end
       # for all of these values
       row[0..-1].each do |value|
+        # if not header and does not match regex_filter
         # If it a UTC date time value, then parse as Time.
         if value =~ /\b[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]*Z\b/ # if the value is UTC formatted
           line << "\"#{Time.parse(value)}\""

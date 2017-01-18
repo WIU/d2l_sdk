@@ -56,3 +56,4 @@ process_mainframe_data
 */export_jobs
 export_jobs
 *.zip
+*.document
