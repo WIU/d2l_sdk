@@ -1,6 +1,7 @@
 require_relative 'requests'
 require 'json-schema'
 require 'zip'
+require 'csv'
 ##########################
 # DATA HUB Import/Export##
 ##########################
@@ -95,9 +96,8 @@ def get_job_status_code(export_job_id)
   get_data_export_job(export_job_id)["Status"] #if 2 is OKAY/COMPLETED
 end
 
-# Returns a ZIP file containing a CSV file with the data of the requested
-# export job that you previosly submitted.
-#
+# Downloads the identified job and stores the zip within the working directory
+# Extracts zipped job contents in "export_jobs" folder of working directory
 def download_job_csv(export_job_id)
     attempt = 0
     while attempt < 7 # Attempts 7 times, waiting ~75 seconds total
@@ -118,11 +118,44 @@ def download_job_csv(export_job_id)
 end
 
 def unzip(file_path)
-  Zip::ZipFile.open(file_path) { |zip_file|
+  Zip::File.open(file_path) { |zip_file|
      zip_file.each { |f|
      f_path=File.join("export_jobs", f.name)
      FileUtils.mkdir_p(File.dirname(f_path))
      zip_file.extract(f, f_path) unless File.exist?(f_path)
+     if f.name.include? ".csv"
+       fix_csv_format("export_jobs/#{f.name}")
+     end
    }
   }
+end
+
+def fix_csv_format(csv_fname)
+  # for this csv file...
+  File.open(csv_fname + ".csv", 'w') do |file|
+    # set row num to 0 to keep track of headers
+    row_num = 0
+    # for each row
+    CSV.foreach(csv_fname) do |row|
+      # the line is initialized as an empty string
+      line = ""
+      # for all of these values
+      row[0..-1].each do |value|
+        # If it a UTC date time value, then parse as Time.
+        if value =~ /\b[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]*Z\b/ # if the value is UTC formatted
+          line << "\"#{Time.parse(value)}\""
+        # if its the last value in the row then dont put a comma at the end.
+        elsif value == row[-1]
+          line <<"\"#{value}\""
+        # not the last value in the row, throw a comma after the value
+        else
+          line << "\"#{value}\","
+        end
+      end
+      # append this line to the csv
+      file.write(line + "\n")
+      # increment the row number
+      row_num += 1
+    end
+  end
 end

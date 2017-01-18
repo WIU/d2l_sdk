@@ -9,7 +9,7 @@ payload = {
   'Filters' => [
     {
       'Name'=>'startDate',
-      'Value'=>'2017-01-16T19:39:19.787Z'
+      'Value'=>'2016-01-16T19:39:19.787Z'
     },
     {
       'Name'=>'endDate',
