@@ -1,4 +1,4 @@
-require_relative "lib/d2l_sdk"
+require_relative "../lib/d2l_sdk"
 
 # puts "printing out possible data sets..."
 # ap get_all_data_sets
@@ -9,7 +9,7 @@ payload = {
   'Filters' => [
     {
       'Name'=>'startDate',
-      'Value'=>'2017-01-17T19:39:19.787Z'
+      'Value'=>'2015-01-17T19:39:19.787Z'
     },
     {
       'Name'=>'endDate',
