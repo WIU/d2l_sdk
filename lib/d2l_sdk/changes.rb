@@ -1,4 +1,4 @@
-#require 'd2l_sdk'
+# require 'd2l_sdk'
 require 'net/ldap' # gem install net-ldap
 require 'highline/import' # gem install highline
 require "CSV"
@@ -37,9 +37,9 @@ def get_uid(users = nil)
   }
   base = 'dc=ad,dc=wiu,dc=edu' if @ad
   host = 'ad.wiu.edu' if @ad
-  host = "ldap3.wiu.edu" if !@ad
+  host = "ldap.wiu.edu" if !@ad
   base = "dc=wiu,dc=edu" if !@ad
-  credentials[:username] = "cn=#{username},ou=domain users,#{base}" if !@ad
+  credentials[:username] = "cn=#{username}" if !@ad
   ap credentials[:username]
   ldap = Net::LDAP.new(:host => host, :port => port, :encryption => 'TLSv1',
                        :base => base, :auth => credentials)
@@ -51,7 +51,7 @@ def get_uid(users = nil)
       attrs = ["wiuId"]
       search_filter = Net::LDAP::Filter.eq("wiuId", search_param)
       puts "searching '#{host}' for '#{search_param}'"
-      ldap.search(:filter => search_filter, :attributes => attrs, :return_result => false) { |item|
+      ldap.search(:filter => search_filter, :attributes => attrs) { |item|
         users[key]["wiuId"] = item["uidnumber"][0]
       }
     end
@@ -59,20 +59,24 @@ def get_uid(users = nil)
   elsif ldap.bind
     puts "success"
     puts "connection initialized to '#{host}'"
-    search_param = "aj-kulpa@wiu.edu"
+    search_param = "a*.com"
     search_filter = Net::LDAP::Filter.eq("mail", search_param)
+    attrs = ["mail", "cn", "sn", "objectclass"]
     puts "searching '#{host}' for '#{search_param}'"
-    ldap.search(:filter => search_filter, :return_result => false) { |item|
-      puts item.attribute_names.sort
+    puts ldap.search(:filter => search_filter, :base => base, :return_result => false,
+                :attributes => attrs,:return_referrals => true ,:deref => Net::LDAP::DerefAliases_Always) { |item|
+      puts "search result successful"
+      puts item.attribute_names
     }
+    ldap.get_operation_result
   else
     puts "failed"
     ap ldap.get_operation_result
     nil
   end
 end
-ap get_uid(get_current_enrollments)
-#ap get_uid
+#ap get_uid(get_current_enrollments)
+ap get_uid
 # Users = {}
 # CSV.foreach(starall_fname) do |row|
   # Get username through LDAP (email.gsub "@wiu.edu" "")

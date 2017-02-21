@@ -47,7 +47,7 @@ end
 # --bookmark: string
 def get_all_enrollments_of_user(user_id, org_unit_type_id = 0, role_id = 0,
                                 bookmark = '')
-    path = "/d2l/api/lp/#{$lp_ver}/users/#{user_id}/orgUnits/"
+    path = "/d2l/api/lp/1.3/enrollments/users/#{user_id}/orgUnits/"
     path += "?orgUnitTypeId=#{org_unit_type_id}" if org_unit_type_id != 0
     path += "?roleId=#{role_id}" if role_id != 0
     path += "?bookmark=#{bookmark}" if bookmark != ''

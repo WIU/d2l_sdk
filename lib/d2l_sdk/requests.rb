@@ -3,7 +3,7 @@ require_relative 'auth'
 ########################
 # QUERIES/RESPONSE:#####
 ########################
-@debug = true
+@debug = false
 # performs a get request on a particular path of the host.
 # To do this, a uniform resource identifier string is created using the path and
 # specifying that this is a get request. Then, the RestClient get method is
@@ -11,10 +11,13 @@ require_relative 'auth'
 # returned. Otherwise, nothing is returned and the response code is printed
 #
 # returns: JSON parsed response.
-def _get(path)
-    uri_string = create_authenticated_uri(path, 'GET')
+def _get(path, isD2l = true)
+    uri_string = path
+    uri_string = create_authenticated_uri(path, 'GET') if isD2l == true
+    ap uri_string if @debug
     RestClient.get(uri_string) do |response, _request, _result|
       begin
+        #ap _request
         case response.code
         when 200
             # ap JSON.parse(response) # Here is the JSON fmt'd response printed
@@ -31,8 +34,9 @@ def _get(path)
     end
 end
 
-def _get_raw(path)
-  uri_string = create_authenticated_uri(path, 'GET')
+def _get_raw(path, isD2l = true)
+  uri_string = path
+  uri_string = create_authenticated_uri(path, 'GET') if isD2l == true
   RestClient.get(uri_string) do |response, _request, _result|
     begin
       case response.code
@@ -51,12 +55,15 @@ def _get_raw(path)
   end
 end
 
+
+
 # performs a post request using the path and the payload arguments. First, an
 # authenticated uri is created to reference a particular resource. Then, the
 # post method is executed using the payload and specifying that it is formatted
 # as JSON.
-def _post(path, payload)
-    auth_uri = create_authenticated_uri(path, 'POST')
+def _post(path, payload, isD2l = true)
+    auth_uri = path
+    auth_uri = create_authenticated_uri(path, 'POST') if isD2l == true
     RestClient.post(auth_uri, payload.to_json, content_type: :json) do |response|
       case response.code
       when 200
@@ -91,16 +98,18 @@ end
 # creating an authenticated uri, the put request is performed using the
 # authenticated uri, the payload argument, and specifying that the payload is
 # formatted in JSON.
-def _put(path, payload)
-    auth_uri = create_authenticated_uri(path, 'PUT')
+def _put(path, payload, isD2l = true)
+    auth_uri = path
+    auth_uri = create_authenticated_uri(path, 'PUT') if isD2l == true
     # Perform the put action, updating the data; Provide feedback to client.
     RestClient.put(auth_uri, payload.to_json, content_type: :json)
 end
 
 # Performs a delete request by creating an authenticated uri and using the
 # RestClient delete method and specifying the content_type as being JSON.
-def _delete(path)
-    auth_uri = create_authenticated_uri(path, 'DELETE')
+def _delete(path, isD2l = true)
+    auth_uri = path
+    auth_uri = create_authenticated_uri(path, 'DELETE') if isD2l == true
     RestClient.delete(auth_uri, content_type: :json)
 end
 
