@@ -57,3 +57,7 @@ process_mainframe_data
 export_jobs
 *.zip
 *.document
+*example_tests
+*ignore
+*tests
+*old

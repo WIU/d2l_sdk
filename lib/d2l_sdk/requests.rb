@@ -67,6 +67,7 @@ def _post(path, payload, isD2l = true)
     RestClient.post(auth_uri, payload.to_json, content_type: :json) do |response|
       case response.code
       when 200
+        return nil if response == ""
         JSON.parse(response)
         ap JSON.parse(response.body)
       else
