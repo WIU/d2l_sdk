@@ -61,3 +61,5 @@ export_jobs
 *ignore
 *tests
 *old
+*d2l_config*
+*changes.rb
