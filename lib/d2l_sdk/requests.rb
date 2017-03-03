@@ -171,7 +171,15 @@ def get_product_supported_versions(product_code)
 end
 
 def get_latest_product_version(product_code)
-  get_product_supported_versions(product_code)["SupportedVersions"][-1]
+  begin
+    get_product_supported_versions(product_code)["SupportedVersions"][-1]
+  rescue SocketError => e
+    puts "\n[!] Error likely caused by an incorrect 'd2l_config.json' hostname value: #{e}"
+    exit
+  rescue NoMethodError => e
+    puts "\n[!] Error likely caused by incorrect 'd2l_config.json' api or user values: #{e}"
+    exit
+  end
 end
 
 # init products to newest versions.
