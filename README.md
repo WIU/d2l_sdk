@@ -60,7 +60,6 @@ Of course, if a proper `d2l_config.json` is created within the current directory
   "app_id": "YOUR APP ID",
   "app_key": "YOUR APP KEY"
 }
-
 ```
 
 
@@ -70,26 +69,24 @@ Example:
 
 ```sh
 $ irb
-$ require_relative "lib/d2l_sdk"
+$ require "d2l_sdk"
 $ x =  multithreaded_user_search("FirstName", "test", 17) #searches using 17 threads for a user based on 'test' being in the first name.
 $ get_user_by_user_id(x[0])
 $ update_user_data(x[0]["Identifier"], x[0].merge!('FirstName'=>"Test2"))
 ```
 
-One may also simply clone this repository, edit the lib/d2l_sdk/config.rb, run rake build within a local repository and gem install that gem. This can be done as follows:
+One may also simply install the gem via `gem install d2l_sdk`. Once this is done, just require it in your script using `require 'd2l_sdk'` and utilize a number of the methods to streamline your app development process for D2L.
 
-```sh
-$ git clone -b master git@gitlab.wiu.edu:ajk142/valence_testing.git
-```
-Edit the config.rb for your api keys, version, and hostname
 
-```sh
-$ rake build
-$ gem install d2l_sdk pkg/d2l_sdk-[VERSION].gem
-```
 Uninstalling the previous version can be done by this command:
 ```sh
 $ gem uninstall d2l_sdk --version [PREVIOUS-VERSION]
+```
+
+or
+
+```sh
+$ gem cleanup d2l_sdk
 ```
 
 
