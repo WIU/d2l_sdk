@@ -1,7 +1,7 @@
-# Ruby Valence API
-[![Gem Version](https://badge.fury.io/rb/d2l_api.svg)](https://badge.fury.io/rb/d2l_api)
+# Ruby Valence SDK
+[![Gem Version](https://badge.fury.io/rb/d2l_sdk.svg)](https://badge.fury.io/rb/d2l_sdk)
 
-The Ruby Valence sdk utilizes a CRUD based API that facilitates HTTP methods coinciding with Brightspace's routing table to perform common CRUD functions.
+The Ruby Valence SDK utilizes a CRUD based API that facilitates HTTP methods coinciding with Brightspace's routing table to perform common CRUD functions.
 
 You can:
   - create, get, update, and delete users, courses, semesters, org_units, and course_templates.
@@ -9,7 +9,7 @@ You can:
 
 The Valence sdk
 
-> The Valence sdk is Rest-like, allowing interactions through HTTP with the back-end of a host. Most all of the Learning Platform functions that comprise D2L's Rest-like API are usable through this Ruby sdk implementation.
+> The Valence API is Rest-like, allowing interactions through HTTP with the back-end of a host. Most all of the Learning Platform functions that comprise D2L's Rest-like API are usable through this Ruby SDK implementation.
 
 While not all functions have been implemented for the Learning Platform of the Valence sdk, all critical CRUD functionalities have been implemented.
 
@@ -42,37 +42,47 @@ Of course, this requires a Desire2Learn/Valence server to work with.
 
 ### Installation
 
-Ruby Valence sdk can be installed using the following statement:
+Ruby Valence sdk can be installed using the following statement at a later date (upon repackaging as a gem):
 
 ```sh
 $ gem install d2l_sdk
 ```
 
-Once installed, the config file of the gem must be setup. To do this, you must first unpack the gem, go to bin/lib/ and alter config.rb with your own api and user keys.
+Once installed, the config file of the gem must be setup. This will be done upon the first use.
 
-Example:
-```sh
-$ gem unpack d2l_sdk
-$ cd d2l_sdk-0.1.1/lib/d2l_sdk/
-$ vim config.rb
+Of course, if a proper `d2l_config.json` is created within the current directory, the setup will not be required. Here is the format of this file, should you wish to pre-create it:
+
+```
+{
+  "hostname": "YOUR HOSTNAME",
+  "user_id": "YOUR USER ID",
+  "user_key": "YOUR USER KEY",
+  "app_id": "YOUR APP ID",
+  "app_key": "YOUR APP KEY"
+}
+
 ```
 
+
 ### Usage
-Complete the installation, require the 'd2l_sdk' gem in your ruby file, and use the many functions supported by the api to perform CRUD methods.
+Complete the installation, require the 'd2l_sdk' library in your ruby file, and use the many functions supported by the api to perform CRUD methods.
 Example:
+
 ```sh
 $ irb
-$ require "d2l_sdk"
+$ require_relative "lib/d2l_sdk"
 $ x =  multithreaded_user_search("FirstName", "test", 17) #searches using 17 threads for a user based on 'test' being in the first name.
 $ get_user_by_user_id(x[0])
 $ update_user_data(x[0]["Identifier"], x[0].merge!('FirstName'=>"Test2"))
 ```
 
 One may also simply clone this repository, edit the lib/d2l_sdk/config.rb, run rake build within a local repository and gem install that gem. This can be done as follows:
+
 ```sh
-$ git clone -b restructuring git@gitlab.wiu.edu:ajk142/valence_testing.git
+$ git clone -b master git@gitlab.wiu.edu:ajk142/valence_testing.git
 ```
 Edit the config.rb for your api keys, version, and hostname
+
 ```sh
 $ rake build
 $ gem install d2l_sdk pkg/d2l_sdk-[VERSION].gem
@@ -88,100 +98,100 @@ $ gem uninstall d2l_sdk --version [PREVIOUS-VERSION]
 ### List of Methods
 
 1. Users
-  * create_user_data(JSON user_data)
-  * get_whoami
-  * get_users(String org_defined_id, String username, String bookmark)
-  * get_user_by_username(String username)
-  * get_users_by_bookmark(String bookmark)
-  * does_user_exist(String username)
-  * multithreaded_user_search(String parameter, String search_string, Int num_of_threads, Boolean regex)
-  * get_user_by_user_id(String user_id)
-  * update_user_data(String user_id, JSON new_data)
-  * delete_user_data(String user_id)
+  * `create_user_data(JSON user_data)`
+  * `get_whoami`
+  * `get_users(String org_defined_id, String username, String bookmark)`
+  * `get_user_by_username(String username)`
+  * `get_users_by_bookmark(String bookmark)`
+  * `does_user_exist(String username)`
+  * `multithreaded_user_search(String parameter, String search_string, Int num_of_threads, Boolean regex)`
+  * `get_user_by_user_id(String user_id)`
+  * `update_user_data(String user_id, JSON new_data)`
+  * `delete_user_data(String user_id)`
 2. Semesters
-  * create_semester_data(JSON semester_data)
-  * get_all_semesters
-  * get_semester_by_id(String org_unit_id)
-  * add_course_to_semester(Int course_id, Int semester_id)
-  * remove_course_from_semester(Int course_id, Int semester_id)
-  * get_semester_by_name(String search_string)
-  * update_semester_data(String org_unit_id, JSON semester_data)
-  * recycle_semester_data(String org_unit_id)
-  * recycle_semester_by_name(String name)
+  * `create_semester_data(JSON semester_data)`
+  * `get_all_semesters`
+  * `get_semester_by_id(String org_unit_id)`
+  * `add_course_to_semester(Int course_id, Int semester_id)`
+  * `remove_course_from_semester(Int course_id, Int semester_id)`
+  * `get_semester_by_name(String search_string)`
+  * `update_semester_data(String org_unit_id, JSON semester_data)`
+  * `recycle_semester_data(String org_unit_id)`
+  * `recycle_semester_by_name(String name)`
 3. Courses
-  * create_course_data(JSON course_data)
-  * get_org_department_classes(String org_unit_id)
-  * get_course_by_id(String org_unit_id)
-  * get_all_courses
-  * get_courses_by_name(String org_unit_name)
-  * get_courses_by_property_by_string(String property, String search_string)
-  * get_courses_by_property_by_regex(String property, regular-expression regex)
-  * update_course_data(String course_id, JSON new_data)
-  * delete_course_by_id(String org_unit_id)
+  * `create_course_data(JSON course_data)`
+  * `get_org_department_classes(String org_unit_id)`
+  * `get_course_by_id(String org_unit_id)`
+  * `get_all_courses`
+  * `get_courses_by_name(String org_unit_name)`
+  * `get_courses_by_property_by_string(String property, String search_string)`
+  * `get_courses_by_property_by_regex(String property, regular-expression regex)`
+  * `update_course_data(String course_id, JSON new_data)`
+  * `delete_course_by_id(String org_unit_id)`
 4. Course Templates
-  * create_course_template(JSON course_template_data)
-  * get_course_template(String org_unit_id)
-  * get_all_course_templates
-  * get_course_template_by_name(String org_unit_name)
-  * get_course_templates_by_schema
-  * update_course_template(String org_unit_id, JSON new_data)
-  * delete_course_template(String org_unit_id)
-  * delete_all_course_templates_with_name(String name)
+  * `create_course_template(JSON course_template_data)`
+  * `get_course_template(String org_unit_id)`
+  * `get_all_course_templates`
+  * `get_course_template_by_name(String org_unit_name)`
+  * `get_course_templates_by_schema`
+  * `update_course_template(String org_unit_id, JSON new_data)`
+  * `delete_course_template(String org_unit_id)`
+  * `delete_all_course_templates_with_name(String name)`
 5. Org Units
-  * get_org_unit_descendants(String org_unit_id, Int ou_type_id)
-  * get_paged_org_unit_descendants(String org_unit_id, Int ou_type_id, String bookmark)
-  * get_org_unit_parents(String org_unit_id, Int ou_type_id)
-  * add_parent_to_org_unit(Int parent_ou_id, Int child_ou_id)
-  * get_org_unit_ancestors(String org_unit_id, Int ou_type_id)
-  * get_org_unit_children(String org_unit_id, Int ou_type_id)
-  * get_paged_org_unit_children(String org_unit_id, String bookmark)
-  * get_org_unit_properties(String org_unit_id)
-  * delete_relationship_of_child_with_parent(Int parent_ou_id, Int child_ou_id)
-  * delete_relationship_of_parent_with_child(Int parent_ou_id, Int child_ou_id)
-  * get_all_childless_org_units(String org_unit_type String org_unit_code, String org_unit_name, String bookmark)
-  * get_all_orphans(String org_unit_type String org_unit_code, String org_unit_name, String bookmark)
-  * add_child_org_unit(String org_unit_id, Int child_org_unit_id)
-  * get_recycled_org_units(String bookmark)
-  * recycle_org_unit(String org_unit_id)
-  * delete_recycled_org_unit(String org_unit_id)
-  * restore_recyced_org_unit(string org_unit_id)
-  * create_custom_org_unit(JSON org_unit_data)
-  * update_org_unit(String org_unit_id, JSON org_unit_data)
-  * get_organization_info
-  * get_all_org_units_by_type_id(Int outype_id)
-  * get_outype(Int outype_id)
-  * get_all_outypes
+  * `get_org_unit_descendants(String org_unit_id, Int ou_type_id)`
+  * `get_paged_org_unit_descendants(String org_unit_id, Int ou_type_id, String bookmark)`
+  * `get_org_unit_parents(String org_unit_id, Int ou_type_id)`
+  * `add_parent_to_org_unit(Int parent_ou_id, Int child_ou_id)`
+  * `get_org_unit_ancestors(String org_unit_id, Int ou_type_id)`
+  * `get_org_unit_children(String org_unit_id, Int ou_type_id)`
+  * `get_paged_org_unit_children(String org_unit_id, String bookmark)`
+  * `get_org_unit_properties(String org_unit_id)`
+  * `delete_relationship_of_child_with_parent(Int parent_ou_id, Int child_ou_id)`
+  * `delete_relationship_of_parent_with_child(Int parent_ou_id, Int child_ou_id)`
+  * `get_all_childless_org_units(String org_unit_type String org_unit_code, String org_unit_name, String bookmark)`
+  * `get_all_orphans(String org_unit_type String org_unit_code, String org_unit_name, String bookmark)`
+  * `add_child_org_unit(String org_unit_id, Int child_org_unit_id)`
+  * `get_recycled_org_units(String bookmark)`
+  * `recycle_org_unit(String org_unit_id)`
+  * `delete_recycled_org_unit(String org_unit_id)`
+  * `restore_recyced_org_unit(string org_unit_id)`
+  * `create_custom_org_unit(JSON org_unit_data)`
+  * `update_org_unit(String org_unit_id, JSON org_unit_data)`
+  * `get_organization_info`
+  * `get_all_org_units_by_type_id(Int outype_id)`
+  * `get_outype(Int outype_id)`
+  * `get_all_outypes`
 6. Enrollments
-  * create_user_enrollment(JSON course_enrollment_data)
-  * get_user_enrollment_data_by_org_unit(String user_id, String org_unit_id)
-  * get_all_enrollments_of_user(String user_id, optional String org_unit_type_id, optional String role_d, optional String bookmark)
-  * get_org_unit_enrollment_data_by_user(String org_unit_id, String user_id)
-  * get_enrollments_details_of_current_user
-  * get_all_enrollments_of_current_user(optional String bookmark, optional String sort_by, optional boolean is_active, optional UTCDATETIME start_date_time, optional UTCDATETIME end_date_time, optional boolean can_access)
-  * get_enrolled_users_in_classlist(String org_unit_id)
-  * delete_user_enrollment(String user_id, String org_unit_id)
+  * `create_user_enrollment(JSON course_enrollment_data)`
+  * `get_user_enrollment_data_by_org_unit(String user_id, String org_unit_id)`
+  * `get_all_enrollments_of_user(String user_id, optional String org_unit_type_id, optional String role_d, optional String bookmark)`
+  * `get_org_unit_enrollment_data_by_user(String org_unit_id, String user_id)`
+  * `get_enrollments_details_of_current_user`
+  * `get_all_enrollments_of_current_user(optional String bookmark, optional String sort_by, optional boolean is_active, optional UTCDATETIME start_date_time, optional UTCDATETIME end_date_time, optional boolean can_access)`
+  * `get_enrolled_users_in_classlist(String org_unit_id)`
+  * `delete_user_enrollment(String user_id, String org_unit_id)`
 7. Groups
-  * delete_group_category(String org_unit_id, String group_category_id)
-  * delete_group(String org_unit_id, String group_category_id, String group_id)
-  * remove_user_from_group(String org_unit_id, String group_category_id, String group_id, String user_id)
-  * get_all_org_unit_group_categories(String org_unit_id)
-  * get_org_unit_group_category(String org_unit_id, String group_category_id)
-  * get_all_group_category_groups(String org_unit_id, String group_category_id)
-  * get_org_unit_group(String org_unit_id, String group_category_id, String group_id)
-  * create_org_unit_group_category(String org_unit_id, JSON group_category_data)
-  * create_org_unit_group(String org_unit_id String group_category_id, JSON group_data)
-  * update_org_unit_group(String org_unit_id, String group_category_id, String group_id, JSON group_data)
-  * enroll_user_in_group(String org_unit_id, String group_category_id, String group_id, String user_id)
-  * update_org_unit_group_category(String org_unit_id, String group_category_id, JSON group_category_data)
+  * `delete_group_category(String org_unit_id, String group_category_id)`
+  * `delete_group(String org_unit_id, String group_category_id, String group_id)`
+  * `remove_user_from_group(String org_unit_id, String group_category_id, String group_id, String user_id)`
+  * `get_all_org_unit_group_categories(String org_unit_id)`
+  * `get_org_unit_group_category(String org_unit_id, String group_category_id)`
+  * `get_all_group_category_groups(String org_unit_id, String group_category_id)`
+  * `get_org_unit_group(String org_unit_id, String group_category_id, String group_id)`
+  * `create_org_unit_group_category(String org_unit_id, JSON group_category_data)`
+  * `create_org_unit_group(String org_unit_id String group_category_id, JSON group_data)`
+  * `update_org_unit_group(String org_unit_id, String group_category_id, String group_id, JSON group_data)`
+  * `enroll_user_in_group(String org_unit_id, String group_category_id, String group_id, String user_id)`
+  * `update_org_unit_group_category(String org_unit_id, String group_category_id, JSON group_category_data)`
 8. Sections
-  * delete_section(String org_unit_id, String section_id)
-  * get_org_unit_sections(String org_unit_id)
-  * get_org_unit_section_property_data(String org_unit_id)
-  * get_section_data(String org_unit_id, String section_id)
-  * create_org_unit_section(String org_unit_id JSON section_data)
-  * enroll_user_in_org_section(String org_unit_id, String section_id, JSON section_data)
-  * update_org_unit_section_properties(String org_unit_id, JSON section_property_data)
-  * update_org_unit_section_info(String org_unit_id, String section_id, JSON section_data)
+  * `delete_section(String org_unit_id, String section_id)`
+  * `get_org_unit_sections(String org_unit_id)`
+  * `get_org_unit_section_property_data(String org_unit_id)`
+  * `get_section_data(String org_unit_id, String section_id)`
+  * `create_org_unit_section(String org_unit_id JSON section_data)`
+  * `enroll_user_in_org_section(String org_unit_id, String section_id, JSON section_data)`
+  * `update_org_unit_section_properties(String org_unit_id, JSON section_property_data)`
+  * `update_org_unit_section_info(String org_unit_id, String section_id, JSON section_data)`
 
 ## Contributing
 1. Fork it!
@@ -192,10 +202,11 @@ $ gem uninstall d2l_sdk --version [PREVIOUS-VERSION]
 
 ## History
 * December 1, 2016: Project began
-* December 20, 2016: Release version 0.1.2 published to RubyGems.org
+* December 20, 2016: Release version 0.1.2 published to RubyGems.org as `d2l_api`
+* March 7, 2017: Release version 0.1.7 published to RubyGems.org as `d2l_sdk`
 
 ## Credits
 Matt Mencel: Assigning and assisting in this project.
 
 ## License
-Pending..
+MIT License (MIT) per the License.txt file.

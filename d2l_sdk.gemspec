@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
     spec.authors       = ['Andrew Kulpa']
     spec.email         = ['AJ-Kulpa@wiu.edu']
 
-    spec.summary       = 'Simple Ruby Gem to utilize the Valence/D2L SDK'
-    spec.description   = 'Simple Ruby Gem to utilize the Valence/D2L SDK; requires config file to have variables declared.'
+    spec.summary       = 'Simple Ruby Gem to utilize the Valence/D2L API'
+    spec.description   = 'Simple Ruby Gem to utilize the Valence/D2L API; requires proper creation of a d2l_config.json file on the first use.'
     spec.homepage      = 'https://gitlab.wiu.edu/ajk142/valence_testing'
     spec.license       = 'MIT'
 
