@@ -10,6 +10,7 @@ require_relative 'd2l_sdk/user'
 require_relative 'd2l_sdk/config_variables'
 require_relative 'd2l_sdk/demographics'
 require_relative 'd2l_sdk/logging'
+require_relative 'd2l_sdk/course_content'
 
 
 puts "d2l_sdk loaded"
