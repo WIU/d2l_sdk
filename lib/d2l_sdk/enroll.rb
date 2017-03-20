@@ -79,8 +79,8 @@ def get_org_unit_enrollments(org_unit_id, role_id = 0, bookmark = '')
 end
 
 # Retrieve the enrollment details for the current user in the provided org unit.
-def get_enrollments_details_of_current_user
-    path = "/d2l/api/lp/#{$lp_ver}/enrollments/myenrollments/org_unit_id/"
+def get_enrollments_details_of_current_user(org_unit_id)
+    path = "/d2l/api/lp/#{$lp_ver}/enrollments/myenrollments/#{org_unit_id}/"
     _get(path)
     # Returns: MyOrgUnitInfo JSON block.
 end

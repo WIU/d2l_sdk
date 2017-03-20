@@ -182,18 +182,6 @@ def get_latest_product_version(product_code)
   end
 end
 
-# init products to newest versions.
-$le_ver = get_latest_product_version('le')
-$lp_ver = get_latest_product_version('lp')
-$ep_ver = get_latest_product_version('ep')
-#lti, rp, LR, ext,
-puts "versions set to:"
-versions = {
-  "le_ver" => $le_ver,
-  "lp_ver" => $lp_ver,
-  "ep_ver" => $ep_ver
-}
-ap versions
 # retrieve all supported versions for all product components
 def get_versions
   path = "/d2l/api/versions/"

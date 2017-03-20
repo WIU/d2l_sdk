@@ -1,3 +1,4 @@
+require_relative 'd2l_sdk/setup_versions'
 require_relative 'd2l_sdk/course_template'
 require_relative 'd2l_sdk/course'
 require_relative 'd2l_sdk/datahub'

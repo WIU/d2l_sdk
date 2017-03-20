@@ -346,6 +346,7 @@ def get_all_outypes
     _get(path)
 end
 
+# NOTE: You cannot update the org unit codes if they are default ouTypes
 # update a particular org unit type (with POST for some reason)
 def update_outype(outype_id, create_org_unit_type_data)
   payload =
