@@ -137,9 +137,10 @@ end
 # PINNING:##############
 ########################
 
-# TODO: Remove the pin from the provided org unit.
+# REVIEW: Remove the pin from the provided org unit.
 def delete_current_user_org_unit_pin(org_unit_id)
-  # DELETE /d2l/api/lp/(version)/enrollments/myenrollments/(orgUnitId)/pin
+  path = "/d2l/api/lp/#{$lp_ver}/enrollments/myenrollments/#{org_unit_id}/pin"
+  _delete(path)
   # RETURNS: nil
 end
 
@@ -164,38 +165,43 @@ end
 ########################
 # NOTE: auditor_id's and auditee_id's are just user_id's.
 
-# TODO: Remove an auditee from the list of users that an auditor is auditing.
+# REVIEW: Remove an auditee from the list of users that an auditor is auditing.
 # Input: auditee_id (D2LID as single JSON number) - Auditee to be removed
 def remove_auditee(auditor_id, auditee_id)
-  # DELETE /d2l/api/le/(version)/auditing/auditors/(auditorId)/auditees/
+  path = "/d2l/api/le/#{$le_ver}/auditing/auditors/#{auditor_id}/auditees/"
+  _delete(path, true, {AuditeeId: auditee_id})
 end
 
-# TODO: Retrieve information for an auditee.
+# REVIEW: Retrieve information for an auditee.
 # RETURNS: a AuditedUser JSON block.
 def get_auditee(auditee_id)
-  # GET /d2l/api/le/(version)/auditing/auditees/(auditeeId)
+  path = "/d2l/api/le/#{$le_ver}/auditing/auditees/#{auditee_id}"
+  _get(path)
   # RETURNS: a AuditedUser JSON block.
 end
 
-# TODO: Retrieve information for an auditor.
+# REVIEW: Retrieve information for an auditor.
 # RETURNS: a Auditor JSON block.
-def get_auditor(auditee_id)
-  # GET /d2l/api/le/(version)/auditing/auditors/(auditorId)
+def get_auditor(auditor_id)
+  path = "/d2l/api/le/#{$le_ver}/auditing/auditors/#{auditor_id}"
+  _get(path)
   # RETURNS: a Auditor JSON block
 end
 
-# TODO: Retrieve the list of users an auditor is auditing.
+# REVIEW: Retrieve the list of users an auditor is auditing.
 # RETURNS: a JSON array of Auditee blocks.
 def get_auditor_auditees(auditor_id)
-  # GET /d2l/api/le/(version)/auditing/auditors/(auditorId)/auditees/
+  path = "/d2l/api/le/#{$le_ver}/auditing/auditors/#{auditor_id}/auditees/"
+  _get(path)
   # RETURNS: a JSON array of Auditee blocks.
 end
 
-# TODO: Add a user to the list of those an auditor is auditing.
+# REVIEW: Add a user to the list of those an auditor is auditing.
 # INPUT:
 #    JSON Param - auditee_id (D2LID as single JSON number) - Auditee to be added
 # RETURNS: nil?
 def add_auditor_auditee(auditor_id, auditee_id)
-  # POST /d2l/api/le/(version)/auditing/auditors/(auditorId)/auditees/
+  path = "/d2l/api/le/#{$le_ver}/auditing/auditors/#{auditor_id}/auditees/"
+  _post(path, auditee_id)
   # RETURNS: nil?
 end

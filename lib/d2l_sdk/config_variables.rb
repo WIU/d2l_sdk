@@ -1,25 +1,36 @@
 require_relative 'auth'
 
-########################
-# CONFIG VARIABLES:#####
-########################
+
 @debug = false
 
-#Retrieve the definitions for all the configuration variables the user has access to view.
+########################
+# DEFINITIONS:##########
+########################
+# NOTE: These provide access to the definition meta-data
+#       surrounding configuration variables.
+
+# Retrieve the definitions for all the configuration variables the
+# user has access to view.
 def get_all_config_var_definitions(search='', bookmark='')
   path = "/d2l/api/lp/#{$lp_ver}/configVariables/definitions/"
   path += "?search=#{search}" if search != ''
   path += "?bookmark=#{bookmark}" if bookmark != ''
   _get(path)
-  #returns paged result set of Definition JSON data blocks
+  # returns paged result set of Definition JSON data blocks
 end
 
-#Retrieve the definitions for a configuration variable.
+# Retrieve the definitions for a configuration variable.
 def get_config_var_definitions(variable_id)
   path = "/d2l/api/lp/#{$lp_ver}/configVariables/(#{variable_id}/definition"
   _get(path)
   # returns Definition JSON data block
 end
+
+########################
+# VALUES:###############
+########################
+# NOTE: These provide access to the values assigned to configuration
+#       variables in the running back-end service.
 
 #Retrieve the value summary for a configuration variable.
 def get_config_var_values(variable_id)
@@ -75,7 +86,44 @@ def get_config_var_system_value(variable_id)
   _get(path)
 end
 
+# TODO: Set a new org value for a configuration variable.
+def set_config_var_org_value(variable_id, org_value)
+  # PUT /d2l/api/lp/(version)/configVariables/(variableId)/values/org
+end
+
+# TODO: Set a new org unit override value for a configuration variable.
+def set_config_var_override_value(variable_id, org_unit_id, org_unit_value)
+  # PUT /d2l/api/lp/(version)/configVariables/(variableId)/values/orgUnits/(orgUnitId)
+end
+
+# TODO: Set a new role override value for a configuration variable.
+def set_config_var_role_value(variable_id, role_id, role_value)
+  # PUT /d2l/api/lp/(version)/configVariables/(variableId)/values/roles/(roleId)
+end
+
+# TODO: Set a new system value for a configuration variable.
+def set_config_var_system_value(variable_id, system_value)
+  # PUT /d2l/api/lp/(version)/configVariables/(variableId)/values/system
+end
+
+########################
+# RESOLVER:#############
+########################
+# NOTE: These provide a way to manage a configuration variable’s
+#       resolution strategy.
+
+# TODO: Restore the default resolution strategy for an org unit configuration variable.
+def restore_default_org_unit_config_var_resolution(variable_id)
+  # DELETE /d2l/api/lp/(version)/configVariables/(variableId)/resolver
+end
+
+# REVIEW: Retrieve the resolution strategy for an org unit configuration variable.
 def get_config_var_resolver(variable_id)
   path = "/d2l/api/lp/#{lp_ver}/configVariables/#{variable_id}/resolver"
   _get(path)
+end
+
+# TODO: Update the resolution strategy for an org unit configuration variable.
+def update_org_unit_config_var_resolution(resolver_value)
+  # PUT /d2l/api/lp/(version)/configVariables/(variableId)/resolver
 end

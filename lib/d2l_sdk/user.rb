@@ -271,10 +271,11 @@ end
 ########################
 # ACTIVATION:###########
 ########################
-# TODO: Retrieve a particular user’s activation settings.
+# REVIEW: Retrieve a particular user’s activation settings.
 # RETURNS: a UserActivationData JSON block with the user’s current activation status.
 def get_user_activation_settings(user_id)
-  # GET /d2l/api/lp/(version)/users/(userId)/activation
+  path = "/d2l/api/lp/#{$lp_ver}/users/#{user_id}/activation"
+  _get(path)
   # RETURNS: a UserActivationData JSON block with the user’s current activation status.
 end
 
@@ -558,48 +559,75 @@ end
 
 
 ########################
-# LOCALES:##############
+# SETTINGS:#############
 ########################
+# NOTE: As the settings page only has 4 functions, these functions are simply
+# appended to this, the most relevant file.
 
-# Update the current user's locale account settings
-def update_current_user_locale_account_settings(update_locale)
-  payload = {"LocaleId" => 0}.merge!(update_locale)
-  path = "/d2l/api/lp/#{$lp_ver}/accountSettings/mysettings/locale/"
-  # requires UpdateSettings JSON data block
-  _put(path, payload)
+# REVIEW: Retrieve the current user’s locale account settings.
+def get_current_user_locale_settings
+  path = "/d2l/api/lp/#{$lp_ver}/accountSettings/mySettings/locale/"
+  _get(path)
+  # RETURNS: a Locale JSON block
 end
 
-def update_user_locale_account_settings(user_id)
-  payload = {"LocaleId" => 0}.merge!(update_locale)
-  path = "/d2l/api/lp/#{$lp_ver}/accountSettings/#{user_id}/locale/"
-  # requires UpdateSettings JSON data block
-  _put(path, payload)
-end
-=begin
-# retrieve the locale account settings for a particular user.
+# REVIEW: retrieve the locale account settings for a particular user.
 def get_locale_account_settings(user_id)
   path = "/d2l/api/lp/#{$lp_ver}/accountSettings/#{user_id}/locale/"
   _get(path)
   # returns Locale JSON block
 end
 
+
+
+# TODO: Add schema check for update_locale conforming to the D2L update_locale
+# JSON data block of form: { "LocaleId" : <D2LID>}.
+def is_valid_locale_id(locale_id)
+
+end
+
+# REVIEW: Update the current user’s locale account settings.
+# TODO: Add schema check for update_locale
+# update_locale = { "LocaleId" : <D2LID>}
+def update_current_user_locale_account_settings(update_locale)
+  payload = {"LocaleId" => 0}.merge!(update_locale)
+  path = "/d2l/api/lp/#{$lp_ver}/accountSettings/mysettings/locale/"
+  # requires UpdateSettings JSON data block
+  # update_locale = { "LocaleId" : <D2LID>}
+  _put(path, payload)
+end
+
+# REVIEW: Update the locale account settings for a particular user.
+# TODO: Add schema check for update_locale
+# update_locale = { "LocaleId" : <D2LID>}
+def update_user_locale_account_settings(user_id, update_locale)
+  payload = {"LocaleId" => 0}.merge!(update_locale)
+  path = "/d2l/api/lp/#{$lp_ver}/accountSettings/#{user_id}/locale/"
+  # requires UpdateSettings JSON data block
+  # update_locale = { "LocaleId" : <D2LID>}
+  _put(path, payload)
+end
+
+########################
+# LOCALE:###############
+########################
+# NOTE: As the locale page only has only 2 functions, these functions are simply
+# appended to this, the most relevant file.
+
+# NOTE: UNSTABLE
 # optional parameter 'bookmark' for querying with a paging offset
 # Retrieve the collection of all known locales.
 def get_all_locales(bookmark = '')
   path = "/d2l/api/lp/#{$lp_ver}/locales/"
+  path += "?bookmark=#{bookmark}" if bookmark != ''
   _get(path)
   # returns paged result set containing Locale data blocks
 end
 
+# NOTE: UNSTABLE
 # Retrieve the properties for a particular locale.
 def get_locale_properties(locale_id)
   path = "/d2l/api/lp/#{$lp_ver}/locales/#{locale_id}"
   _get(path)
   # returns Locale JSON block
 end
-
-def is_valid_locale_id(locale_id)
-
-
-end
-=end

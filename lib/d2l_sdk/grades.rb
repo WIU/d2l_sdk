@@ -125,7 +125,6 @@ end
 # final calculated grade values sorted by the OrgUnitIds that match the provided
 # query parameter filters.
 def get_current_user_final_grades(org_unit_ids_csv)
-  # TODO
   # RETURN: This action returns an ObjectListPage JSON block containing a list
   # of final calculated grade values sorted by the OrgUnitIds that match the
   # provided query parameter filters.

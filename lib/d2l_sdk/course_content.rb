@@ -1,7 +1,7 @@
 
-###################
-### CONTENT ACTIONS
-###################
+########################
+### CONTENT ACTIONS#####
+########################
 
 # Delete a specific module from an org unit.
 def delete_module(org_unit_id, module_id) # DELETE
@@ -51,7 +51,7 @@ def get_topic_file(org_unit_id, topic_id, stream = false) # GET
   _get(query_string)
 end
 
-# Add a child +module+ or +topic+ to a specific module’s structure.
+# TODO Add a child +module+ or +topic+ to a specific module’s structure.
 # Can be used in multiple ways. D2L categorizes it into 3 different ways:
 # --Module: add child module to parent module
 # --Link Topic: add child topic to parent module structure consisting of a LINK
@@ -68,7 +68,6 @@ end
 # Returns (if successful) a JSON data block containing properties of the newly created object
 def add_child_to_module(org_unit_id, module_id) # POST
   query_string = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/modules/#{module_id}/structure/"
-  # TODO
 end
 
 def check_content_module_validity(content_module)
@@ -200,9 +199,9 @@ def update_topic(org_unit_id, topic_id, content_topic) # GET
   _put(query_string, payload)
 end
 
-####################
-### CONTENT OVERVIEW
-####################
+#########################
+### CONTENT OVERVIEW#####
+#########################
 
 # Retrieve the overview for a course offering.
 def get_course_overview(org_unit_id) # GET
@@ -219,9 +218,9 @@ def get_course_overview_file_attachment(org_unit_id) # GET
   # Returns: a file stream containing the course offering’s overview attachment.
 end
 
-########
-### ISBN
-########
+##############
+### ISBN #####
+##############
 
 # Remove the association between an ISBN and org unit.
 def delete_isbn_association(org_unit_id, isbn) # DELETE
@@ -279,9 +278,137 @@ def create_isbn_org_unit_association(org_unit_id, isbn_association_data) # GET
   # the association between an org unit and an ISBN.
 end
 
-####################
-### SCHEDULED ITEMS
-####################
+#########################
+### SCHEDULED ITEMS######
+#########################
+
+# REVIEW: Retrieve the calling user’s scheduled items.
+def get_user_overdue_items(org_unit_ids_CSV, completion = nil,
+                           start_date_time = '', end_date_time = '') # GET
+  query_string = "/d2l/api/le/#{$le_ver}/content/myItems/?"
+  query_string += "orgUnitIdsCSV=#{org_unit_ids_CSV}&"
+  query_string += "completion=#{completion}&" unless completion.nil?
+  query_string += "startDateTime=#{start_date_time}&" unless start_date_time == ''
+  query_string += "endDateTime=#{end_date_time}&" unless end_date_time == ''
+  _get(query_string)
+  # Returns: An ObjectListPage JSON block containing a list of ScheduledItem blocks
+end
+
+# REVIEW: Retrieve the calling user’s scheduled items still due.
+def get_current_user_still_due_items(org_unit_ids_CSV, completion = nil,
+                                     start_date_time = '', end_date_time = '')
+  query_string = "/d2l/api/le/#{$le_ver}/content/myItems/due/?"
+  query_string += "orgUnitIdsCSV=#{org_unit_ids_CSV}&"
+  query_string += "completion=#{completion}&" unless completion.nil?
+  query_string += "startDateTime=#{start_date_time}&" unless start_date_time == ''
+  query_string += "endDateTime=#{end_date_time}&" unless end_date_time == ''
+  _get(query_string)
+  # Returns: An ObjectListPage JSON block containing a list of ScheduledItem blocks
+end
+
+# REVIEW: Retrieve the quantities of the calling user’s scheduled items, organized by org unit.
+# GET /d2l/api/le/(version)/content/myItems/itemCounts/
+def get_current_user_organized_scheduled_items(org_unit_ids_CSV,
+                                               completion = nil,
+                                               start_date_time = '',
+                                               end_date_time = '')
+  query_string = "/d2l/api/le/#{$le_ver}/content/myItems/itemCounts/?"
+  query_string += "orgUnitIdsCSV=#{org_unit_ids_CSV}&"
+  query_string += "completion=#{completion}&" unless completion.nil?
+  query_string += "startDateTime=#{start_date_time}&" unless start_date_time == ''
+  query_string += "endDateTime=#{end_date_time}&" unless end_date_time == ''
+  _get(query_string)
+  # Returns: An ObjectListPage JSON block containing a list of ScheduledItem blocks
+end
+
+# REVIEW: Retrieve the quantities of the calling user’s scheduled items still due.
+# GET /d2l/api/le/(version)/content/myItems/due/itemCounts/
+def get_current_user_scheduled_item_count(org_unit_ids_CSV, completion = nil,
+                                          start_date_time = '', end_date_time = '') # GET
+  query_string = "/d2l/api/le/#{$le_ver}/content/myItems/due/itemCounts/?"
+  query_string += "orgUnitIdsCSV=#{org_unit_ids_CSV}&"
+  query_string += "completion=#{completion}&" unless completion.nil?
+  query_string += "startDateTime=#{start_date_time}&" unless start_date_time == ''
+  query_string += "endDateTime=#{end_date_time}&" unless end_date_time == ''
+  _get(query_string)
+  # Returns: An ObjectListPage JSON block containing a list of ScheduledItem blocks
+end
+
+# REVIEW: Retrieve the calling user’s completed scheduled items.
+# GET /d2l/api/le/(version)/content/myItems/completions/
+def get_current_user_completed_scheduled_items(org_unit_ids_CSV,
+                                               completion_from_date_time = '',
+                                               completed_to_date_time = '')
+  query_string = "/d2l/api/le/#{$le_ver}/content/myItems/completions/?"
+  query_string += "orgUnitIdsCSV=#{org_unit_ids_CSV}&"
+  query_string += "completedFromDateTime=#{completion_from_date_time}&" unless completion_from_date_time == ''
+  query_string += "completedToDateTime=#{completed_to_date_time}&" unless completed_to_date_time == ''
+  _get(query_string)
+  # Returns: An ObjectListPage JSON block containing a list of ScheduledItem blocks
+end
+
+# REVIEW: Retrieve the calling user’s completed scheduled items that have a due date.
+# GET /d2l/api/le/(version)/content/myItems/completions/due/
+def get_current_user_completed_scheduled_items_with_due_date(org_unit_ids_CSV,
+                                                             completion_from_date_time = '',
+                                                             completed_to_date_time = '')
+  query_string = "/d2l/api/le/#{$le_ver}/content/myItems/completions/due/?"
+  query_string += "orgUnitIdsCSV=#{org_unit_ids_CSV}&"
+  query_string += "completedFromDateTime=#{completion_from_date_time}&" unless completion_from_date_time == ''
+  query_string += "completedToDateTime=#{completed_to_date_time}&" unless completed_to_date_time == ''
+  _get(query_string)
+  # Returns: An ObjectListPage JSON block containing a list of ScheduledItem blocks
+end
+
+# REVIEW: Retrieve the calling user’s scheduled items for a particular org unit.
+# GET /d2l/api/le/(version)/(orgUnitId)/content/myItems/
+def get_current_user_scheduled_items_by_org_unit(org_unit_id, completion = nil,
+                                                 start_date_time = '',
+                                                 end_date_time = '')
+  query_string = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/myItems/?"
+  query_string += "completion=#{completion}&" unless completion.nil?
+  query_string += "startDateTime=#{start_date_time}&" unless start_date_time == ''
+  query_string += "endDateTime=#{end_date_time}&" unless end_date_time == ''
+  _get(query_string)
+  # Returns: An ObjectListPage JSON block containing a list of ScheduledItem blocks
+end
+
+# REVIEW: Retrieve the calling user’s scheduled items still due for a particular org unit.
+# GET /d2l/api/le/(version)/(orgUnitId)/content/myItems/due/
+def get_current_user_org_unit_scheduled_item_count(org_unit_id, completion = nil,
+                                                   start_date_time = '',
+                                                   end_date_time = '') # GET
+  query_string = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/myItems/due/?"
+  query_string += "completion=#{completion}&" unless completion.nil?
+  query_string += "startDateTime=#{start_date_time}&" unless start_date_time == ''
+  query_string += "endDateTime=#{end_date_time}&" unless end_date_time == ''
+  _get(query_string)
+  # Returns: An ObjectListPage JSON block containing a list of ScheduledItem blocks
+end
+
+# REVIEW: Retrieve the quantity of the calling user’s scheduled items for provided org unit.
+# GET /d2l/api/le/(version)/(orgUnitId)/content/myItems/itemCount
+def get_user_overdue_items(org_unit_id, completion = nil, start_date_time = '',
+                           end_date_time = '') # GET
+  query_string = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/myItems/itemCount?"
+  query_string += "completion=#{completion}&" unless completion.nil?
+  query_string += "startDateTime=#{start_date_time}&" unless start_date_time == ''
+  query_string += "endDateTime=#{end_date_time}&" unless end_date_time == ''
+  _get(query_string)
+  # Returns: An ObjectListPage JSON block containing a list of ScheduledItem blocks
+end
+
+# REVIEW: Retrieve quantity of the calling user’s scheduled items still due for a particular org unit.
+# GET /d2l/api/le/(version)/(orgUnitId)/content/myItems/due/itemCount
+def get_user_overdue_items(org_unit_id, completion = nil, start_date_time = '',
+                           end_date_time = '') # GET
+  query_string = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/myItems/due/itemCount?"
+  query_string += "completion=#{completion}&" unless completion.nil?
+  query_string += "startDateTime=#{start_date_time}&" unless start_date_time == ''
+  query_string += "endDateTime=#{end_date_time}&" unless end_date_time == ''
+  _get(query_string)
+  # Returns: An ObjectListPage JSON block containing a list of ScheduledItem blocks
+end
 
 # Retrieve the overdue items for a particular user in a particular org unit.
 # +org_unit_ids_CSV+ is a CSV of D2LIDs or rather Org unit IDs (optional)
@@ -308,9 +435,9 @@ def get_current_user_overdue_items(org_unit_ids_CSV = nil) # GET
   # Returns: An ObjectListPage JSON block containing a list of OverdueItem.
 end
 
-#####################
-### TABLE OF CONTENTS
-#####################
+#########################
+### TABLE OF CONTENTS####
+#########################
 
 # Retrieve a list of topics that have been bookmarked.
 def get_bookmarked_topics(org_unit_id) # GET

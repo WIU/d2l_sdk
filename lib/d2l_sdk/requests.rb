@@ -108,10 +108,11 @@ end
 
 # Performs a delete request by creating an authenticated uri and using the
 # RestClient delete method and specifying the content_type as being JSON.
-def _delete(path, isD2l = true)
+def _delete(path, isD2l = true, headers = {})
+    headers[:content_type] = :json
     auth_uri = path
     auth_uri = create_authenticated_uri(path, 'DELETE') if isD2l == true
-    RestClient.delete(auth_uri, content_type: :json)
+    RestClient.delete(auth_uri, headers)
 end
 
 # based upon the specific code that is returned from the http method, this

@@ -98,7 +98,7 @@ def create_course_data(course_data)
     # requires: CreateCourseOffering JSON block
     path = "/d2l/api/lp/#{$lp_ver}/courses/"
     _post(path, payload)
-    puts '[+] Course creation completed successfully'.green
+    #puts '[+] Course creation completed successfully'.green
 end
 
 # Checks whether the updated course data conforms to the valence api for the
@@ -228,7 +228,7 @@ def create_new_copy_job_request(org_unit_id, create_copy_job_request)
 end
 
 # NOTE: UNSTABLE!!!!
-# TODO: Retrieve the list of logs for course copy jobs.
+# TODO: --UNSTABLE-- Retrieve the list of logs for course copy jobs.
 # Query Params:
 # --OPTIONAL--
 # -bookmark : string

@@ -1,15 +1,15 @@
 require_relative 'd2l_sdk/setup_versions'
-require_relative 'd2l_sdk/course_template'
-require_relative 'd2l_sdk/course'
+require_relative 'd2l_sdk/course_template' # Checked
+require_relative 'd2l_sdk/course' # Checked
 require_relative 'd2l_sdk/datahub'
-require_relative 'd2l_sdk/enroll'
-require_relative 'd2l_sdk/group'
-require_relative 'd2l_sdk/org_unit'
-require_relative 'd2l_sdk/section'
-require_relative 'd2l_sdk/semester'
-require_relative 'd2l_sdk/user'
-require_relative 'd2l_sdk/config_variables'
-require_relative 'd2l_sdk/demographics'
+require_relative 'd2l_sdk/enroll' # Checked
+require_relative 'd2l_sdk/group' # Checked
+require_relative 'd2l_sdk/org_unit' # Checked
+require_relative 'd2l_sdk/section' # Checked
+require_relative 'd2l_sdk/semester' # Checked
+require_relative 'd2l_sdk/user' # Checked
+require_relative 'd2l_sdk/config_variables' # Checked
+require_relative 'd2l_sdk/demographics' # Checked
 require_relative 'd2l_sdk/logging'
 require_relative 'd2l_sdk/course_content'
 
