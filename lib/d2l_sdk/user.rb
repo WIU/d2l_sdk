@@ -380,7 +380,7 @@ def get_enrolled_roles_in_org_unit(org_unit_id)
   # returns JSON array of Role data blocks
 end
 
-# TODO: Create a new role copied from an existing role.
+# TODO: --UNSTABLE -- Create a new role copied from an existing role.
 # INPUT: deep_copy_role_id = d2lID; role_copy_data = User.role_copy_data
 # RETURN: a Role JSON data block representing the newly-created copy of the role.
 def create_new_role_from_existing_role(deep_copy_role_id, role_copy_data)
@@ -551,7 +551,7 @@ def get_user_role_lis_mappings(role_id, d2lid = 0)
 end
 
 # NOTE: UNSTABLE
-# TODO: Map a user role to a set of LIS Roles.
+# TODO: --UNSTABLE-- Map a user role to a set of LIS Roles.
 # input: Mappings = String array
 def map_user_role_to_lis_roles(role_id, mappings)
   # PUT /d2l/api/lp/(version)/imsconfig/map/roles/(roleId)

@@ -475,15 +475,13 @@ def get_current_user_progress(org_unit_id, level) # GET
   # a list of ContentAggregateCompletion items.
 end
 
-# Retrieve the user progress items in an org unit, for specific users or content topics.
-# NOTE: UNSTABLE
+
+# TODO: --UNSTABLE-- Retrieve the user progress items in an org unit, for specific users or content topics.
 # _get "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/userprogress/"
 
-# Retrieve one user’s progress within an org unit for a particular content topic.
-# NOTE: UNSTABLE
+# TODO: --UNSTABLE-- Retrieve one user’s progress within an org unit for a particular content topic.
 # _get "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/userprogress/#{topic_id}"
 
-# Update a user progress item.
-# NOTE: UNSTABLE
+# TODO: --UNSTABLE-- Update a user progress item.
 # _post "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/userprogress/"
 # payload: UserProgressData

@@ -61,6 +61,7 @@ def get_config_var_org_unit_override_value(variable_id, org_unit_id)
   # returns OrgUnitValue JSON block
 end
 
+# NOTE: UNSTABLE!!!
 # Retrieve the effective value for a configuration variable within an org unit.
 def get_config_var_org_unit_effective_value(variable_id, org_unit_id)
   path = "/d2l/api/lp/#{$lp_ver}/configVariables/#{variable_id}/effectiveValues/orgUnits/#{org_unit_id}"
@@ -112,17 +113,20 @@ end
 # NOTE: These provide a way to manage a configuration variable’s
 #       resolution strategy.
 
-# TODO: Restore the default resolution strategy for an org unit configuration variable.
+# NOTE: UNSTABLE!!!
+# TODO: UNSTABLE!!! --Restore the default resolution strategy for an org unit configuration variable.
 def restore_default_org_unit_config_var_resolution(variable_id)
   # DELETE /d2l/api/lp/(version)/configVariables/(variableId)/resolver
 end
 
+# NOTE: UNSTABLE!!!
 # REVIEW: Retrieve the resolution strategy for an org unit configuration variable.
 def get_config_var_resolver(variable_id)
   path = "/d2l/api/lp/#{lp_ver}/configVariables/#{variable_id}/resolver"
   _get(path)
 end
 
+# NOTE: UNSTABLE!!!
 # TODO: Update the resolution strategy for an org unit configuration variable.
 def update_org_unit_config_var_resolution(resolver_value)
   # PUT /d2l/api/lp/(version)/configVariables/(variableId)/resolver

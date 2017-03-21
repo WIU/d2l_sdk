@@ -39,6 +39,7 @@ def get_org_unit_news_items(org_unit_id, since = "")
   _get(path)
 end
 
+# NOTE: UNSTABLE!!!
 # REVIEW: Retrieve data blocks containing the properties of deleted news items.
 def get_deleted_news(org_unit_id, global = nil)
   # GET /d2l/api/le/(version)/(orgUnitId)/news/deleted/
