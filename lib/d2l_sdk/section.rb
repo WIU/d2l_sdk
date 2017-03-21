@@ -11,58 +11,6 @@ def delete_section(org_unit_id, section_id)
   _delete(path)
 end
 
-##########
-# WesternOnline Specific GET Section ID by Code
-##########
-def create_semester_code(star_num, course_date)
-    "sec_#{course_date}_#{star_num}"
-end
-
-def get_section_by_section_code(code)
-  _get("/d2l/api/lp/1.4/orgstructure/?orgUnitCode=#{code}")["Items"][0]
-end
-
-def get_section_id_by_section_code(code)
-  get_section_by_section_code(code)["Identifier"]
-end
-
-def get_section_data_by_code(code)
-    sect_id = get_section_by_section_code(code)["Identifier"]
-    parent_id = get_org_unit_parents(sect_id)[0]["Identifier"]
-    get_section_data(parent_id, sect_id)
-end
-=begin
-def get_section_by_offering_code(code)
-  section_data = 0
-  parent_course = nil
-  courses = get_courses_by_code(code)
-  if courses.size > 1 # If the course code matches two codes..should be CL then
-    courses.each do |course| # iterate through each course...should be < 3
-      if course["Code"].include? "cl_off"
-        parent_course = course
-      end
-    end
-    # ELSE IF no course with "cl_off" found: Not properly cross listed
-    if parent_course == nil
-      puts "More than two courses with same code index; No proper crosslisting"
-    end
-  end
-  # get all sections of the course offering
-  sections = get_org_unit_sections(parent_course["Identifier"])
-  sections.each do |sect|
-    if sect["Code"].include? code[-5..-1]
-      section_data = sect
-    end
-  end
-  return section_data
-end
-
-def get_section_id_by_section_code(code)
-  get_section_data_by_code(code)["SectionId"]
-end
-=end
-############
-############
 # Retrieve all the sections for a provided org unit.
 def get_org_unit_sections(org_unit_id)
   path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/sections/"
@@ -193,6 +141,7 @@ def update_org_unit_section_properties(org_unit_id, section_property_data)
     # for the org unit’s updated section properties.
 end
 
+# Update information for a section in a particular org unit.
 def update_org_unit_section_info(org_unit_id, section_id, section_data)
     payload = { 'Name' => '', # String
                 'Code' => '', # String
@@ -205,3 +154,79 @@ def update_org_unit_section_info(org_unit_id, section_id, section_data)
     _put(path, payload)
     # returns the SectionData JSON block, in its Fetch form
 end
+
+#########################################################
+# WesternOnline Specific GET Section ID by Code##########
+#########################################################
+# NOTE: These are additional functions that were primarily made to work with
+# the Western Illinois University brightspace instance. Most will work
+# universally, but others may be of no use outside our specific instance.
+
+# creates a properly formatted section code, based on WIU's standard
+# section code.
+# RETURNS: formatted section code
+def create_section_code(star_num, course_date)
+    "sec_#{course_date}_#{star_num}"
+end
+
+# retrieves all sections with the same code.
+# NOTE: As the code SHOULD be unique, this function assumes that the returned
+# item is the requested item.
+def get_section_by_section_code(code)
+  path = "/d2l/api/lp/#{$lp_ver}/orgstructure/?orgUnitCode=#{code}"
+  _get(path)["Items"][0]
+  # RETURNS: SectionData block
+end
+
+# Simple bridge function that allows for the retrieval of a section's ID
+# based on its section code.
+# NOTE: Again, As the code SHOULD be unique, this function assumes that the
+# returned item is the requested item.
+def get_section_id_by_section_code(code)
+  get_section_by_section_code(code)["Identifier"]
+  # RETURNS: D2LID of the section identified by its section code
+end
+
+# Simple bridge function allowing for retrieval of section data by using
+# the section's code. As D2L does not allow for accessing the SectionData block
+# without using a parent's id, this retrieves the parents id and allows for
+# such functionality.
+def get_section_data_by_code(code)
+    sect_id = get_section_by_section_code(code)["Identifier"]
+    parent_id = get_org_unit_parents(sect_id)[0]["Identifier"]
+    get_section_data(parent_id, sect_id)
+end
+
+=begin
+ # IDEA::
+def get_section_by_offering_code(code)
+  section_data = 0
+  parent_course = nil
+  courses = get_courses_by_code(code)
+  if courses.size > 1 # If the course code matches two codes..should be CL then
+    courses.each do |course| # iterate through each course...should be < 3
+      if course["Code"].include? "cl_off"
+        parent_course = course
+      end
+    end
+    # ELSE IF no course with "cl_off" found: Not properly cross listed
+    if parent_course == nil
+      puts "More than two courses with same code index; No proper crosslisting"
+    end
+  end
+  # get all sections of the course offering
+  sections = get_org_unit_sections(parent_course["Identifier"])
+  sections.each do |sect|
+    if sect["Code"].include? code[-5..-1]
+      section_data = sect
+    end
+  end
+  return section_data
+end
+
+def get_section_id_by_section_code(code)
+  get_section_data_by_code(code)["SectionId"]
+end
+=end
+############
+############

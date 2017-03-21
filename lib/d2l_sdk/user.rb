@@ -59,11 +59,11 @@ def create_user_data(user_data)
 end
 
 # Retrieves the whoami of the user authenticated through the config file.
-# returns: JSON whoami response
+# RETURNS: JSON whoami response
 def get_whoami
     path = "/d2l/api/lp/#{$lp_ver}/users/whoami"
     _get(path)
-    # returns a WhoAmIUser JSON block for the current user context
+    # RETURNS: a WhoAmIUser JSON block for the current user context
 end
 
 # Simple get users function that assists in retrieving users by particular
@@ -193,12 +193,12 @@ end
 # known as the Identifier of this user object. Upon retrieving the user, it
 # is then returned.
 #
-# returns: JSON user object.
+# RETURNS: JSON user object.
 def get_user_by_user_id(user_id)
     # Retrieve data for a particular user
     path = "/d2l/api/lp/#{$lp_ver}/users/#{user_id}"
     _get(path)
-    # returns a UserData JSON block
+    # RETURNS: a UserData JSON block
 end
 
 # Checks whether the updated user data conforms to the valence api for the
@@ -268,6 +268,107 @@ def delete_user_data(user_id)
     puts '[+] User data deleted successfully'.green
 end
 
+########################
+# ACTIVATION:###########
+########################
+# TODO: Retrieve a particular user’s activation settings.
+# RETURNS: a UserActivationData JSON block with the user’s current activation status.
+def get_user_activation_settings(user_id)
+  # GET /d2l/api/lp/(version)/users/(userId)/activation
+  # RETURNS: a UserActivationData JSON block with the user’s current activation status.
+end
+
+# TODO: Update a particular user’s activation settings.
+# RETURNS: ?
+def update_user_activation_settings(user_id, user_activation_data)
+  # PUT /d2l/api/lp/(version)/users/(userId)/activation
+  # RETURNS: ?
+end
+
+########################
+# INTEGRATIONS:#########
+########################
+
+# NOTE: UNSTABLE!
+# TODO: Link a user to a Google Apps user account.
+# RETURNS: ?
+def link_user_google_apps_account(google_apps_linking_item)
+  # POST /d2l/api/gae/(version)/linkuser
+end
+
+
+########################
+# NOTIFICATIONS:########
+########################
+
+# TODO: Delete the subscription for messages of a particular type,
+#       delivered by a particular carrier.
+def delete_subscription(carrier_id, message_type_id)
+  # DELETE /d2l/api/lp/(version)/notifications/instant/carriers/(carrierId)/subscriptions/(messageTypeId)
+end
+
+# Retrieve all the carrier channels for delivering notification messages.
+# RETURNS: a JSON array of CarrierOutput data blocks.
+def get_all_notification_carrier_channels
+  path = "/d2l/api/lp/#{$lp_ver}/notifications/instant/carriers/"
+  _get(path)
+end
+
+# Retrieve all the current subscriptions for notification messages.
+# RETURNS: a JSON array of SubscriptionOutput data blocks.
+def get_all_subscriptions_by_carrier(carrier_id)
+  path = "/d2l/api/lp/#{$lp_ver}/notifications/instant/carriers/#{carrier_id}/subscriptions/"
+  _get(path)
+end
+
+# Subscribe to notification messages of a particular type, delivered by a particular carrier.
+def subscribe_to_carrier_notification(carrier_id, message_type_id)
+  path = "/d2l/api/lp/#{$lp_ver}/notifications/instant/carriers/#{carrier_id}/subscriptions/#{message_type_id}"
+  _put(path, {})
+end
+
+########################
+# PASSWORDS:############
+########################
+
+# TODO: Clear a particular user’s password.
+def delete_user_password(user_id)
+  # DELETE /d2l/api/lp/(version)/users/(userId)/password
+end
+
+# TODO: Reset a particular user’s password.
+# INPUT: nil (no payload necessary)
+# NOTE: Prompts the service to send a password-reset email to the provided user.
+def reset_user_password(user_id)
+  # POST /d2l/api/lp/(version)/users/(userId)/password
+end
+
+# TODO: Update a particular user’s password.
+# NOTE: 400 errors are implicitly invalid password
+def update_user_password(user_id, user_password_data)
+  # PUT /d2l/api/lp/(version)/users/(userId)/password
+end
+
+
+
+########################
+# ROLES:################
+########################
+
+# retrieve list of all known user roles
+def get_all_user_roles
+  path = "/d2l/api/lp/#{$lp_ver}/roles/"
+  _get(path)
+  # RETURNS: a JSON array of Role data blocks
+end
+
+# Retrieve a particular user role
+def get_user_role(role_id)
+  path = "/d2l/api/lp/#{$lp_ver}/roles/#{role_id}"
+  _get(path)
+  # returns a Role JSON data block
+end
+
 # Retrieve a list of all the enrolled user roles the calling user can view
 # in an org unit
 def get_enrolled_roles_in_org_unit(org_unit_id)
@@ -278,33 +379,53 @@ def get_enrolled_roles_in_org_unit(org_unit_id)
   # returns JSON array of Role data blocks
 end
 
-# retrieve list of all known user roles
-def get_all_user_roles
-  path = "/d2l/api/lp/#{$lp_ver}/roles/"
-  _get(path)
-  # returns a JSON array of Role data blocks
+# TODO: Create a new role copied from an existing role.
+# INPUT: deep_copy_role_id = d2lID; role_copy_data = User.role_copy_data
+# RETURN: a Role JSON data block representing the newly-created copy of the role.
+def create_new_role_from_existing_role(deep_copy_role_id, role_copy_data)
+  # POST /d2l/api/lp/(version)/roles/
 end
 
-# Retrieve a particular user role
-def get_user_role(role_id)
-  path = "/d2l/api/lp/#{$lp_ver}/roles/#{role_id}"
-  _get(path)
-  # returns a Role JSON data block
+
+########################
+# PROFILES:#############
+########################
+
+# TODO: Remove the current user’s profile image.
+def remove_current_user_profile_image
+  # DELETE /d2l/api/lp/(version)/profile/myProfile/image
 end
 
+# TODO: Remove the profile image from a particular personal profile, by Profile ID.
+def remove_profile_image_by_profile_id(profile_id)
+  # DELETE /d2l/api/lp/(version)/profile/(profileId)/image
+end
+
+# TODO: Remove the profile image from a particular personal profile, by User ID.
+def remove_profile_image_by_user_id(user_id)
+  # DELETE /d2l/api/lp/(version)/profile/user/(userId)/image
+end
 
 # retrieve personal profile info for the current user context
+# Returns: UserProfile JSON data block
 def get_current_user_profile
   path = "/d2l/api/lp/#{$lp_ver}/profile/myProfile"
   _get(path)
-  # Returns UserProfile JSON data block
+  # Returns: UserProfile JSON data block
 end
 
-# retrieve personal profile info of the specified user
-def get_user_profile_by_user_id(user_id)
-  path = "/d2l/api/lp/#{$lp_ver}/profile/user/#{user_id}"
+# Retrieve the current user’s profile image.
+# INPUT: size (integer) determines the thumbnail size
+# RETURNS: This action returns a file stream containing the current user’s
+#          profile image. Note that the back-end service may return a
+#          profile image larger than your provided size.
+def get_current_user_profile_image(size = 0)
+  path = "/d2l/api/lp/#{$lp_ver}/profile/myProfile/image"
+  path += "?size=#{size}" if size != 0
   _get(path)
-  # Returns UserProfile JSON data block
+  # RETURNS: This action returns a file stream containing the current user’s
+  #          profile image. Note that the back-end service may return a
+  #          profile image larger than your provided size.
 end
 
 # retrieve a particular personal profile, by Profile ID
@@ -314,40 +435,146 @@ def get_user_profile_by_profile_id(profile_id)
   # Returns UserProfile JSON data block
 end
 
+# Retrieve a particular profile image, by Profile ID.
+# RETURNS: This action returns a file stream containing the current user’s
+#          profile image. Note that the back-end service may return a
+#          profile image larger than your provided size.
 def get_profile_image(profile_id, size = 0)
   path = "/d2l/api/lp/#{$lp_ver}/profile/#{profile_id}/image"
   path += "?size=#{size}" if size != 0
   _get(path)
+  # RETURNS: This action returns a file stream containing the current user’s
+  #          profile image. Note that the back-end service may return a
+  #          profile image larger than your provided size.
 end
 
-def get_current_user_profile_image(size = 0)
-  path = "/d2l/api/lp/#{$lp_ver}/profile/myProfile/image"
-  path += "?size=#{size}" if size != 0
+# Retrieve a particular personal profile, by User ID.
+def get_user_profile_by_user_id(user_id)
+  path = "/d2l/api/lp/#{$lp_ver}/profile/user/#{user_id}"
   _get(path)
+  # Returns UserProfile JSON data block
 end
 
+
+# Retrieve a particular profile image, by User ID.
+# RETURNS: This action returns a file stream containing the current user’s
+#          profile image. Note that the back-end service may return a
+#          profile image larger than your provided size.
 def get_user_profile_image(user_id)
   path = "/d2l/api/lp/#{$lp_ver}/profile/user/#{user_id}"
   path += "?size=#{size}" if size != 0
   _get(path)
+  # RETURNS: This action returns a file stream containing the current user’s
+  #          profile image. Note that the back-end service may return a
+  #          profile image larger than your provided size.
 end
-#####Notifications
-def get_all_notification_carrier_channels
-  path = "/d2l/api/lp/#{$lp_ver}/notifications/instant/carriers/"
+
+# TODO: Update the personal profile image for the current user context.
+# INPUT: Provide an uploaded image file using the simple file upload process;
+#        the content-disposition part header for the file part should have the
+#        name profileImage
+#        http://docs.valence.desire2learn.com/basic/fileupload.html#simple-uploads
+# RETURNS: ?
+def update_current_user_profile_image()
+  # POST /d2l/api/lp/(version)/profile/myProfile/image
+  # RETURNS: ?
+end
+
+# TODO: Update the profile image for the identified personal profile, by Profile ID.
+# INPUT: Provide an uploaded image file using the simple file upload process;
+#        the content-disposition part header for the file part should have the
+#        name profileImage
+#        http://docs.valence.desire2learn.com/basic/fileupload.html#simple-uploads
+# RETURNS: ?
+def update_profile_image_by_profile_id
+  # POST /d2l/api/lp/(version)/profile/(profileId)/image
+  # RETURNS: ?
+end
+
+# TODO: Update the profile image for the identified personal profile, by User ID.
+# INPUT: Provide an uploaded image file using the simple file upload process;
+#        the content-disposition part header for the file part should have the
+#        name profileImage
+#        http://docs.valence.desire2learn.com/basic/fileupload.html#simple-uploads
+# RETURNS: ?
+def update_profile_image_by_user_id
+  # POST /d2l/api/lp/(version)/profile/user/(userId)/image
+  # RETURNS: ?
+end
+
+# TODO: Update the personal profile data for the current user context.
+# NOTE: block's data will replace all user profile data
+# RETURNS: a UserProfile JSON data block for the updated current user profile.
+def update_current_user_profile_data(user_profile_data)
+  # PUT /d2l/api/lp/(version)/profile/myProfile
+end
+
+# TODO: Update a particular personal profile, by Profile ID.
+# NOTE: block's data will replace all user profile data
+# RETURNS: a UserProfile JSON data block for the updated personal profile.
+def update_profile_by_profile_id(profile_id, user_profile_data)
+  # PUT /d2l/api/lp/(version)/profile/(profileId)
+  # RETURNS: a UserProfile JSON data block for the updated personal profile.
+end
+
+#####################################
+# IMS/LIS role configuration:########
+#####################################
+
+# NOTE: UNSTABLE
+# REVIEW: retrieve list of known LIS roles
+def get_lis_roles(lis_urn = "")
+  path = "/d2l/api/lp/#{$lp_ver}/imsconfig/roles/"
+  path += "#{lis_urn}" if lis_urn != ""
   _get(path)
+  # returns array of LIS role data blocks
 end
 
-def get_all_subscriptions_by_carrier(carrier_id)
-  path = "/d2l/api/lp/#{$lp_ver}/notifications/instant/carriers/#{carrier_id}/subscriptions/"
+# NOTE: UNSTABLE
+# REVIEW: retrieve mappings between user roles and LIS roles
+def get_user_role_lis_mappings(lis_urn = "", d2lid = 0)
+  path = "/d2l/api/lp/#{$lp_ver}/imsconfig/map/roles/"
+  path += "#{lis_urn}" if lis_urn != ""
+  path += "#{d2lid}" if d2lid != 0
   _get(path)
+  # returns JSON array of LIS role mapping data blocks
 end
 
-def subscribe_to_carrier_notification(carrier_id, message_type_id)
-  path = "/d2l/api/lp/#{$lp_ver}/notifications/instant/carriers/#{carrier_id}/subscriptions/#{message_type_id}"
-  _put(path,{})
+# NOTE: UNSTABLE
+# REVIEW: retrieve mapping between a user role and a LIS role
+def get_user_role_lis_mappings(role_id, d2lid = 0)
+  path = "/d2l/api/lp/#{$lp_ver}/imsconfig/map/roles/#{role_id}"
+  path += "#{d2lid}" if d2lid != 0
+  _get(path)
+  # returns JSON array of LIS role mapping data blocks
 end
 
-#####LOCALES
+# NOTE: UNSTABLE
+# TODO: Map a user role to a set of LIS Roles.
+# input: Mappings = String array
+def map_user_role_to_lis_roles(role_id, mappings)
+  # PUT /d2l/api/lp/(version)/imsconfig/map/roles/(roleId)
+end
+
+
+########################
+# LOCALES:##############
+########################
+
+# Update the current user's locale account settings
+def update_current_user_locale_account_settings(update_locale)
+  payload = {"LocaleId" => 0}.merge!(update_locale)
+  path = "/d2l/api/lp/#{$lp_ver}/accountSettings/mysettings/locale/"
+  # requires UpdateSettings JSON data block
+  _put(path, payload)
+end
+
+def update_user_locale_account_settings(user_id)
+  payload = {"LocaleId" => 0}.merge!(update_locale)
+  path = "/d2l/api/lp/#{$lp_ver}/accountSettings/#{user_id}/locale/"
+  # requires UpdateSettings JSON data block
+  _put(path, payload)
+end
 =begin
 # retrieve the locale account settings for a particular user.
 def get_locale_account_settings(user_id)
@@ -374,47 +601,5 @@ end
 def is_valid_locale_id(locale_id)
 
 
-end
-
-# Update the current user's locale account settings
-def update_current_user_locale_account_settings(update_locale)
-  payload = {"LocaleId" => 0}.merge!(update_locale)
-  path = "/d2l/api/lp/#{$lp_ver}/accountSettings/mysettings/locale/"
-  # requires UpdateSettings JSON data block
-  _put(path, payload)
-end
-
-def update_user_locale_account_settings(user_id)
-  payload = {"LocaleId" => 0}.merge!(update_locale)
-  path = "/d2l/api/lp/#{$lp_ver}/accountSettings/#{user_id}/locale/"
-  # requires UpdateSettings JSON data block
-  _put(path, payload)
-end
-
-
-######IMS/LIS role configuration
-# retrieve list of known LIS roles
-def get_lis_roles(lis_urn = "")
-  path = "/d2l/api/lp/#{$lp_ver}/imsconfig/roles/"
-  path += "#{lis_urn}" if lis_urn != ""
-  _get(path)
-  # returns array of LIS role data blocks
-end
-
-# retrieve mappings between user roles and LIS roles
-def get_user_role_lis_mappings(lis_urn = "", d2lid = 0)
-  path = "/d2l/api/lp/#{$lp_ver}/imsconfig/map/roles/"
-  path += "#{lis_urn}" if lis_urn != ""
-  path += "#{d2lid}" if d2lid != 0
-  _get(path)
-  # returns JSON array of LIS role mapping data blocks
-end
-
-# retrieve mapping between a user role and a LIS role
-def get_user_role_lis_mappings(role_id, d2lid = 0)
-  path = "/d2l/api/lp/#{$lp_ver}/imsconfig/map/roles/#{role_id}"
-  path += "#{d2lid}" if d2lid != 0
-  _get(path)
-  # returns JSON array of LIS role mapping data blocks
 end
 =end

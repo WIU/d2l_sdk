@@ -4,6 +4,9 @@ require 'json-schema'
 ########################
 # SEMESTER:#############
 ########################
+# NOTE: These functions are supplementary to the basic +org unit+ functions
+# provided by the valence API. These simply provide a little more tailored
+# functionality to this particular org unit type.
 
 # Checks if the created semester data conforms to the valence api for the
 # semester JSON object. If it does conform, then nothing happens and it

@@ -1,8 +1,47 @@
 require_relative 'requests'
 require 'json-schema'
+
 ########################
-# COURSES:##############
+# ACTIONS:##############
 ########################
+
+# Deletes a course based, referencing it via its org_unit_id
+# This reference is created through a formatted path appended with the id.
+# Then, a delete http method is executed using this path, deleting the course.
+def delete_course_by_id(org_unit_id)
+    path = "/d2l/api/lp/#{$lp_ver}/courses/#{org_unit_id}" # setup user path
+    #ap path
+    _delete(path)
+    puts '[+] Course data deleted successfully'.green
+end
+
+# retrieve the list of parent org unit type constraints for course offerings
+def get_parent_outypes_courses_schema_constraints
+  path = "/d2l/api/lp/#{$lp_ver}/courses/schema"
+  _get(path)
+  # returns a JSON array of SchemaElement blocks
+end
+
+# Performs a get request to retrieve a particular course using the org_unit_id
+# of this particular course. If the course does not exist, as specified by the
+# org_unit_id, the response is typically a 404 error.
+#
+# returns: JSON object of the course
+def get_course_by_id(org_unit_id)
+    path = "/d2l/api/lp/#{$lp_ver}/courses/#{org_unit_id}"
+    _get(path)
+    # returns: JSON object of the course
+end
+
+
+def get_course_image(org_unit_id, width = 0, height = 0)
+  path = "/d2l/api/lp/#{lp_ver}/courses/#{org_unit_id}/image"
+  if width > 0 && height > 0
+    path += "?width=#{width}"
+    path += "&height=#{height}"
+  end
+  _get(path)
+end
 
 # Checks whether the created course data conforms to the valence api for the
 # course data JSON object. If it does conform, then nothing happens and it
@@ -62,6 +101,185 @@ def create_course_data(course_data)
     puts '[+] Course creation completed successfully'.green
 end
 
+# Checks whether the updated course data conforms to the valence api for the
+# update data JSON object. If it does conform, then nothing happens and it
+# simply returns true. If it does not conform, then the JSON validator raises
+# an exception.
+def check_updated_course_data_validity(course_data)
+    schema = {
+        'type' => 'object',
+        'required' => %w(Name Code StartDate EndDate IsActive),
+        'properties' => {
+            'Name' => { 'type' => 'string' },
+            'Code' => { 'type' => 'string' },
+            'StartDate' => { 'type' => ['string', "null"] },
+            'EndDate' => { 'type' => ['string', "null"] },
+            'IsActive' => { 'type' => "boolean" },
+        }
+    }
+    JSON::Validator.validate!(schema, course_data, validate_schema: true)
+end
+
+# Update the course based upon the first argument. This course object is first
+# referenced via the first argument and its data formatted via merging it with
+# a predefined payload. Then, a PUT http method is executed using the new
+# payload.
+# Utilize the second argument and perform a PUT action to replace the old data
+def update_course_data(course_id, new_data)
+    # Define a valid, empty payload and merge! with the new data.
+    payload = { 'Name' => '', # String
+                'Code' => 'off_SEMESTERCODE_STARNUM', # String
+                'StartDate' => nil, # String: UTCDateTime | nil
+                'EndDate' => nil, # String: UTCDateTime | nil
+                'IsActive' => false # bool
+              }.merge!(new_data)
+    check_updated_course_data_validity(payload)
+    # ap payload
+    # Define a path referencing the courses path
+    path = "/d2l/api/lp/#{$lp_ver}/courses/" + course_id.to_s
+    _put(path, payload)
+    # requires: CourseOfferingInfo JSON block
+    puts '[+] Course update completed successfully'.green
+    # Define a path referencing the course data using the course_id
+    # Perform the put action that replaces the old data
+    # Provide feedback that the update was successful
+end
+
+# TODO: Update the course image for a course offering.
+def update_course_image(org_unit_id, image_file)
+  # PUT /d2l/api/lp/(version)/courses/(orgUnitId)/image
+end
+
+########################
+# COURSE TEMPLATES:#####
+########################
+# NOTE: Course template related functions are now in 'course_template.rb'
+
+########################
+# COPYING COURSES:######
+########################
+
+def get_copy_job_request_status(org_unit_id, job_token)
+    path = "/d2l/api/le/#{le_ver}/import/#{org_unit_id}/copy/#{job_token}"
+    _get(path)
+    # returns GetCopyJobResponse JSON block
+    # GetImportJobResponse:
+    # {"JobToken" => <string:COPYJOBSTATUS_T>,
+    #  "TargetOrgUnitID" => <number:D2LID>,
+    #  "Status" => <string:IMPORTJOBTSTATUS_T>}
+    # States of getImport: UPLOADING, PROCESSING, PROCESSED, IMPORTING,
+    #                      IMPORTFAILED, COMPLETED
+end
+
+def check_create_copy_job_request_validity(create_copy_job_request)
+    schema = {
+        'type' => 'object',
+        'required' => %w(SourceOrgUnitId Components CallbackUrl),
+        'properties' => {
+            'SourceOrgUnitId' => { 'type' => 'integer' },
+            'Components' => {
+                'type' => ['array', "null"],
+                'items' =>
+                  {
+                      'type' => "string"
+                  }
+            },
+            'CallbackUrl' => { 'type' => ['string', 'null'] }
+        }
+    }
+    JSON::Validator.validate!(schema, create_copy_job_request, validate_schema: true)
+end
+
+# simple schema check to assure the course component is an actual course component
+# returns: boolean
+def is_course_component(key)
+  valid_components = %w(AttendanceRegisters Glossary News Checklists
+                        Grades QuestionLibrary Competencies GradesSettings
+                        Quizzes Content Groups ReleaseConditions CourseFiles
+                        Homepages Rubrics Discussions IntelligentAgents
+                        Schedule DisplaySettings Links SelfAssessments
+                        Dropbox LtiLink Surveys Faq LtiTP ToolNames Forms
+                        Navbars Widgets)
+  valid_components.include?(key)
+  # returns whether the key is actually a course component
+end
+
+def create_new_copy_job_request(org_unit_id, create_copy_job_request)
+  payload =
+  {
+    'SourceOrgUnitId' => 0, # int
+    'Components' => nil, # [Str,...] || nil
+    'CallbackUrl' => nil # str | nil
+  }.merge!(create_copy_job_request)
+  # Check that the payload conforms to the JSON Schema of CreateCopyJobRequest
+  check_create_copy_job_request_validity(payload)
+  # Check each one of the components to see if they are valid Component types
+  payload["Components"].each do |component|
+    # If one of the components is not valid, cancel the CopyJobRequest operation
+    if(!is_course_component(key))
+      puts "'#{component}' specified is not a valid Copy Job Request component"
+      puts "Please retry with a valid course component such as 'Dropbox' or 'Grades'"
+      break
+    end
+  end
+  path = "/d2l/api/le/#{$le_ver}/import/#{org_unit_id}/copy/"
+  _post(path, payload)
+  # Returns CreateCopyJobResponse JSON block
+end
+
+# NOTE: UNSTABLE!!!!
+# TODO: Retrieve the list of logs for course copy jobs.
+# Query Params:
+# --OPTIONAL--
+# -bookmark : string
+# -page_size : number
+# -source_org_unit_id : number
+# -destination_org_unit_id : number
+# -start_date : UTCDateTime
+# -end_date : UTCDateTime
+# RETURNS: An object list page containing the resulting CopyCourseLogMessage data blocks
+def get_copy_jobs_logs(bookmark = '', page_size = 0, source_org_unit_id = 0,
+                       destination_org_unit_id = 0, start_date = '', end_date = '')
+  # GET /d2l/api/le/(version)/ccb/logs
+end
+
+########################
+# IMPORTING COURSES:####
+########################
+
+def get_course_import_job_request_status(org_unit_id, job_token)
+  path = "/d2l/api/le/#{le_ver}/import/#{org_unit_id}/imports/#{job_token}"
+  _get(path)
+  # returns GetImportJobResponse JSON block
+  # example:
+  # {"JobToken" => <string:COPYJOBSTATUS_T>}
+  # States: PENDING, PROCESSING, COMPLETE, FAILED, CANCELLED
+end
+
+def get_course_import_job_request_logs(org_unit_id, job_token, bookmark = '')
+  path = "/d2l/api/le/#{le_ver}/import/#{org_unit_id}/imports/#{job_token}/logs"
+  path += "?bookmark=#{bookmark}" if bookmark != ''
+  _get(path)
+  # returns PAGED RESULT of ImportCourseLog JSON blocks following bookmark param
+end
+
+# TODO: Create a new course import job request.
+def create_course_import_request(org_unit_id, callback_url = '')
+    #path = "/d2l/le/#{le_ver}/import/#{org_unit_id}/imports/"
+    #path += "?callbackUrl=#{callback_url}" if callback_url != ''
+    #_post(path, payload)
+    #_upload(path, json, file, 'POST', 'file', filename)
+end
+
+################################################################################
+################################################################################
+
+
+###########################
+# ADDITIONAL FUNCTIONS:####
+###########################
+
+
 # In order to retrieve an entire department's class list, this method uses a
 # predefined org_unit identifier. This identifier is then appended to a path
 # and all classes withiin the department are returned as JSON objects in an arr.
@@ -73,16 +291,7 @@ def get_org_department_classes(org_unit_id)
     # returns: JSON array of classes.
 end
 
-# Performs a get request to retrieve a particular course using the org_unit_id
-# of this particular course. If the course does not exist, as specified by the
-# org_unit_id, the response is typically a 404 error.
-#
-# returns: JSON object of the course
-def get_course_by_id(org_unit_id)
-    path = "/d2l/api/lp/#{$lp_ver}/courses/#{org_unit_id}"
-    _get(path)
-    # returns: JSON object of the course
-end
+
 
 def get_all_courses
     path = "/d2l/api/lp/#{$lp_ver}/orgstructure/6606/descendants/?ouTypeId=3"
@@ -146,166 +355,4 @@ def get_courses_by_property_by_regex(property, regex)
     end
     courses_results
     # returns array of all matching courses in JSON format.
-end
-
-# Checks whether the updated course data conforms to the valence api for the
-# update data JSON object. If it does conform, then nothing happens and it
-# simply returns true. If it does not conform, then the JSON validator raises
-# an exception.
-def check_updated_course_data_validity(course_data)
-    schema = {
-        'type' => 'object',
-        'required' => %w(Name Code StartDate EndDate IsActive),
-        'properties' => {
-            'Name' => { 'type' => 'string' },
-            'Code' => { 'type' => 'string' },
-            'StartDate' => { 'type' => ['string', "null"] },
-            'EndDate' => { 'type' => ['string', "null"] },
-            'IsActive' => { 'type' => "boolean" },
-        }
-    }
-    JSON::Validator.validate!(schema, course_data, validate_schema: true)
-end
-
-# Update the course based upon the first argument. This course object is first
-# referenced via the first argument and its data formatted via merging it with
-# a predefined payload. Then, a PUT http method is executed using the new
-# payload.
-# Utilize the second argument and perform a PUT action to replace the old data
-def update_course_data(course_id, new_data)
-    # Define a valid, empty payload and merge! with the new data.
-    payload = { 'Name' => '', # String
-                'Code' => 'off_SEMESTERCODE_STARNUM', # String
-                'StartDate' => nil, # String: UTCDateTime | nil
-                'EndDate' => nil, # String: UTCDateTime | nil
-                'IsActive' => false # bool
-              }.merge!(new_data)
-    check_updated_course_data_validity(payload)
-    # ap payload
-    # Define a path referencing the courses path
-    path = "/d2l/api/lp/#{$lp_ver}/courses/" + course_id.to_s
-    _put(path, payload)
-    # requires: CourseOfferingInfo JSON block
-    puts '[+] Course update completed successfully'.green
-    # Define a path referencing the course data using the course_id
-    # Perform the put action that replaces the old data
-    # Provide feedback that the update was successful
-end
-
-def is_course_component(key)
-  valid_components = %w(AttendanceRegisters Glossary News Checklists
-                        Grades QuestionLibrary Competencies GradesSettings
-                        Quizzes Content Groups ReleaseConditions CourseFiles
-                        Homepages Rubrics Discussions IntelligentAgents
-                        Schedule DisplaySettings Links SelfAssessments
-                        Dropbox LtiLink Surveys Faq LtiTP ToolNames Forms
-                        Navbars Widgets)
-  valid_components.include?(key)
-  # returns whether the key is actually a course component
-end
-
-def check_create_copy_job_request_validity(create_copy_job_request)
-    schema = {
-        'type' => 'object',
-        'required' => %w(SourceOrgUnitId Components CallbackUrl),
-        'properties' => {
-            'SourceOrgUnitId' => { 'type' => 'integer' },
-            'Components' => {
-                'type' => ['array', "null"],
-                'items' =>
-                  {
-                      'type' => "string"
-                  }
-            },
-            'CallbackUrl' => { 'type' => ['string', 'null'] }
-        }
-    }
-    JSON::Validator.validate!(schema, create_copy_job_request, validate_schema: true)
-end
-
-
-def create_new_copy_job_request(org_unit_id, create_copy_job_request)
-  payload =
-  {
-    'SourceOrgUnitId' => 0, # int
-    'Components' => nil, # [Str,...] || nil
-    'CallbackUrl' => nil # str | nil
-  }.merge!(create_copy_job_request)
-  # Check that the payload conforms to the JSON Schema of CreateCopyJobRequest
-  check_create_copy_job_request_validity(payload)
-  # Check each one of the components to see if they are valid Component types
-  payload["Components"].each do |component|
-    # If one of the components is not valid, cancel the CopyJobRequest operation
-    if(!is_course_component(key))
-      puts "'#{component}' specified is not a valid Copy Job Request component"
-      puts "Please retry with a valid course component such as 'Dropbox' or 'Grades'"
-      break
-    end
-  end
-  path = "/d2l/api/le/#{$le_ver}/import/#{org_unit_id}/copy/"
-  _post(path, payload)
-  # Returns CreateCopyJobResponse JSON block
-end
-
-def get_copy_job_request_status(org_unit_id, job_token)
-    path = "/d2l/api/le/#{le_ver}/import/#{org_unit_id}/copy/#{job_token}"
-    _get(path)
-    # returns GetCopyJobResponse JSON block
-    # GetImportJobResponse:
-    # {"JobToken" => <string:COPYJOBSTATUS_T>,
-    #  "TargetOrgUnitID" => <number:D2LID>,
-    #  "Status" => <string:IMPORTJOBTSTATUS_T>}
-    # States of getImport: UPLOADING, PROCESSING, PROCESSED, IMPORTING,
-    #                      IMPORTFAILED, COMPLETED
-end
-#########
-=begin
-def create_course_import_request(org_unit_id, callback_url = '')
-    path = "/d2l/le/#{le_ver}/import/#{org_unit_id}/imports/"
-    path += "?callbackUrl=#{callback_url}" if callback_url != ''
-    #_post(path, payload)
-    #_upload(path, json, file, 'POST', 'file', filename)
-
-end
-=end
-def get_course_import_job_request_status(org_unit_id, job_token)
-  path = "/d2l/api/le/#{le_ver}/import/#{org_unit_id}/imports/#{job_token}"
-  _get(path)
-  # returns GetImportJobResponse JSON block
-  # example:
-  # {"JobToken" => <string:COPYJOBSTATUS_T>}
-  # States: PENDING, PROCESSING, COMPLETE, FAILED, CANCELLED
-end
-
-def get_course_import_job_request_logs(org_unit_id, job_token, bookmark = '')
-  path = "/d2l/api/le/#{le_ver}/import/#{org_unit_id}/imports/#{job_token}/logs"
-  path += "?bookmark=#{bookmark}" if bookmark != ''
-  _get(path)
-  # returns PAGED RESULT of ImportCourseLog JSON blocks following bookmark param
-end
-
-# Deletes a course based, referencing it via its org_unit_id
-# This reference is created through a formatted path appended with the id.
-# Then, a delete http method is executed using this path, deleting the course.
-def delete_course_by_id(org_unit_id)
-    path = "/d2l/api/lp/#{$lp_ver}/courses/#{org_unit_id}" # setup user path
-    #ap path
-    _delete(path)
-    puts '[+] Course data deleted successfully'.green
-end
-
-# retrieve the list of parent org unit type constraints for course offerings
-def get_parent_outypes_courses_schema_constraints
-  path = "/d2l/api/lp/#{$lp_ver}/courses/schema"
-  _get(path)
-  # returns a JSON array of SchemaElement blocks
-end
-
-def get_course_image(org_unit_id, width = 0, height = 0)
-  path = "/d2l/api/lp/#{lp_ver}/courses/#{org_unit_id}/image"
-  if width > 0 && height > 0
-    path += "?width=#{width}"
-    path += "&height=#{height}"
-  end
-  _get(path)
 end

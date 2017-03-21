@@ -3,6 +3,7 @@ require 'json-schema'
 ####################################
 # Groups/Group Categories:##########
 ####################################
+
 # Delete a particular group category from an org unit.
 def delete_group_category(org_unit_id, group_category_id)
    path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/#{group_category_id}"

@@ -7,7 +7,7 @@ require 'json-schema'
 # TODO: Delete a specific grade object for a particular org unit.
 # Return: nil
 def delete_org_unit_grade_object(org_unit_id, grade_object_id)
-  # TODO
+  # DELETE /d2l/api/le/(version)/(orgUnitId)/grades/(gradeObjectId)
 end
 
 # REVIEW: Retrieve all the current grade objects for a particular org unit.
@@ -30,7 +30,7 @@ end
 # Return: This action returns a GradeObject JSON block for the grade object
 # that the service just created, so you can quickly retrieve the grade object ID
 def create_org_unit_grade_object(org_unit_id, grade_object)
-  # TODO
+  # POST /d2l/api/le/(version)/(orgUnitId)/grades/
   # NOTE: must be grade object of type numeric, passfail, selectbox, or text
   # NOTE: the name must be unique!
   # Return: This action returns a GradeObject JSON block for the grade object
@@ -42,7 +42,7 @@ end
 def update_org_unit_grade_object(org_unit_id, grade_object)
   # NOTE: if new name, it must be Unique
   # NOTE: must be grade object of type numeric, passfail, selectbox, or text
-  # TODO
+  # PUT /d2l/api/le/(version)/(orgUnitId)/grades/(gradeObjectId)
   # Return: This action returns a GradeObject JSON block for the grade object
   # that the service just updated.
 end
@@ -53,7 +53,7 @@ end
 
 # TODO: Delete a specific grade category for a provided org unit.
 def delete_org_unit_grade_category(org_unit_id, category_id)
-  # TODO
+  # DELETE /d2l/api/le/(version)/(orgUnitId)/grades/categories/(categoryId)
 end
 
 # REVIEW: Retrieve a list of all grade categories for a provided org unit.
@@ -77,7 +77,7 @@ end
 # GradeObjectCategory JSON block, so that you can quickly gather its grade
 # category ID.
 def create_org_unit_grade_category(org_unit_id, grade_category_data)
-  # TODO
+  # POST /d2l/api/le/(version)/(orgUnitId)/grades/
   # Return. This action returns the newly created grade object category in a
   # GradeObjectCategory JSON block, so that you can quickly gather its grade
   # category ID.
@@ -183,4 +183,151 @@ def get_user_org_unit_grades(org_unit_id, user_id)
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/grades/values/#{user_id}/"
   _get(path)
   # RETURN: This action returns a JSON array of GradeValue blocks.
+end
+
+########################
+# GRADE VALUES:#########
+########################
+
+# TODO: Delete a course completion.
+# RETURNS: nil
+def delete_course_completion(org_unit_id, completion_id)
+  # DELETE /d2l/api/le/(version)/(orgUnitId)/grades/courseCompletion/(completionId)
+end
+
+# REVIEW: Retrieve all the course completion records for an org unit.
+# RETURNS: This action returns a paged result set containing the resulting
+# CourseCompletion data blocks for the segment following your bookmark
+# parameter (or the first segment if the parameter is empty or missing).
+def get_org_unit_completion_records(org_unit_id, user_id = 0, start_expiry = '',
+                                    end_expiry = '', bookmark = '')
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/grades/courseCompletion/"
+  path += "?"
+  path += "userId=#{user_id}&" if user_id != 0
+  path += "startExpiry=#{start_expiry}&" if startExpiry != ''
+  path += "endExpiry=#{end_expiry}&" if endExpiry != ''
+  path += "bookmark=#{bookmark}" if bookmark != ''
+  _get(path)
+  # RETURNS: This action returns a paged result set containing the resulting
+  # CourseCompletion data blocks for the segment following your bookmark
+  # parameter (or the first segment if the parameter is empty or missing).
+end
+
+# REVIEW: Retrieve all the course completion records for a user.
+# RETURNS: This action returns a paged result set containing the resulting
+# CourseCompletion data blocks for the segment following your bookmark
+# parameter (or the first segment if the parameter is empty or missing).
+def get_user_completion_records(user_id, start_expiry = '', end_expiry = '',
+                                bookmark = '')
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/grades/courseCompletion/"
+  path += "?"
+  path += "startExpiry=#{start_expiry}&" if startExpiry != ''
+  path += "endExpiry=#{end_expiry}&" if endExpiry != ''
+  path += "bookmark=#{bookmark}" if bookmark != ''
+  _get(path)
+  # RETURNS: This action returns a paged result set containing the resulting
+  # CourseCompletion data blocks for the segment following your bookmark
+  # parameter (or the first segment if the parameter is empty or missing).
+end
+
+# TODO: Create a new course completion for an org unit.
+# RETURNS: a CourseCompletion JSON block with the newly created course completion record.
+def create_course_completion(org_unit_id, course_completion_data)
+  # POST /d2l/api/le/(version)/(orgUnitId)/grades/courseCompletion/
+end
+
+# TODO: Update an existing course completion.
+# RETURNS: a CourseCompletion JSON block with the newly created course completion record.
+def update_course_completion(org_unit_id, completion_id, course_completion_data)
+
+  # PUT /d2l/api/le/(version)/(orgUnitId)/grades/courseCompletion/(completionId)
+end
+
+########################
+# GRADE STATISTICS:#####
+########################
+
+# REVIEW: Get statistics for a specified grade item.
+# RETURNS: a GradeStatisticsInfo JSON block.
+def get_grade_item_statistics(org_unit_id, grade_object_id)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/grades/#{grade_object_id}/statistics"
+  _get(path)
+  # RETURNS: a GradeStatisticsInfo JSON block.
+end
+
+########################
+# GRADE SETUP:##########
+########################
+
+# REVIEW: Retrieve the grades configuration for the org unit.
+# RETURNS: a GradeSetupInfo JSON block.
+def get_org_unit_grade_config(org_unit_id)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/grades/setup/"
+  _get(path)
+  # RETURNS: a GradeSetupInfo JSON block.
+end
+
+# TODO: Update the grades configuration for the org unit.
+# INPUT: a GradeSetupInfo JSON block. (grade_setup_info)
+# RETURNS: a GradeSetupInfo JSON block.
+def update_org_unit_grade_config(org_unit_id, grade_setup_info)
+  # PUT /d2l/api/le/(version)/(orgUnitId)/grades/setup/
+  # RETURNS: a GradeSetupInfo JSON block.
+end
+
+########################
+# GRADE EXEMPTIONS:#####
+########################
+
+# REVIEW: Retrieve all the exempt users for a provided grade.
+# RETURNS: a JSON array of User blocks.
+def get_grade_exempt_users(org_unit_id, grade_object_id)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/grades/#{grade_object_id}/exemptions/"
+  _get(path)
+  # RETURNS: a JSON array of User blocks.
+end
+
+# REVIEW: Determine if a user is exempt from a grade.
+# RETURNS: a User JSON block.
+def get_is_user_exempt(org_unit_id, grade_object_id, user_id)
+  path = "GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/grades/#{grade_object_id}/exemptions/#{user_id}"
+  _get(path)
+  # RETURNS: a User JSON block.
+end
+
+# TODO: Exempt a user from a grade.
+# RETURNS: a User JSON block.
+def exempt_user_from_grade(org_unit_id, grade_object_id, user_id)
+  # POST /d2l/api/le/(version)/(orgUnitId)/grades/(gradeObjectId)/exemptions/(userId)
+  # RETURNS: a User JSON block.
+end
+
+# TODO: Remove a user’s exemption from a grade.
+# RETURNS: nil
+def remove_user_grade_exemption(org_unit_id, grade_object_id, user_id)
+  # DELETE /d2l/api/le/(version)/(orgUnitId)/grades/(gradeObjectId)/exemptions/(userId)
+  # RETURNS: nil
+end
+
+#############################
+# BULK GRADE EXEMPTIONS:#####
+#############################
+
+# REVIEW: Retrieve all the grade objects for a provided user in a provided org unit with exemption status included.
+# RETURNS: BulkGradeObjectExemptionResult JSON block.
+def get_user_grade_exemptions(org_unit_id, user_id)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/grades/exemptions/#{user_id}"
+  _get(path)
+  # RETURNS: BulkGradeObjectExemptionResult JSON block.
+end
+
+# TODO: Attempt to exempt or unexempt a set of grades for a user.
+# INPUT: a BulkGradeObjectExemptionUpdate.
+# NOTE: If a grade has been changed since the provided ExemptionAccessDate,
+#       a conflict will be added to the result set and that grade will not
+#       be exempted or unexempted.
+# RETURNS: a JSON array of BulkGradeObjectExemptionConflict blocks.
+def bulk_grade_exemption_update(org_unit_id, user_id, bulk_grade_exmption_update_block)
+  # POST /d2l/api/le/(version)/(orgUnitId)/grades/exemptions/(userId)
+  # RETURNS: a JSON array of BulkGradeObjectExemptionConflict blocks.
 end
