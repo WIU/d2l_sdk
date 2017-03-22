@@ -144,9 +144,10 @@ def delete_current_user_org_unit_pin(org_unit_id)
   # RETURNS: nil
 end
 
-# TODO: Pin an org unit to the top of the list of a user’s enrollments.
+# REVIEW: Pin an org unit to the top of the list of a user’s enrollments.
 def pin_org_unit_for_current_context(org_unit_id)
-  # POST /d2l/api/lp/(version)/enrollments/myenrollments/(orgUnitId)/pin
+  path = "/d2l/api/lp/#{$lp_ver}/enrollments/myenrollments/#{org_unit_id}/pin"
+  _post(path, {})
   # RETURNS: MyOrgUnitInfo JSON block.
 end
 

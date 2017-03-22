@@ -105,5 +105,13 @@ end
 # TODO: Update a news item for an org unit.
 # INPUT: JSON Parameter of type NewsItemData (News.NewsItemData)
 def update_news_item(org_unit_id, news_item_id, news_item_data)
+  # Example of News.NewsItemData JSON Data Block:
+  #   {"Title" => "string",
+  #   "Body" => {'Content' => "content", "Type" => "type"} # RichTextInput -- e.g. {'Content'=>'x', 'Type'=>'y'}
+  #   "StartDate": "<string:UTCDateTime>",
+  #   "EndDate": "<string:UTCDateTime>", # or nil
+  #   "IsGlobal": false,
+  #   "IsPublished": false,
+  #   "ShowOnlyInCourseOfferings": false}
   # PUT /d2l/api/le/(version)/(orgUnitId)/news/(newsItemId)
 end

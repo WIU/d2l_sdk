@@ -2,7 +2,7 @@ require 'rubygems' # useful
 require 'awesome_print' # useful for debugging
 require 'base64' # NEEDED
 require 'json' # NEEDED
-require 'restclient' # NEEDED
+require 'rest-client' # NEEDED
 require 'openssl' # NEEDED
 require 'open-uri' # NEEDED
 require 'colorize' # useful

@@ -302,10 +302,11 @@ end
 # NOTIFICATIONS:########
 ########################
 
-# TODO: Delete the subscription for messages of a particular type,
+# REVIEW: Delete the subscription for messages of a particular type,
 #       delivered by a particular carrier.
 def delete_subscription(carrier_id, message_type_id)
-  # DELETE /d2l/api/lp/(version)/notifications/instant/carriers/(carrierId)/subscriptions/(messageTypeId)
+  path = "/d2l/api/lp/#{$lp_ver}/notifications/instant/carriers/#{carrier_id}/subscriptions/#{message_type_id}"
+  _delete(path)
 end
 
 # Retrieve all the carrier channels for delivering notification messages.
@@ -332,22 +333,30 @@ end
 # PASSWORDS:############
 ########################
 
-# TODO: Clear a particular user’s password.
+# REVIEW: Clear a particular user’s password.
 def delete_user_password(user_id)
-  # DELETE /d2l/api/lp/(version)/users/(userId)/password
+  path = "/d2l/api/lp/#{$lp_ver}/users/#{user_id}/password"
+  _delete(path)
 end
 
-# TODO: Reset a particular user’s password.
+# REVIEW: Reset a particular user’s password.
 # INPUT: nil (no payload necessary)
 # NOTE: Prompts the service to send a password-reset email to the provided user.
 def reset_user_password(user_id)
-  # POST /d2l/api/lp/(version)/users/(userId)/password
+  path = "/d2l/api/lp/#{$lp_ver}/users/#{user_id}/password"
+  _post(path, {})
 end
 
-# TODO: Update a particular user’s password.
+# REVIEW: Update a particular user’s password.
 # NOTE: 400 errors are implicitly invalid password
 def update_user_password(user_id, user_password_data)
-  # PUT /d2l/api/lp/(version)/users/(userId)/password
+  if user_password_data.is_a? String
+    path = "/d2l/api/lp/#{$lp_ver}/users/#{user_id}/password"
+    payload = {"Password" => user_password_data}
+    _put(path, payload)
+  else
+    raise ArgumentError, "Argument 'user_password_data' is not a String"
+  end
 end
 
 
@@ -392,19 +401,22 @@ end
 # PROFILES:#############
 ########################
 
-# TODO: Remove the current user’s profile image.
+# REVIEW: Remove the current user’s profile image.
 def remove_current_user_profile_image
-  # DELETE /d2l/api/lp/(version)/profile/myProfile/image
+  path = "/d2l/api/lp/#{$lp_ver}/profile/myProfile/image"
+  _delete(path)
 end
 
-# TODO: Remove the profile image from a particular personal profile, by Profile ID.
+# REVIEW: Remove the profile image from a particular personal profile, by Profile ID.
 def remove_profile_image_by_profile_id(profile_id)
-  # DELETE /d2l/api/lp/(version)/profile/(profileId)/image
+  path = "/d2l/api/lp/#{$lp_ver}/profile/#{profile_id}/image"
+  _delete(path)
 end
 
-# TODO: Remove the profile image from a particular personal profile, by User ID.
+# REVIEW: Remove the profile image from a particular personal profile, by User ID.
 def remove_profile_image_by_user_id(user_id)
-  # DELETE /d2l/api/lp/(version)/profile/user/(userId)/image
+  path = "/d2l/api/lp/#{$lp_ver}/profile/user/#{user_id}/image"
+  _delete(path)
 end
 
 # retrieve personal profile info for the current user context
@@ -515,6 +527,47 @@ end
 # RETURNS: a UserProfile JSON data block for the updated personal profile.
 def update_profile_by_profile_id(profile_id, user_profile_data)
   # PUT /d2l/api/lp/(version)/profile/(profileId)
+    # NOTE: Example of User.UserProfile JSON Data Block
+    #    {  "Nickname": <string>,
+    #       "Birthday": {
+    #           "Month": <number>,
+    #           "Day": <number>
+    #       },
+    #       "HomeTown": <string>,
+    #       "Email": <string>,
+    #       "HomePage": <string>,
+    #       "HomePhone": <string>,
+    #       "BusinessPhone": <string>,
+    #       "MobilePhone": <string>,
+    #       "FaxNumber": <string>,
+    #       "Address1": <string>,
+    #       "Address2": <string>,
+    #       "City": <string>,
+    #       "Province": <string>,
+    #       "PostalCode": <string>,
+    #       "Country": <string>,
+    #       "Company": <string>,
+    #       "JobTitle": <string>,
+    #       "HighSchool": <string>,
+    #       "University": <string>,
+    #       "Hobbies": <string>,
+    #       "FavMusic": <string>,
+    #       "FavTVShows": <string>,
+    #       "FavMovies": <string>,
+    #       "FavBooks": <string>,
+    #       "FavQuotations": <string>,
+    #       "FavWebSites": <string>,
+    #       "FutureGoals": <string>,
+    #       "FavMemory": <string>,
+    #       "SocialMediaUrls": [ // Array of SocialMediaUrl blocks
+    #           {
+    #                 "Name": <string>,
+    #                 "Url": <string:URL>
+    #           },
+    #           { <composite:SocialMediaUrl> }, ...
+    #       ]
+    #    }
+    # NOTE: The back-end service also expects a file names "profileImage"
   # RETURNS: a UserProfile JSON data block for the updated personal profile.
 end
 

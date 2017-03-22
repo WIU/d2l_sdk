@@ -71,9 +71,10 @@ end
 ## FIELDS:##############
 ########################
 
-# TODO: Delete a single demographic field, provided it has no associated entries.
+# REVIEW: Delete a single demographic field, provided it has no associated entries.
 def delete_demographics_field(field_id)
-  #DELETE /d2l/api/lp/(version)/demographics/fields/(fieldId)
+  path = "/d2l/api/lp/#{$lp_ver}/demographics/fields/#{field_id}"
+  _delete(path)
 end
 
 # Retrieve list of all demographics fields

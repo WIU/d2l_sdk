@@ -264,6 +264,7 @@ def get_course_import_job_request_logs(org_unit_id, job_token, bookmark = '')
 end
 
 # TODO: Create a new course import job request.
+# INPUT: simple file upload process
 def create_course_import_request(org_unit_id, callback_url = '')
     #path = "/d2l/le/#{le_ver}/import/#{org_unit_id}/imports/"
     #path += "?callbackUrl=#{callback_url}" if callback_url != ''

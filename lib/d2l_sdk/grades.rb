@@ -4,10 +4,11 @@ require 'json-schema'
 # GRADES:###############
 ########################
 
-# TODO: Delete a specific grade object for a particular org unit.
+# REVIEW: Delete a specific grade object for a particular org unit.
 # Return: nil
 def delete_org_unit_grade_object(org_unit_id, grade_object_id)
-  # DELETE /d2l/api/le/(version)/(orgUnitId)/grades/(gradeObjectId)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/grades/#{grade_object_id}"
+  _delete(path)
 end
 
 # REVIEW: Retrieve all the current grade objects for a particular org unit.
@@ -51,9 +52,10 @@ end
 # GRADE CATEGORIES:#####
 ########################
 
-# TODO: Delete a specific grade category for a provided org unit.
+# REVIEW: Delete a specific grade category for a provided org unit.
 def delete_org_unit_grade_category(org_unit_id, category_id)
-  # DELETE /d2l/api/le/(version)/(orgUnitId)/grades/categories/(categoryId)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/grades/categories/#{category_id}"
+  _delete(path)
 end
 
 # REVIEW: Retrieve a list of all grade categories for a provided org unit.
@@ -188,10 +190,11 @@ end
 # GRADE VALUES:#########
 ########################
 
-# TODO: Delete a course completion.
+# REVIEW: Delete a course completion.
 # RETURNS: nil
 def delete_course_completion(org_unit_id, completion_id)
-  # DELETE /d2l/api/le/(version)/(orgUnitId)/grades/courseCompletion/(completionId)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/grades/courseCompletion/#{completion_id}"
+  _delete(path)
 end
 
 # REVIEW: Retrieve all the course completion records for an org unit.
@@ -232,13 +235,19 @@ end
 # TODO: Create a new course completion for an org unit.
 # RETURNS: a CourseCompletion JSON block with the newly created course completion record.
 def create_course_completion(org_unit_id, course_completion_data)
+  #CourseCompletionCreationData JSON data block example:
+  # {"UserId" => 0,
+  # "CompletedDate" => "UTCDateTime",
+  # "ExpiryDate" => "UTCDateTime" || nil}
   # POST /d2l/api/le/(version)/(orgUnitId)/grades/courseCompletion/
 end
 
 # TODO: Update an existing course completion.
 # RETURNS: a CourseCompletion JSON block with the newly created course completion record.
 def update_course_completion(org_unit_id, completion_id, course_completion_data)
-
+  # CourseCompletionUpdateData JSON data block example:
+  # {"CompletedDate" => "UTCDateTime",
+  # "ExpiryDate" => "UTCDateTime" || nil}
   # PUT /d2l/api/le/(version)/(orgUnitId)/grades/courseCompletion/(completionId)
 end
 
@@ -270,6 +279,10 @@ end
 # INPUT: a GradeSetupInfo JSON block. (grade_setup_info)
 # RETURNS: a GradeSetupInfo JSON block.
 def update_org_unit_grade_config(org_unit_id, grade_setup_info)
+  # Grade.GradeSetupInfo JSON data block example:
+  # {"GradingSystem" => "Points", # Other types: "Weighted", "Formula"
+  # "IsNullGradeZero" => false,
+  # "DefaultGradeSchemeId" => 0}
   # PUT /d2l/api/le/(version)/(orgUnitId)/grades/setup/
   # RETURNS: a GradeSetupInfo JSON block.
 end
@@ -294,17 +307,19 @@ def get_is_user_exempt(org_unit_id, grade_object_id, user_id)
   # RETURNS: a User JSON block.
 end
 
-# TODO: Exempt a user from a grade.
+# REVIEW: Exempt a user from a grade.
 # RETURNS: a User JSON block.
 def exempt_user_from_grade(org_unit_id, grade_object_id, user_id)
-  # POST /d2l/api/le/(version)/(orgUnitId)/grades/(gradeObjectId)/exemptions/(userId)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/grades/#{grade_object_id}/exemptions/#{user_id}"
+  _post(path, {})
   # RETURNS: a User JSON block.
 end
 
-# TODO: Remove a user’s exemption from a grade.
+# REVIEW: Remove a user’s exemption from a grade.
 # RETURNS: nil
 def remove_user_grade_exemption(org_unit_id, grade_object_id, user_id)
-  # DELETE /d2l/api/le/(version)/(orgUnitId)/grades/(gradeObjectId)/exemptions/(userId)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/grades/#{grade_object_id}/exemptions/#{user_id}"
+  _delete(path)
   # RETURNS: nil
 end
 
@@ -327,6 +342,11 @@ end
 #       be exempted or unexempted.
 # RETURNS: a JSON array of BulkGradeObjectExemptionConflict blocks.
 def bulk_grade_exemption_update(org_unit_id, user_id, bulk_grade_exmption_update_block)
+  # Grade.BulkGradeObjectExemptionUpdate JSON data block example:
+  # {"ExemptedIds" => [0,1,2,3], # D2LIDs
+  # "UnexemptedIds" => [0,1,2,3], # D2LIDs
+  # "ExemptionAccessDate" => 'UTCDateTime'}
+
   # POST /d2l/api/le/(version)/(orgUnitId)/grades/exemptions/(userId)
   # RETURNS: a JSON array of BulkGradeObjectExemptionConflict blocks.
 end
