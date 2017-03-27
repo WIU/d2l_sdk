@@ -155,3 +155,36 @@ end
 def update_org_unit_config_var_resolution(resolver_value)
   # PUT /d2l/api/lp/(version)/configVariables/(variableId)/resolver
 end
+
+################################################################################
+###############################     TOOLS    ###################################
+################################################################################
+# NOTE: This section has been appended to config variables due to its similar
+#       placement in the GUI and the fact that tools functions are rather small
+#       in number.
+
+########################
+# ORGANIZATION:#########
+########################
+
+# TODO: Retrieve the current organization-level information for all tools.
+# => GET /d2l/api/lp/(version)/tools/org/
+# TODO: Retrieve the current organization-level information for a tool.
+# => GET /d2l/api/lp/(version)/tools/org/(toolId)
+# TODO: Update the organization-level status for a tool.
+# => PUT /d2l/api/lp/(version)/tools/org/(toolId)
+# TODO: Update a tool’s default status for new org units.
+# => PUT /d2l/api/lp/(version)/tools/org/(toolId)/OUDefault
+# TODO: Update a tool’s current status for all org units.
+# => PUT /d2l/api/lp/(version)/tools/org/(toolId)/OUDefault/override
+
+########################
+# ORG UNITS:############
+########################
+
+# TODO: Retrieve the current information for all tools enabled for the provided org unit.
+# => GET /d2l/api/lp/(version)/tools/orgUnits/(orgUnitId)
+# TODO: Retrieve the current information for a tool enabled for the provided org unit.
+# => GET /d2l/api/lp/(version)/tools/orgUnits/(orgUnitId)/(toolId)
+# TODO: Update the org unit-level information for a tool.
+# => PUT /d2l/api/lp/(version)/tools/orgUnits/(orgUnitId)/(toolId)

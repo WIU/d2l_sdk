@@ -350,3 +350,28 @@ def bulk_grade_exemption_update(org_unit_id, user_id, bulk_grade_exmption_update
   # POST /d2l/api/le/(version)/(orgUnitId)/grades/exemptions/(userId)
   # RETURNS: a JSON array of BulkGradeObjectExemptionConflict blocks.
 end
+
+###################
+# ASSESSMENTS:#####
+###################
+
+# TODO: --UNSTABLE-- Retrieve rubrics for an object in an org unit.
+# RETURNS: a JSON array of Rubric blocks.
+def get_org_unit_rubrics(org_unit_id, object_type, object_id)
+  # GET /d2l/api/le/(version)/(orgUnitId)/rubrics
+  # RETURNS: a JSON array of Rubric blocks.
+end
+
+# TODO: --UNSTABLE-- Retrieve an assessment in an org unit.
+# RETURNS: a RubricAssessment JSON structure.
+def get_org_unit_assessment(org_unit_id, assessment_type, object_type, object_id, user_id)
+  # GET /d2l/api/le/(version)/(orgUnitId)/assessment
+  # RETURNS: a RubricAssessment JSON structure.
+end
+
+# TODO: --UNSTABLE-- Update an assessment in an org unit.
+# RETURNS: value of the assessment in a RubricAssessment JSON structure.
+def update_org_unit_assessment(org_unit_id, assessment_type, object_type, object_id, user_id)
+  # PUT /d2l/api/le/(version)/(orgUnitId)/assessment
+  # RETURNS: value of the assessment in a RubricAssessment JSON structure.
+end
