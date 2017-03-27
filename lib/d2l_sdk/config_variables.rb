@@ -167,24 +167,62 @@ end
 # ORGANIZATION:#########
 ########################
 
-# TODO: Retrieve the current organization-level information for all tools.
+# REVIEW: Retrieve the current organization-level information for all tools.
 # => GET /d2l/api/lp/(version)/tools/org/
-# TODO: Retrieve the current organization-level information for a tool.
+# RETURNS: paged result set containing the resulting OrgInformation data blocks
+def get_org_tools_info(include_restricted_tools = nil, bookmark = '')
+  path = "/d2l/api/lp/#{$lp_ver}/tools/org/?"
+  path += "includeRestrictedTools=#{includeRestrictedTools}&" unless include_restricted_tools.nil?
+  path += "bookmark=#{bookmark}" unless bookmark == ''
+  _get(path)
+  # RETURNS: paged result set containing the resulting OrgInformation data blocks
+end
+
+# REVIEW: Retrieve the current organization-level information for a tool.
 # => GET /d2l/api/lp/(version)/tools/org/(toolId)
+# RETURNS: an OrgInformation JSON block
+def get_org_tool_info(tool_id)
+  path = "GET /d2l/api/lp/#{$lp_ver}/tools/org/#{tool_id}"
+  _get(path)
+  # RETURNS: an OrgInformation JSON block
+end
+
 # TODO: Update the organization-level status for a tool.
 # => PUT /d2l/api/lp/(version)/tools/org/(toolId)
+def update_org_tool_status(tool_id, update_status)
+
+end
+
 # TODO: Update a tool’s default status for new org units.
 # => PUT /d2l/api/lp/(version)/tools/org/(toolId)/OUDefault
+def update_tool_default_status(tool_id, update_status)
+
+end
+
 # TODO: Update a tool’s current status for all org units.
 # => PUT /d2l/api/lp/(version)/tools/org/(toolId)/OUDefault/override
+def update_all_org_unit_tool_status(tool_id, update_status)
+
+end
 
 ########################
 # ORG UNITS:############
 ########################
 
-# TODO: Retrieve the current information for all tools enabled for the provided org unit.
+# REVIEW: Retrieve the current information for all tools enabled for the provided org unit.
 # => GET /d2l/api/lp/(version)/tools/orgUnits/(orgUnitId)
-# TODO: Retrieve the current information for a tool enabled for the provided org unit.
+def get_org_enabled_tools_info(org_unit_id, bookmark = '')
+  path = "/d2l/api/lp/#{$lp_ver}/tools/orgUnits/#{org_unit_id}?"
+  path += "bookmark=#{bookmark}" unless bookmark == ''
+  _get(path)
+end
+
+# REVIEW: Retrieve the current information for a tool enabled for the provided org unit.
 # => GET /d2l/api/lp/(version)/tools/orgUnits/(orgUnitId)/(toolId)
+def get_org_enabled_tool_info(org_unit_id, tool_id)
+  path = "/d2l/api/lp/#{$lp_ver}/tools/orgUnits/#{org_unit_id}/#{tool_id}"
+  _get(path)
+end
+
 # TODO: Update the org unit-level information for a tool.
 # => PUT /d2l/api/lp/(version)/tools/orgUnits/(orgUnitId)/(toolId)

@@ -92,7 +92,7 @@ def get_paged_calendar_events_by_org_units(org_unit_ids_csv, start_date_time,
   _get(path)
 end
 
-# TODO: Retrieve all the calendar events for a specified user’s explicit
+# REVIEW: Retrieve all the calendar events for a specified user’s explicit
 #       enrollments within the organization containing the specified org unit.
 # RETURNS: a paged result set containing the resulting EventDataInfo JSON data blocks
 def get_user_calendar_events(org_unit_id, user_id, start_date_time, end_date_time,
