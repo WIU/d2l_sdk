@@ -212,7 +212,7 @@ def check_updated_user_data_validity(user_data)
                          LastName ExternalEmail UserName
                          Activation),
         'properties' => {
-            'OrgDefinedId' => { 'type' => 'string' },
+            'OrgDefinedId' => { 'type' => %w(string null) },
             'FirstName' => { 'type' => 'string' },
             'MiddleName' => { 'type' => 'string' },
             'LastName' => { 'type' => 'string' },
@@ -279,11 +279,21 @@ def get_user_activation_settings(user_id)
   # RETURNS: a UserActivationData JSON block with the user’s current activation status.
 end
 
-# TODO: Update a particular user’s activation settings.
+# REVIEW: Update a particular user’s activation settings.
 # RETURNS: ?
-def update_user_activation_settings(user_id, user_activation_data)
+def update_user_activation_settings(user_id, is_active)
   # PUT /d2l/api/lp/(version)/users/(userId)/activation
-  # RETURNS: ?
+  if is_active != true && is_active != false
+    raise ArgumentError, 'is_active is not a boolean'
+  else
+    path = "/d2l/api/lp/#{$lp_ver}/users/#{user_id}/activation"
+    payload =
+    {
+      "IsActive" => is_active
+    }
+    _put(path, payload)
+    # RETURNS: ?
+  end
 end
 
 ########################
@@ -291,7 +301,7 @@ end
 ########################
 
 # NOTE: UNSTABLE!
-# TODO: Link a user to a Google Apps user account.
+# TODO: UNSTABLE!--Link a user to a Google Apps user account.
 # RETURNS: ?
 def link_user_google_apps_account(google_apps_linking_item)
   # POST /d2l/api/gae/(version)/linkuser

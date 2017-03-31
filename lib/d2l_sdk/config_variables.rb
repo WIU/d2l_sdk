@@ -151,7 +151,7 @@ def get_config_var_resolver(variable_id)
 end
 
 # NOTE: UNSTABLE!!!
-# TODO: Update the resolution strategy for an org unit configuration variable.
+# TODO: UNSTABLE!!! --Update the resolution strategy for an org unit configuration variable.
 def update_org_unit_config_var_resolution(resolver_value)
   # PUT /d2l/api/lp/(version)/configVariables/(variableId)/resolver
 end
@@ -187,22 +187,38 @@ def get_org_tool_info(tool_id)
   # RETURNS: an OrgInformation JSON block
 end
 
-# TODO: Update the organization-level status for a tool.
+# NOTE: Not inherent d2l_api function. This is to check that the update_status
+#       is actually a boolean and return a formatted UpdateStatus JSON block.
+def check_and_create_update_status_payload(update_status)
+  if update_status != true && update_status != false
+    raise ArgumentError, 'update_status is not a boolean'
+  end
+  payload = {"Status" => update_status} # Tools.UpdateStatus JSON data block
+  payload
+end
+
+# REVIEW: Update the organization-level status for a tool.
 # => PUT /d2l/api/lp/(version)/tools/org/(toolId)
 def update_org_tool_status(tool_id, update_status)
-
+  path = "/d2l/api/lp/#{$lp_ver}/tools/org/#{tool_id}"
+  payload = check_and_create_update_status_payload(update_status)
+  _put(path, payload)
 end
 
-# TODO: Update a tool’s default status for new org units.
+# REVIEW: Update a tool’s default status for new org units.
 # => PUT /d2l/api/lp/(version)/tools/org/(toolId)/OUDefault
 def update_tool_default_status(tool_id, update_status)
-
+  path = "/d2l/api/lp/#{$lp_ver}/tools/org/#{tool_id}/OUDefault"
+  payload = check_and_create_update_status_payload(update_status)
+  _put(path, payload)
 end
 
-# TODO: Update a tool’s current status for all org units.
+# REVIEW: Update a tool’s current status for all org units.
 # => PUT /d2l/api/lp/(version)/tools/org/(toolId)/OUDefault/override
 def update_all_org_unit_tool_status(tool_id, update_status)
-
+  path = "/d2l/api/lp/#{$lp_ver}/tools/org/#{tool_id}/OUDefault/override"
+  payload = check_and_create_update_status_payload(update_status)
+  _put(path, payload)
 end
 
 ########################
@@ -224,5 +240,34 @@ def get_org_enabled_tool_info(org_unit_id, tool_id)
   _get(path)
 end
 
-# TODO: Update the org unit-level information for a tool.
+def check_org_unit_information_validity(data_block)
+    schema = {
+        'type' => 'object',
+        'required' => %w(ToolId DisplayName OrgUnitId Status CustomNavbarName),
+        'properties' => {
+            'ToolId' => { 'type' => 'string' },
+            'DisplayName' => { 'type' => 'string' },
+            'CallbackUrl' => { 'type' => 'integer' },
+            'Status' => { 'type' => 'boolean' },
+            'CustomNavbarName' => { 'type' => 'string' }
+        }
+    }
+    JSON::Validator.validate!(schema, data_block, validate_schema: true)
+end
+
+# REVIEW: Update the org unit-level information for a tool.
+# INPUT: OrgUnitInformation JSON block
 # => PUT /d2l/api/lp/(version)/tools/orgUnits/(orgUnitId)/(toolId)
+def update_org_unit_level_tool_info(org_unit_id, tool_id, org_unit_information)
+  path = "/d2l/api/lp/#{$lp_ver}/tools/orgUnits/#{org_unit_id}/#{tool_id}"
+  payload =
+  {
+    "ToolId" => "", # <string:D2LID>
+    "DisplayName" => "",   # <string> ## added with LP v1.6 API
+    "OrgUnitId" => 0, # D2LID:number
+    "Status" => false, # boolean
+    "CustomNavbarName" => "" # <string>
+  }.merge!(org_unit_information)
+  check_org_unit_information_validity(payload) # NOTE: Check this later.
+  _put(path, payload)
+end

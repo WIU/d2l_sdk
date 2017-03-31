@@ -66,8 +66,52 @@ end
 #               1. +ContentObjectData+ JSON data block of type Topic
 #               2. File attachment data itself you want to store in OU content area
 # Returns (if successful) a JSON data block containing properties of the newly created object
-def add_child_to_module(org_unit_id, module_id) # POST
-  query_string = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/modules/#{module_id}/structure/"
+def add_child_to_module(org_unit_id, module_id, child ={}) # POST
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/modules/#{module_id}/structure/"
+  payload = {}
+  if child.key?("module") # TODO: modules
+    payload = {
+      "Title" => "title_string", # String
+      "ShortTitle" => "title_short_string", # String
+      "Type" => 0,
+      "ModuleStartDate" => nil, # nil || string:UTCDateTime
+      "ModuleEndDate" => nil, # nil || string:UTCDateTime
+      "ModuleDueDate" => nil, # nil || string:UTCDateTime
+      "IsHidden" => false,
+      "IsLocked" => false,
+      "description" => {
+        "Text" => "blank",
+        "HTML" => ""
+      },
+      "Duration" => nil, #nil, number
+    }.merge!(child["module"])
+    _post(path, payload)
+  elsif child.key?("link") # TODO: link-type topics
+    payload = {
+      "Title" => "title_string", # String
+      "ShortTitle" => "title_short_string", # String
+      "Type" => 1,
+      "TopicType" => 3, #<number:TOPIC_T>
+      "Url" => "URL", # the URL you want to fetch when the user opens the link-type topic.
+      "StartDate" => nil, # nil || string:UTCDateTime
+      "EndDate" => nil, # nil || string:UTCDateTime
+      "DueDate" => nil, # nil || string:UTCDateTime
+      "IsHidden" => false,
+      "IsLocked" => false,
+      "OpenAsExternalResource" => nil, #or boolean
+      "description" => {
+        "Text" => "",
+        "HTML" => nil # -or- HTML formatted string
+      },
+      "MajorUpdate" => nil, # or bool
+      "MajorUpdateText" => "MajorUpdateText",
+      "ResetCompletionTracking" => nil, # or bool
+      "Duration" => nil, #nil, number
+    }.merge!(child["module"])
+    _post(path, payload)
+  elsif child.key?("file") # TODO: file-type topics
+    _course_content_upload(query_string, payload, file, "POST")
+  end
 end
 
 def check_content_module_validity(content_module)
@@ -206,6 +250,7 @@ end
 # Retrieve the overview for a course offering.
 def get_course_overview(org_unit_id) # GET
   query_string = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/overview"
+  ap query_string
   _get(query_string)
   # Returns: a Overview JSON data block containing
   # the course offering overview’s details.

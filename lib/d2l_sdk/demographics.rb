@@ -61,6 +61,43 @@ def get_user_demographics(user_id, field_ids = '', bookmark = '')
   path += "bookmark=#{bookmark}" if bookmark != ''
 end
 
+def check_demographics_user_entry_data_validity(demographics_user_entry_data)
+    # A hash with one value, "EntryValues", which is an array of hashes that
+    # include the keys "Name" and "Values", where "Name" is a string and "Values"
+    # is an array of string.
+    schema = {
+        'type' => 'object',
+        'required' => %w(EntryValues),
+        'properties' => {
+            'EntryValues' => # DemographicsEntryData
+            {
+              'type' => 'array',
+              'items' => # Items = <composite:DemographicsEntry>
+              {
+                'type' => 'object',
+                'minItems' => 1,
+                'required' => %w(Name Values),
+                'properties' =>
+                {
+                  'Name' => { 'type' => 'string' },
+                  'Values' =>
+                  {
+                    'type' => 'array',
+                    'items' =>
+                    {
+                      'type' => 'string',
+                      'minItems' => 1
+                    }
+                  }
+                }
+              }
+            }
+        }
+    }
+    JSON::Validator.validate!(schema, demographics_user_entry_data, validate_schema: true)
+end
+
+
 # TODO: Update the demographics entries for a single user.
 # Return: a DemographicsUserEntryData JSON block containing the user’s updated entries.
 def update_user_demographics(user_id, demographics_entry_data)
@@ -92,19 +129,64 @@ def get_demographic_field(field_id)
   # returns fetch form of DemographicsField JSON block
 end
 
-# TODO: Create new demographic field
+# Additional function added to check that the demographics data (create form)
+# conforms to the JSON schema required by D2L's backend.
+def check_create_demographics_field(demographics_data)
+    schema = {
+        'type' => 'object',
+        'required' => %w(Name Description DataTypeId),
+        'properties' => {
+            'Name' => { 'type' => 'string' },
+            'Description' => { 'type' => 'string' },
+            'DataTypeId' => { 'type' => 'string' }
+        }
+    }
+    JSON::Validator.validate!(schema, demographics_data, validate_schema: true)
+end
+
+# REVIEW: Create new demographic field
 # Input: DemographicsField (Demographics.Demographicsfield)
 # RETURNS: fetch form of a DemographicsField JSON block
 def create_demographic_field(demographics_field)
   # POST /d2l/api/lp/(version)/demographics/fields/
+  path = "/d2l/api/lp/#{$lp_ver}/demographics/fields/"
+  payload = {
+    "Name" => "String",
+    "Description" => "String",
+    "DataTypeId" => "String:GUID"
+  }
+  check_create_demographics_field(payload)
+  _post(path, payload)
   # RETURNS: fetch form of a DemographicsField JSON block
 end
 
-# TODO: Update demographic field
+# Additional function added to check that the demographics data (update form)
+# conforms to the JSON schema required by D2L's backend.
+def check_update_demographics_field(demographics_data)
+    schema = {
+        'type' => 'object',
+        'required' => %w(Name Description),
+        'properties' => {
+            'Name' => { 'type' => 'string' },
+            'Description' => { 'type' => 'string' },
+        }
+    }
+    JSON::Validator.validate!(schema, demographics_data, validate_schema: true)
+end
+
+# REVIEW: Update a single demographic field.
 # Input: DemographicsField (Demographics.Demographicsfield)
 # RETURNS: fetch form of a DemographicsField JSON block
-def create_demographic_field(field_id, demographics_field)
+def update_demographics_field(field_id, demographics_field)
   # PUT /d2l/api/lp/(version)/demographics/fields/(fieldId)
+  path = "/d2l/api/lp/#{$lp_ver}/demographics/fields/#{field_id}"
+  payload = {
+    "Name" => "String",
+    "Description" => "String",
+    "DataTypeId" => "String:GUID"
+  }
+  check_update_demographics_field(payload)
+  _put(path, payload)
   # RETURNS: fetch form of a DemographicsField JSON block
 end
 

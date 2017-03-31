@@ -67,6 +67,26 @@ end
 #   part 2: attachments
 def create_news_item(org_unit_id, news_item_data, attachments = [])
   # POST /d2l/api/le/(version)/(orgUnitId)/news/
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/news/"
+  json =
+  {
+    "Title" => "Placeholder_title",
+    "Body" =>
+    { # Composite: RichText
+      "Text" => "plaintext_text_here",
+      "HTML" => nil # OR the HTML_Formatted_version_of_text
+    },
+    "StartDate" => "UTCDateTime",
+    "EndDate" => nil, # nil or UTCDateTime -- e.g. 2017-03-28T18:54:56.000Z
+    "IsGlobal" => false,
+    "IsPublished" => false, # sets it as a draft
+    "ShowOnlyInCourseOfferings" => false
+  }.merge!(news_item_data)
+  files = attachments
+  method = "POST"
+  ap json
+  ap _news_upload(path, json, files, method)
+  # RETURNS a NewsItem JSON data block
 end
 
 # NOTE: UNSTABLE!!!

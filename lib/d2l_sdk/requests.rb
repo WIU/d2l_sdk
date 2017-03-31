@@ -1,4 +1,8 @@
 require_relative 'auth'
+require 'net/http'
+require 'uri'
+require 'mime/types'
+require 'json'
 
 ########################
 # QUERIES/RESPONSE:#####
@@ -76,25 +80,231 @@ def _post(path, payload, isD2l = true)
       end
     end
 end
-=begin
-# in compliance with FTC1867 HTTP file upload
-def _upload(path, json, file, method, name, filename)
+
+# NOTE: multipart code examples referrenced from danielwestendorf--
+# FTC 1867 and FTC 2388 implementations are based upon the following url:
+# => "https://coderwall.com/p/c-mu-a/http-posts-in-ruby"
+# The code has obviously been modified for usage with basic D2L POST/PUT api methods
+# in compliance with FTC 1867 & FTC 2388 HTTP file upload and according to examples
+# shown on: "http://docs.valence.desire2learn.com/basic/fileupload.html"
+
+# Upload a file to the learning repository.
+def _learning_repository_upload(path, file, method)
+    # name = the content name,
+    # e.g. "Resource", "profileImage", "name", "description", "file", "targetUsers"
+    # file = the File's name in the directory.
+    # method = POST or PUT
+    # json = the json appended to the end of the request body
+    auth_uri = path
+    auth_uri = create_authenticated_uri(path, method)
+    uri = URI.parse(auth_uri)
+
     boundary = "xxBOUNDARYxx"
-    http_req = "Content-Type: multipart/form-data; boundary=#{boundary}\n"\
-               "Content-Length: {#{method} #{file.bytesize}}\n\n"\
-               "#{boundary}\n"\
-               "Content-Type: #{content-type}\n"
-               "Content-Disposition: form-data; name = '#{name}'; filename='#{filename}'\n"\
-    # Requires Content-Type and boundary specification on line 1
-    # Requires Content-Length with specification of method on line 2
-    # Requires boundary before the content
-    # Requires Content-Disposition, name, and filename line 1 of content
-    # Requires Content-Type as line 2 of content
-    # Requires boundary after the content
-    # url, payload, {:multipart => true}, req
-    # if sending a file, multipart is autodetected
+    header = {"Content-Type" => "multipart/form-data; boundary=#{boundary}"}
+    # setup the post body
+    post_body = []
+    post_body << "--#{boundary}\n"
+    post_body << "Content-Disposition: form-data; name = \"Resource\"; filename=\"#{File.basename(file)}\"\r\n"
+    post_body << "Content-Type: application/zip\r\n\r\n"
+    post_body << File.read(file)
+    post_body << "\r\n\r\n--#{boundary}--\r\n"
+
+    # Create the HTTP objects
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Post.new(uri.request_uri, header)
+    request.body = post_body.join
+
+    # Send the request
+    response = http.request(request)
+    JSON.parse(response)
 end
-=end
+
+# REVIEW: profile image upload process
+def _profile_image_upload(path, file, method)
+  # name = the content name,
+  # e.g. "Resource", "profileImage", "name", "description", "file", "targetUsers"
+  # file = the File's name in the directory.
+  # method = POST or PUT
+  # json = the json appended to the end of the request body
+  auth_uri = path
+  auth_uri = create_authenticated_uri(path, method)
+  uri = URI.parse(auth_uri)
+
+  boundary = "xxBOUNDARYxx"
+  header = {"Content-Type" => "multipart/form-data; boundary=#{boundary}"}
+  # setup the post body
+  post_body = []
+  post_body << "--#{boundary}\n"
+  post_body << "Content-Disposition: form-data; name = \"profileImage\"; filename=\"#{File.basename(file)}\"\r\n"
+  post_body << "Content-Type: image/png\r\n\r\n"
+  post_body << File.read(file)
+  post_body << "\r\n\r\n--#{boundary}--\r\n"
+
+  # Create the HTTP objects
+  http = Net::HTTP.new(uri.host, uri.port)
+  request = Net::HTTP::Post.new(uri.request_uri, header)
+  request.body = post_body.join
+
+  # Send the request
+  response = http.request(request)
+  JSON.parse(response)
+end
+
+def _ePortfolio_upload(path, file, method, description)
+  # name = the content name,
+  # e.g. "Resource", "profileImage", "name", "description", "file", "targetUsers"
+  # filename = the File's name in the directory.
+  # method = POST or PUT
+  # json = the json appended to the end of the request body
+  auth_uri = path
+  auth_uri = create_authenticated_uri(path, method)
+  uri = URI.parse(auth_uri)
+
+  boundary = "xxBOUNDARYxx"
+  header = {"Content-Type" => "multipart/form-data; boundary=#{boundary}"}
+  # setup the post body
+  post_body = []
+  post_body << "--#{boundary}\r\n"
+  post_body << "Content-Type: text/plain\r\n"
+  post_body << "Content-Disposition: form-data; name = \"name\"\r\n\r\n"
+  post_body << "#{File.basename(file)}\r\n"
+
+  post_body << "--#{boundary}\r\n"
+  post_body << "Content-Type: text/plain\r\n"
+  post_body << "Content-Disposition: form-data; name = \"description\"\r\n\r\n"
+  post_body << "#{description}\r\n"
+
+  post_body << "--#{boundary}\r\n"
+  post_body << "Content-Type: text/plain\r\n"
+  post_body << "Content-Disposition: form-data; name = \"file\"; filename=\"#{File.basename(file)}\"\r\n\r\n"
+  post_body << File.read(file)
+  post_body << "\r\n\r\n--#{boundary}--\r\n"
+
+  # Create the HTTP objects
+  http = Net::HTTP.new(uri.host, uri.port)
+  request = Net::HTTP::Post.new(uri.request_uri, header)
+  request.body = post_body.join
+
+  # Send the request
+  response = http.request(request)
+  JSON.parse(response)
+end
+
+def _course_content_upload(path, json, file, method)
+  # name = the content name,
+  # e.g. "Resource", "profileImage", "name", "description", "file", "targetUsers"
+  # filename = the File's name in the directory.
+  # method = POST or PUT
+  # json = the json appended to the end of the request body
+  auth_uri = path
+  auth_uri = create_authenticated_uri(path, method)
+  uri = URI.parse(auth_uri)
+
+  boundary = "xxBOUNDARYxx"
+  header = {"Content-Type" => "multipart/mixed; boundary=#{boundary}"}
+  # setup the post body
+  post_body = []
+  post_body << "--#{boundary}\r\n"
+  post_body << "Content-Type: application/json\r\n\r\n"
+
+  post_body << json.to_json
+  post_body << "\r\n"
+
+  post_body << "--#{boundary}\r\n"
+  post_body << "Content-Disposition: form-data; name = \"\"; filename=\"#{File.basename(file)}\"\r\n\r\n"
+  post_body << "Content-Type: text/plain\r\n"
+  post_body << File.read(file)
+  post_body << "\r\n\r\n--#{boundary}--\r\n"
+
+  # Create the HTTP objects
+  http = Net::HTTP.new(uri.host, uri.port)
+  request = Net::HTTP::Post.new(uri.request_uri, header)
+  request.body = post_body.join
+
+  # Send the request
+  response = http.request(request)
+  JSON.parse(response)
+end
+
+def _dropbox_upload(path, json, file, method)
+  # name = the content name,
+  # e.g. "Resource", "profileImage", "name", "description", "file", "targetUsers"
+  # filename = the File's name in the directory.
+  # method = POST or PUT
+  # json = the json appended to the end of the request body
+  auth_uri = path
+  auth_uri = create_authenticated_uri(path, method)
+  uri = URI.parse(auth_uri)
+
+  boundary = "xxBOUNDARYxx"
+  header = {"Content-Type" => "multipart/mixed; boundary=#{boundary}"}
+  # setup the post body
+  post_body = []
+  post_body << "--#{boundary}\r\n"
+  post_body << "Content-Type: application/json\r\n\r\n"
+
+  post_body << json.to_json # e.g. {"Text" => "Here you go", "Html" => null}
+  post_body << "\r\n"
+  post_body << "--#{boundary}\r\n"
+  post_body << "Content-Disposition: form-data; name = \"\"; filename=\"#{File.basename(file)}\"\r\n"
+  post_body << "Content-Type: #{MIME::Types.type_for(file)}\r\n\r\n"
+
+  post_body << File.read(file)
+  post_body << "\r\n\r\n--#{boundary}--\r\n"
+
+  # Create the HTTP objects
+  http = Net::HTTP.new(uri.host, uri.port)
+  request = Net::HTTP::Post.new(uri.request_uri, header)
+  request.body = post_body.join
+
+  # Send the request
+  response = http.request(request)
+  JSON.parse(response)
+end
+
+# function to upload 1+ files to a news event.
+# e.g. uploading 2 attachments to a news event (a text file; a png)
+def _news_upload(path, json, files, method)
+  # name = the content name,
+  # e.g. "Resource", "profileImage", "name", "description", "file", "targetUsers"
+  # files = array of filenames
+  # method = POST or PUT
+  # json = the json appended to the end of the request body
+  auth_uri = path
+  auth_uri = create_authenticated_uri(path, method)
+  uri = URI.parse(auth_uri)
+
+  boundary = "xxBOUNDARYxx"
+  header = {"Content-Type" => "multipart/mixed; boundary=#{boundary}"}
+  # setup the post body
+  post_body = []
+  post_body << "--#{boundary}\r\n"
+  post_body << "Content-Type: application/json\r\n\r\n"
+
+  post_body << json.to_json # e.g. {"Text" => "Here you go", "Html" => null}
+
+  file_iteration = 0
+  files.each do |file|
+    post_body << "\r\n--#{boundary}\r\n"
+    post_body << "Content-Disposition: form-data; name = \"file #{file_iteration}\"; filename=\"#{File.basename(file)}\"\r\n"
+    post_body << "Content-Type: text/plain\r\n\r\n"
+    post_body << File.read(file)
+    file_iteration += 1
+  end
+  post_body << "\r\n\r\n--#{boundary}--\r\n"
+
+  # Create the HTTP objects
+  http = Net::HTTP.new(uri.host, uri.port)
+  http.set_debug_output($stdout)
+  http.use_ssl = true
+  request = Net::HTTP::Post.new(uri.request_uri, header)
+  request.body = post_body.join
+  puts request.body
+  # Send the request
+  response = http.request(request)
+  response.body
+end
+
 # performs a put request using the path and the payload arguments. After first
 # creating an authenticated uri, the put request is performed using the
 # authenticated uri, the payload argument, and specifying that the payload is
