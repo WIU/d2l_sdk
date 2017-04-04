@@ -63,38 +63,57 @@ end
 
 # TODO: Post a new group submission to a particular dropbox folder.
 # => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/submissions/group/(groupId)
+# INPUT: multipart/mixed body should contain a JSON part encoding the submission’s descriptive comments
+#        in RichText, followed by the submission file’s data.
+
+
 # TODO: Post a new submission for the current user context to a particular dropbox folder.
 # => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/submissions/mysubmissions/
-# TODO: Mark a submitted file as read.
+# INPUT: multipart/mixed body should contain a JSON part encoding the submission’s descriptive comments
+#        in RichText, followed by the submission file’s data.
+
+
+# REVIEW: Mark a submitted file as read.
 # => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/submissions/#{submission_id}/files/#{file_id}/markAsRead
+# INPUT: "Provide an empty post body."
+def mark_file_as_read(org_unit_id, folder_id, submission_id)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/submissions/#{submission_id}/files/#{file_id}/markAsRead"
+  _post(path, {})
+end
 
 ##################
 ## FEEDBACK: #####
 ##################
 
-# TODO: Remove a particular file attachment from an entity’s feedback entry within a specified dropbox folder.
-# => DELETE /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/(entityId)/attachments/#{file_id}
+# REVIEW: Remove a particular file attachment from an entity’s feedback entry within a specified dropbox folder.
+# => DELETE /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/#{entity_id}/attachments/#{file_id}
+def remove_feedback_entry_file_attachment(org_unit_id, folder_id, entity_type, entity_id, file_id)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/#{entity_id}/attachments/#{file_id}"
+  _delete(path)
+end
 
 # REVIEW: Retrieve the feedback entry from a dropbox folder for the provided entity.
-# => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/(entityId)
+# => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/#{entity_id}
 def get_dropbox_folder_entity_feedback_entry(org_unit_id, folder_id, entity_id)
-  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/(entityId)"
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/#{entity_id}"
   _get(path)
 end
 
 # REVIEW: Retrieve a feedback entry’s file attachment from a dropbox folder for the provided entity.
-# => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/(entityId)/attachments/#{file_id}
+# => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/#{entity_id}/attachments/#{file_id}
 def get_feedback_entry_file_attachment(org_unit_id, folder_id, entity_id, file_id)
-  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/(entityId)/attachments/#{file_id}"
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/#{entity_id}/attachments/#{file_id}"
   _get(path)
 end
 
 # TODO: Post feedback (without attachment) for a particular submission in a specific dropbox folder.
-# => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/(entityId)
+# => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/#{entity_id}
+# INPUT: Dropbox.DropboxFeedback
+
 # TODO: Attach an uploaded file to a particular entity’s feedback entry in a specific dropbox folder.
-# => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/(entityId)/attach
+# => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/#{entity_id}/attach
 # TODO: Initiate a resumable file upload request for a particular entity’s feedback for a specific dropbox folder.
-# => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/(entityId)/upload
+# => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/#{entity_id}/upload
 
 ##########################
 ## FOLDER CATEGORIES: ####
@@ -116,5 +135,10 @@ end
 
 # TODO: Create a new dropbox folder category for the provided org unit.
 # => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/categories/
+# INPUT: DropboxCategory JSON data block
+# RETURNS: a single DropboxCategory block.
+
 # TODO: Update the information for a specific dropbox folder category.
 # => PUT /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/categories/#{category_id}
+# INPUT: DropboxCategory JSON data block.
+# RETURNS: a single DropboxCategory block.

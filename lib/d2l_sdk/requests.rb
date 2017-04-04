@@ -119,8 +119,39 @@ def _learning_repository_upload(path, file, method)
     JSON.parse(response)
 end
 
-# REVIEW: profile image upload process
-def _profile_image_upload(path, file, method)
+# Upload a file to the learning repository.
+def _course_package_upload(path, file, method)
+    # name = the content name,
+    # e.g. "Resource", "profileImage", "name", "description", "file", "targetUsers"
+    # file = the File's name in the directory.
+    # method = POST or PUT
+    # json = the json appended to the end of the request body
+    auth_uri = path
+    auth_uri = create_authenticated_uri(path, method)
+    uri = URI.parse(auth_uri)
+
+    boundary = "xxBOUNDARYxx"
+    header = {"Content-Type" => "multipart/form-data; boundary=#{boundary}"}
+    # setup the post body
+    post_body = []
+    post_body << "--#{boundary}\n"
+    post_body << "Content-Disposition: form-data; name = \"Resource\"; filename=\"#{File.basename(file)}\"\r\n"
+    post_body << "Content-Type: #{MIME::Types.type_for(file)}\r\n\r\n"
+    post_body << File.read(file)
+    post_body << "\r\n\r\n--#{boundary}--\r\n"
+
+    # Create the HTTP objects
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Post.new(uri.request_uri, header)
+    request.body = post_body.join
+
+    # Send the request
+    response = http.request(request)
+    JSON.parse(response)
+end
+
+# REVIEW: image upload process
+def _image_upload(path, file, method)
   # name = the content name,
   # e.g. "Resource", "profileImage", "name", "description", "file", "targetUsers"
   # file = the File's name in the directory.

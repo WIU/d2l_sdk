@@ -183,6 +183,6 @@ def delete_all_course_templates_with_name(name)
     end
 end
 
-# TODO: Delete course templates by using regular expressions to filter them.
+# TODO: (HOMEBREW) Delete course templates by using regular expressions to filter them.
 def delete_course_templates_by_regex(regex)
 end

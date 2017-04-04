@@ -61,10 +61,11 @@ def get_user_demographics(user_id, field_ids = '', bookmark = '')
   path += "bookmark=#{bookmark}" if bookmark != ''
 end
 
-def check_demographics_user_entry_data_validity(demographics_user_entry_data)
+def check_demographics_entry_data_validity(demographics_entry_data)
     # A hash with one value, "EntryValues", which is an array of hashes that
     # include the keys "Name" and "Values", where "Name" is a string and "Values"
     # is an array of string.
+    # { "key" => [ { "key" => "string", "key" => [] } ] }
     schema = {
         'type' => 'object',
         'required' => %w(EntryValues),
@@ -94,14 +95,31 @@ def check_demographics_user_entry_data_validity(demographics_user_entry_data)
             }
         }
     }
-    JSON::Validator.validate!(schema, demographics_user_entry_data, validate_schema: true)
+    JSON::Validator.validate!(schema, demographics_entry_data, validate_schema: true)
 end
 
 
-# TODO: Update the demographics entries for a single user.
+# REVIEW: Update the demographics entries for a single user.
 # Return: a DemographicsUserEntryData JSON block containing the user’s updated entries.
 def update_user_demographics(user_id, demographics_entry_data)
+  payload =
+  {
+    "EntryValues" =>
+    [
+      {
+        "Name" => "placeholder_name",
+        "Values" =>
+        [
+          "value1",
+          "value2"
+        ]
+      }
+    ]
+  }.merge!(demographics_entry_data)
   # PUT /d2l/api/lp/(version)/demographics/users/(userId)
+  path = "/d2l/api/lp/#{$lp_ver}/demographics/users/#{user_id}"
+  check_demographics_user_entry_data_validity(payload)
+  _put(path, payload)
 end
 
 ########################

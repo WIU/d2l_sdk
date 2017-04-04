@@ -69,7 +69,8 @@ end
 def add_child_to_module(org_unit_id, module_id, child ={}) # POST
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/modules/#{module_id}/structure/"
   payload = {}
-  if child.key?("module") # TODO: modules
+  # TODO: Add child module to a module
+  if child.key?("module")
     payload = {
       "Title" => "title_string", # String
       "ShortTitle" => "title_short_string", # String
@@ -86,7 +87,8 @@ def add_child_to_module(org_unit_id, module_id, child ={}) # POST
       "Duration" => nil, #nil, number
     }.merge!(child["module"])
     _post(path, payload)
-  elsif child.key?("link") # TODO: link-type topics
+  # TODO: Add child link-type topics to a module
+  elsif child.key?("link")
     payload = {
       "Title" => "title_string", # String
       "ShortTitle" => "title_short_string", # String
@@ -109,7 +111,8 @@ def add_child_to_module(org_unit_id, module_id, child ={}) # POST
       "Duration" => nil, #nil, number
     }.merge!(child["module"])
     _post(path, payload)
-  elsif child.key?("file") # TODO: file-type topics
+  # TODO: Add child file-type topics to a module
+  elsif child.key?("file")
     _course_content_upload(query_string, payload, file, "POST")
   end
 end
@@ -406,7 +409,7 @@ def get_current_user_completed_scheduled_items_with_due_date(org_unit_ids_CSV,
 end
 
 # REVIEW: Retrieve the calling user’s scheduled items for a particular org unit.
-# GET /d2l/api/le/(version)/(orgUnitId)/content/myItems/
+# GET /d2l/api/le/(version)/#{org_unit_id}/content/myItems/
 def get_current_user_scheduled_items_by_org_unit(org_unit_id, completion = nil,
                                                  start_date_time = '',
                                                  end_date_time = '')
@@ -419,7 +422,7 @@ def get_current_user_scheduled_items_by_org_unit(org_unit_id, completion = nil,
 end
 
 # REVIEW: Retrieve the calling user’s scheduled items still due for a particular org unit.
-# GET /d2l/api/le/(version)/(orgUnitId)/content/myItems/due/
+# GET /d2l/api/le/(version)/#{org_unit_id}/content/myItems/due/
 def get_current_user_org_unit_scheduled_item_count(org_unit_id, completion = nil,
                                                    start_date_time = '',
                                                    end_date_time = '') # GET
@@ -432,7 +435,7 @@ def get_current_user_org_unit_scheduled_item_count(org_unit_id, completion = nil
 end
 
 # REVIEW: Retrieve the quantity of the calling user’s scheduled items for provided org unit.
-# GET /d2l/api/le/(version)/(orgUnitId)/content/myItems/itemCount
+# GET /d2l/api/le/(version)/#{org_unit_id}/content/myItems/itemCount
 def get_user_overdue_items(org_unit_id, completion = nil, start_date_time = '',
                            end_date_time = '') # GET
   query_string = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/myItems/itemCount?"
@@ -444,7 +447,7 @@ def get_user_overdue_items(org_unit_id, completion = nil, start_date_time = '',
 end
 
 # REVIEW: Retrieve quantity of the calling user’s scheduled items still due for a particular org unit.
-# GET /d2l/api/le/(version)/(orgUnitId)/content/myItems/due/itemCount
+# GET /d2l/api/le/(version)/#{org_unit_id}/content/myItems/due/itemCount
 def get_user_overdue_items(org_unit_id, completion = nil, start_date_time = '',
                            end_date_time = '') # GET
   query_string = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/myItems/due/itemCount?"

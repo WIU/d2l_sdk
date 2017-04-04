@@ -26,8 +26,40 @@ def get_org_unit_discussion(org_unit_id, forum_id)
     _get(path)
 end
 
-# TODO: Validate input of create_org_unit_discussion
-# Create a new forum for an org unit.
+def check_forum_data_validity(forum_data)
+  schema = {
+      'type' => 'object',
+      'required' => %w(Name Description ShowDescriptionInTopics StartDate
+                       EndDate PostStartDate PostEndDate IsHidden
+                       IsLocked  RequiresApproval MustPostToParticipate
+                       DisplayInCalendar DisplayPostDatesInCalendar),
+      'properties' => {
+          'Name' => { 'type' => 'string' },
+          'Description' => {
+            'type' => 'object',
+            'properties'=>
+            {
+              "Text" => { 'type' => "string" },
+              "Html" => { 'type' => %w(string null) }
+            }
+          },
+          'ShowDescriptionInTopics' => { 'type' => %w(boolean null) },
+          'StartDate' => { 'type' => %w(string null) },
+          'EndDate' => { 'type' => %w(string null) },
+          'PostStartDate' => { 'type' => %w(string null) },
+          'PostEndDate' => { 'type' => %w(string null) },
+          'IsHidden' => { 'type' => 'boolean' },
+          'IsLocked' => { 'type' => 'boolean' },
+          'RequiresApproval' => { 'type' => 'boolean' }, #: <boolean>,
+          'MustPostToParticipate' => { 'type' => %w(boolean null) },
+          'DisplayInCalendar' => { 'type' => %w(boolean null) },  # Added with LE API v1.11
+          'DisplayPostDatesInCalendar' => { 'type' => %w(boolean null) }
+      }
+  }
+  JSON::Validator.validate!(schema, forum_data, validate_schema: true)
+end
+
+# REVIEW: Create a new forum for an org unit.
 # => POST /d2l/api/le/(version)/(orgUnitId)/discussions/forums/
 def create_org_unit_discussion(org_unit_id, forum_data)
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/"
@@ -52,21 +84,65 @@ def create_org_unit_discussion(org_unit_id, forum_data)
         'DisplayInCalendar' => nil, #: <boolean>|null,  // Added with LE API v1.11
         'DisplayPostDatesInCalendar' => nil, #: <boolean>|null  // Added with LE API v1.11
     }.merge!(forum_data)
-    # TODO: Validate payload
+    # REVIEW: Validate payload
+    check_forum_data_validity(payload)
     _post(path, payload)
 end
 
-# TODO: Update a forum for an org unit.
+# REVIEW: Update a forum for an org unit.
 # => PUT /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)
+# NOTE: <  LE v 1.10 ignores date filed of the forum_data
+# NOTE: >= LE v 1.11 applies date fields that are sent, otherwise they're
+#       assumed null.
+def update_forum(org_unit_id, forum_id, forum_data)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/"
+  payload =
+  {
+      'Name' => '', #: <string>,
+      'Description' => #: { <composite:RichText> },
+      {
+          "Text" => "",#<string:plaintext_version_of_text>,
+          "Html" => nil #<string:HTML_formatted_version_of_text>|null
+      },
+      'ShowDescriptionInTopics' => nil, #: <boolean>|null,  // Added with LE API v1.14
+      'StartDate' => nil, #: <string:UTCDateTime>|null,
+      'EndDate' => nil, #: <string:UTCDateTime>|null,
+      'PostStartDate' => nil, #: <string:UTCDateTime>|null,
+      'PostEndDate' => nil, # <string:UTCDateTime>|null,
+      'AllowAnonymous' => false, # <boolean>,
+      'IsLocked' => false,  #: <boolean>,
+      'IsHidden' => false,  #: <boolean>,
+      'RequiresApproval' => '', #: <boolean>,
+      'MustPostToParticipate' => nil, #: <boolean>|null,
+      'DisplayInCalendar' => nil, #: <boolean>|null,  // Added with LE API v1.11
+      'DisplayPostDatesInCalendar' => nil, #: <boolean>|null  // Added with LE API v1.11
+  }.merge!(forum_data)
+  # REVIEW: Validate payload
+  check_forum_data_validity(payload)
+  _put(path, payload)
+# RETURNS: Forum JSON block
+
+
+end
 
 ##################
 ## TOPICS: #######
 ##################
 
-# TODO: Delete a particular topic from the provided discussion forum in an org unit.
+# REVIEW: Delete a particular topic from the provided discussion forum in an org unit.
 # => DELETE /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)
-# TODO: Delete a group restriction for a discussion forum topic.
+def delete_topic(org_unit_id, forum_id, topic_id)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}"
+  _delete(path)
+end
+
+# REVIEW: Delete a group restriction for a discussion forum topic.
 # => DELETE /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/groupRestrictions/
+def delete_topic_group_restriction(org_unit_id, forum_id, topic_id)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/groupRestrictions/"
+  _delete(path)
+end
+
 # REVIEW: Retrieve topics from the provided discussion forum in an org unit.
 # => GET /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/
 def get_forum_topics(org_unit_id, forum_id)
@@ -88,21 +164,155 @@ def get_forum_topic_group_restrictions(org_unit_id, forum_id, topic_id)
     _get(path)
 end
 
-# TODO: Create a new topic for the provided discussion forum in an org unit.
+def check_create_topic_data_validity(create_topic_data)
+  schema = {
+      'type' => 'object',
+      'required' => %w(Name Description AllowAnonymousPosts StartDate
+                       EndDate UnlockStartDate UnlockEndDate IsHidden
+                       IsLocked  RequiresApproval ScoreOutOf IsAutoScore
+                       IncludeNonScoredValues ScoringType MustPostToParticipate
+                       RatingType DisplayInCalendar DisplayUnlockDatesInCalendar),
+      'properties' =>
+      {
+          'Name' => { 'type' => 'string' },
+          'Description' =>
+          {
+            'type' => 'object',
+            'properties'=>
+            {
+              "Text" => { 'type' => "string" },
+              "Html" => { 'type' => %w(string null) }
+            }
+          },
+          'AllowAnonymousPosts' => { 'type' => 'boolean' },
+          'StartDate' => { 'type' => %w(string null) },
+          'EndDate' => { 'type' => %w(string null) },
+          'UnlockStartDate' => { 'type' => %w(string null) },
+          'UnlockEndDate' => { 'type' => %w(string null) },
+          'IsHidden' => { 'type' => 'boolean' },
+          'IsLocked' => { 'type' => 'boolean' },
+          'RequiresApproval' => { 'type' => 'boolean' }, #: <boolean>,
+          'ScoreOutOf' => { 'type' => %w(integer null) },
+          'IsAutoScore' => { 'type' => 'boolean' },  # Added with LE API v1.11
+          'IncludeNonScoredValues' => { 'type' => 'boolean' },
+          'ScoringType' => { 'type' => %w(string null) },
+          'MustPostToParticipate' => { 'type' => 'boolean' }, #: <boolean>,
+          'RatingType' => { 'type' => %w(string null) },
+          'DisplayInCalendar' => { 'type' => %w(boolean null) }, # Added with LE API v1.12
+          'DisplayUnlockDatesInCalendar' => { 'type' => %w(boolean null) } # Added with LE API v1.12
+      }
+  }
+  JSON::Validator.validate!(schema, forum_data, validate_schema: true)
+end
+
+# REVIEW: Create a new topic for the provided discussion forum in an org unit.
 # => POST /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/
-# TODO: Update an existing topic for the provided discussion forum in an org unit.
+def create_forum_topic(org_unit_id, forum_id, create_topic_data)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/"
+  payload =
+  {
+    "Name" => "", # : <string>,
+    "Description" =>
+    {
+        "Text" => "",#<string:plaintext_version_of_text>,
+        "Html" => nil #<string:HTML_formatted_version_of_text>|null
+    }, # { <composite:RichTextInput> },
+    "AllowAnonymousPosts" => false, # <boolean>,
+    "StartDate" => nil, # <string:UTCDateTime>|null,
+    "EndDate" => nil, # : <string:UTCDateTime>|null,
+    "IsHidden" => false, # : <boolean>,
+    "UnlockStartDate" => nil, # : <string:UTCDateTime>|null,
+    "UnlockEndDate" => nil, # : <string:UTCDateTime>|null,
+    "RequiresApproval" => false, # : <boolean>,
+    "ScoreOutOf" => nil, # : <number>|null,
+    "IsAutoScore" => false, # : <boolean>,
+    "IncludeNonScoredValues" => "", # : <boolean>,
+    "ScoringType" => nil, # : <string:SCORING_T>|null,
+    "IsLocked" => false, # : <boolean>,
+    "MustPostToParticipate" => false, # : <boolean>,
+    "RatingType" => nil, # : <string:RATING_T>|null,
+    "DisplayInCalendar" => nil, # : <boolean>|null,  // Added with LE API v1.12
+    "DisplayUnlockDatesInCalendar" => nil, # : <boolean>|null  // Added with LE API v1.12
+  }
+  check_create_topic_data_validity(payload) # REVIEW: Validity check of topic data
+  _post(path, payload)
+  # RETURNS: Topic JSON data block
+end
+
+# REVIEW: Update an existing topic for the provided discussion forum in an org unit.
 # => PUT /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)
-# TODO: Add a group to the group restriction list for a discussion forum topic.
+def update_forum_topic(org_unit_id, forum_id, topic_id, create_topic_data)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}"
+  payload =
+  {
+    "Name" => "", # : <string>,
+    "Description" =>
+    {
+        "Text" => "",#<string:plaintext_version_of_text>,
+        "Html" => nil #<string:HTML_formatted_version_of_text>|null
+    }, # { <composite:RichTextInput> },
+    "AllowAnonymousPosts" => false, # <boolean>,
+    "StartDate" => nil, # <string:UTCDateTime>|null,
+    "EndDate" => nil, # : <string:UTCDateTime>|null,
+    "IsHidden" => false, # : <boolean>,
+    "UnlockStartDate" => nil, # : <string:UTCDateTime>|null,
+    "UnlockEndDate" => nil, # : <string:UTCDateTime>|null,
+    "RequiresApproval" => false, # : <boolean>,
+    "ScoreOutOf" => nil, # : <number>|null,
+    "IsAutoScore" => false, # : <boolean>,
+    "IncludeNonScoredValues" => "", # : <boolean>,
+    "ScoringType" => nil, # : <string:SCORING_T>|null,
+    "IsLocked" => false, # : <boolean>,
+    "MustPostToParticipate" => false, # : <boolean>,
+    "RatingType" => nil, # : <string:RATING_T>|null,
+    "DisplayInCalendar" => nil, # : <boolean>|null,  // Added with LE API v1.12
+    "DisplayUnlockDatesInCalendar" => nil, # : <boolean>|null  // Added with LE API v1.12
+  }
+  check_create_topic_data_validity(payload) # REVIEW: Validity check of topic data
+  _post(path, payload)
+  # RETURNS: Topic JSON data block
+end
+
+# REVIEW: Add a group to the group restriction list for a discussion forum topic.
 # => PUT /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/groupRestrictions/
+def add_group_to_group_restriction_list(org_unit_id, forum_id, topic_id, group_id)
+  if !group_id.is_a? Numeric
+    raise ArgumentError, "Argument 'group_id' is not numeric value."
+  else
+    path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/groupRestrictions/"
+    payload =
+    {
+      "GroupRestriction" =>
+      {
+          "GroupId" => group_id
+      }
+    }
+    _put(path, payload)
+    # RETURNS: ??
+  end
+end
+
 
 ##################
 ## POSTS: ########
 ##################
 
-# TODO: Delete a particular post from a discussion forum topic.
+# REVIEW: Delete a particular post from a discussion forum topic.
 # => DELETE /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)
-# TODO: DELETE /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)/Rating/MyRating
+def delete_topic_post(org_unit_id, forum_id, topic_id, post_id)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}"
+  _delete(path)
+end
+
+# REVIEW: DELETE /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)/Rating/MyRating
 # => Delete the current user context’s rating for a particular post from a discussion forum topic.
+def delete_current_user_context_post_rating
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Rating/MyRating"
+  _delete(path)
+  # NOTE: Doing so is actually an update, setting the current user's rating
+  #       of a post to null
+end
+
 
 # REVIEW: Retrieve all posts in a discussion forum topic.
 # => GET /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/
@@ -135,7 +345,7 @@ def get_forum_topic_post_approval_status(org_unit_id, forum_id, topic_id, post_i
     # RETURNS: ApprovalData JSON data block
 end
 
-# TODO: Retrieve the flagged status for a particular post in a discussion forum topic.
+# REVIEW: Retrieve the flagged status for a particular post in a discussion forum topic.
 # => GET /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)/Flag
 def get_forum_topic_post_flagged_status(org_unit_id, forum_id, topic_id, post_id)
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Flag"

@@ -145,8 +145,12 @@ def update_course_data(course_id, new_data)
     # Provide feedback that the update was successful
 end
 
-# TODO: Update the course image for a course offering.
+# REVIEW: Update the course image for a course offering.
 def update_course_image(org_unit_id, image_file)
+  path = "/d2l/api/lp/#{$lp_ver}/courses/#{org_unit_id}/image"
+  # TODO: (SCHEMA) Make sure file isnt > 2MB
+  # TODO: (SCHEMA) Make sure its a native web browser image fmt (e.g. JPEG, GIF, or PNG)
+  _image_upload(path, image_file, "PUT")
   # PUT /d2l/api/lp/(version)/courses/(orgUnitId)/image
 end
 
@@ -263,13 +267,14 @@ def get_course_import_job_request_logs(org_unit_id, job_token, bookmark = '')
   # returns PAGED RESULT of ImportCourseLog JSON blocks following bookmark param
 end
 
-# TODO: Create a new course import job request.
-# INPUT: simple file upload process
-def create_course_import_request(org_unit_id, callback_url = '')
-    #path = "/d2l/le/#{le_ver}/import/#{org_unit_id}/imports/"
-    #path += "?callbackUrl=#{callback_url}" if callback_url != ''
-    #_post(path, payload)
-    #_upload(path, json, file, 'POST', 'file', filename)
+# REVIEW: Create a new course import job request.
+# INPUT: simple file upload process -- using "course package" as the uploaded file
+def create_course_import_request(org_unit_id, callback_url = '', file)
+    path = "/d2l/le/#{le_ver}/import/#{org_unit_id}/imports/"
+    path += "?callbackUrl=#{callback_url}" if callback_url != ''
+    # TODO: (SCHEMA) Find out WTH a 'course package' entails as far as standards.
+    _course_package_upload(path, file, "POST")
+    # RETURNS: Parsed CreateImportJobResponse JSON block.
 end
 
 ################################################################################
