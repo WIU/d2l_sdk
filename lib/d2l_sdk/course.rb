@@ -1,5 +1,6 @@
 require_relative 'requests'
 require 'json-schema'
+require 'mime/types'
 
 ########################
 # ACTIONS:##############
@@ -35,7 +36,7 @@ end
 
 
 def get_course_image(org_unit_id, width = 0, height = 0)
-  path = "/d2l/api/lp/#{lp_ver}/courses/#{org_unit_id}/image"
+  path = "/d2l/api/lp/#{$lp_ver}/courses/#{org_unit_id}/image"
   if width > 0 && height > 0
     path += "?width=#{width}"
     path += "&height=#{height}"
@@ -148,8 +149,12 @@ end
 # REVIEW: Update the course image for a course offering.
 def update_course_image(org_unit_id, image_file)
   path = "/d2l/api/lp/#{$lp_ver}/courses/#{org_unit_id}/image"
-  # TODO: (SCHEMA) Make sure file isnt > 2MB
-  # TODO: (SCHEMA) Make sure its a native web browser image fmt (e.g. JPEG, GIF, or PNG)
+  # (SCHEMA) Make sure file isnt > 2MB
+  if File.size(image_file) > 2000000
+    raise ArgumentError, "File referrenced by 'image_file' must be less than 1000KB."
+  elsif MIME::Types.type_for(image_file).first.media_type.downcase != "image"
+    raise ArgumentError, "File referrenced by 'image_file' is not a valid image."
+  end
   _image_upload(path, image_file, "PUT")
   # PUT /d2l/api/lp/(version)/courses/(orgUnitId)/image
 end
@@ -196,7 +201,7 @@ end
 
 # simple schema check to assure the course component is an actual course component
 # returns: boolean
-def is_course_component(key)
+def course_component?(key)
   valid_components = %w(AttendanceRegisters Glossary News Checklists
                         Grades QuestionLibrary Competencies GradesSettings
                         Quizzes Content Groups ReleaseConditions CourseFiles
@@ -220,7 +225,7 @@ def create_new_copy_job_request(org_unit_id, create_copy_job_request)
   # Check each one of the components to see if they are valid Component types
   payload["Components"].each do |component|
     # If one of the components is not valid, cancel the CopyJobRequest operation
-    if(!is_course_component(key))
+    if(!course_component?(key))
       puts "'#{component}' specified is not a valid Copy Job Request component"
       puts "Please retry with a valid course component such as 'Dropbox' or 'Grades'"
       break
@@ -231,8 +236,7 @@ def create_new_copy_job_request(org_unit_id, create_copy_job_request)
   # Returns CreateCopyJobResponse JSON block
 end
 
-# NOTE: UNSTABLE!!!!
-# TODO: --UNSTABLE-- Retrieve the list of logs for course copy jobs.
+# TODO: UNSTABLE!!!! Retrieve the list of logs for course copy jobs.
 # Query Params:
 # --OPTIONAL--
 # -bookmark : string
@@ -269,7 +273,7 @@ end
 
 # REVIEW: Create a new course import job request.
 # INPUT: simple file upload process -- using "course package" as the uploaded file
-def create_course_import_request(org_unit_id, callback_url = '', file)
+def create_course_import_request(org_unit_id, file, callback_url = '')
     path = "/d2l/le/#{le_ver}/import/#{org_unit_id}/imports/"
     path += "?callbackUrl=#{callback_url}" if callback_url != ''
     # TODO: (SCHEMA) Find out WTH a 'course package' entails as far as standards.

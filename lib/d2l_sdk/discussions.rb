@@ -6,21 +6,21 @@ require 'json-schema'
 ##################
 
 # REVIEW: Delete a particular discussion forum from an org unit.
-# => DELETE /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)
+# => DELETE /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}
 def dete_org_unit_discussion(org_unit_id, forum_id)
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}"
     _delete(path)
 end
 
 # REVIEW: Retrieve a list of all discussion forums for an org unit.
-# => GET /d2l/api/le/(version)/(orgUnitId)/discussions/forums/
+# => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/
 def get_org_unit_discussions(org_unit_id)
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/"
     _get(path)
 end
 
 # REVIEW: Retrieve a particular discussion forum for an org unit.
-# => GET /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)
+# => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}
 def get_org_unit_discussion(org_unit_id, forum_id)
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}"
     _get(path)
@@ -60,7 +60,7 @@ def check_forum_data_validity(forum_data)
 end
 
 # REVIEW: Create a new forum for an org unit.
-# => POST /d2l/api/le/(version)/(orgUnitId)/discussions/forums/
+# => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/
 def create_org_unit_discussion(org_unit_id, forum_data)
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/"
     payload =
@@ -90,7 +90,7 @@ def create_org_unit_discussion(org_unit_id, forum_data)
 end
 
 # REVIEW: Update a forum for an org unit.
-# => PUT /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)
+# => PUT /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}
 # NOTE: <  LE v 1.10 ignores date filed of the forum_data
 # NOTE: >= LE v 1.11 applies date fields that are sent, otherwise they're
 #       assumed null.
@@ -130,35 +130,35 @@ end
 ##################
 
 # REVIEW: Delete a particular topic from the provided discussion forum in an org unit.
-# => DELETE /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)
+# => DELETE /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}
 def delete_topic(org_unit_id, forum_id, topic_id)
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}"
   _delete(path)
 end
 
 # REVIEW: Delete a group restriction for a discussion forum topic.
-# => DELETE /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/groupRestrictions/
+# => DELETE /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/groupRestrictions/
 def delete_topic_group_restriction(org_unit_id, forum_id, topic_id)
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/groupRestrictions/"
   _delete(path)
 end
 
 # REVIEW: Retrieve topics from the provided discussion forum in an org unit.
-# => GET /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/
+# => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/
 def get_forum_topics(org_unit_id, forum_id)
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/"
     _get(path)
 end
 
 # REVIEW: Retrieve a particular topic from the provided discussion forum in an org unit.
-# => GET /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)
+# => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}
 def get_forum_topic(org_unit_id, forum_id, topic_id)
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}"
     _get(path)
 end
 
 # REVIEW: Retrieve the group restrictions for a discussion forum topic.
-# => GET /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/groupRestrictions/
+# => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/groupRestrictions/
 def get_forum_topic_group_restrictions(org_unit_id, forum_id, topic_id)
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/groupRestrictions/"
     _get(path)
@@ -180,8 +180,8 @@ def check_create_topic_data_validity(create_topic_data)
             'type' => 'object',
             'properties'=>
             {
-              "Text" => { 'type' => "string" },
-              "Html" => { 'type' => %w(string null) }
+              "Content" => { 'type' => "string" },
+              "Type" => { 'type' => "string" }
             }
           },
           'AllowAnonymousPosts' => { 'type' => 'boolean' },
@@ -206,7 +206,7 @@ def check_create_topic_data_validity(create_topic_data)
 end
 
 # REVIEW: Create a new topic for the provided discussion forum in an org unit.
-# => POST /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/
+# => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/
 def create_forum_topic(org_unit_id, forum_id, create_topic_data)
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/"
   payload =
@@ -240,7 +240,7 @@ def create_forum_topic(org_unit_id, forum_id, create_topic_data)
 end
 
 # REVIEW: Update an existing topic for the provided discussion forum in an org unit.
-# => PUT /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)
+# => PUT /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}
 def update_forum_topic(org_unit_id, forum_id, topic_id, create_topic_data)
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}"
   payload =
@@ -274,7 +274,7 @@ def update_forum_topic(org_unit_id, forum_id, topic_id, create_topic_data)
 end
 
 # REVIEW: Add a group to the group restriction list for a discussion forum topic.
-# => PUT /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/groupRestrictions/
+# => PUT /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/groupRestrictions/
 def add_group_to_group_restriction_list(org_unit_id, forum_id, topic_id, group_id)
   if !group_id.is_a? Numeric
     raise ArgumentError, "Argument 'group_id' is not numeric value."
@@ -298,13 +298,13 @@ end
 ##################
 
 # REVIEW: Delete a particular post from a discussion forum topic.
-# => DELETE /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)
+# => DELETE /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}
 def delete_topic_post(org_unit_id, forum_id, topic_id, post_id)
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}"
   _delete(path)
 end
 
-# REVIEW: DELETE /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)/Rating/MyRating
+# REVIEW: DELETE /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Rating/MyRating
 # => Delete the current user context’s rating for a particular post from a discussion forum topic.
 def delete_current_user_context_post_rating
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Rating/MyRating"
@@ -315,7 +315,7 @@ end
 
 
 # REVIEW: Retrieve all posts in a discussion forum topic.
-# => GET /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/
+# => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/
 # RETURNS: JSON array of Post data blocks containing the properties for all the post
 def get_forum_topic_posts(org_unit_id, forum_id, topic_id, page_size = 0, page_number = 0,
                           threads_only = nil, thread_id = 0, sort = '')
@@ -330,7 +330,7 @@ def get_forum_topic_posts(org_unit_id, forum_id, topic_id, page_size = 0, page_n
 end
 
 # REVIEW: Retrieve a particular post in a discussion forum topic.
-# => GET /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)
+# => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}
 def get_forum_topic_post(org_unit_id, forum_id, topic_id, post_id)
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}"
     _get(path)
@@ -338,7 +338,7 @@ def get_forum_topic_post(org_unit_id, forum_id, topic_id, post_id)
 end
 
 # REVIEW: Retrieve the approval status for a particular post in a discussion forum topic.
-# => GET /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)/Approval
+# => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Approval
 def get_forum_topic_post_approval_status(org_unit_id, forum_id, topic_id, post_id)
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Approval"
     _get(path)
@@ -346,7 +346,7 @@ def get_forum_topic_post_approval_status(org_unit_id, forum_id, topic_id, post_i
 end
 
 # REVIEW: Retrieve the flagged status for a particular post in a discussion forum topic.
-# => GET /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)/Flag
+# => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Flag
 def get_forum_topic_post_flagged_status(org_unit_id, forum_id, topic_id, post_id)
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Flag"
     _get(path)
@@ -354,7 +354,7 @@ def get_forum_topic_post_flagged_status(org_unit_id, forum_id, topic_id, post_id
 end
 
 # REVIEW: Retrieve the rating data for a particular post in a discussion forum topic.
-# => GET /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)/Rating
+# => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Rating
 def get_forum_topic_post_rating_data(org_unit_id, forum_id, topic_id, post_id)
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Rating"
     _get(path)
@@ -362,7 +362,7 @@ def get_forum_topic_post_rating_data(org_unit_id, forum_id, topic_id, post_id)
 end
 
 # REVIEW: Retrieve the current user context’s rating data for a particular post in a discussion forum topic.
-# => GET /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)/Rating/MyRating
+# => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Rating/MyRating
 def get_current_user_forum_topic_post_rating_data(org_unit_id, forum_id, topic_id, post_id)
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Rating/MyRating"
     _get(path)
@@ -370,7 +370,7 @@ def get_current_user_forum_topic_post_rating_data(org_unit_id, forum_id, topic_i
 end
 
 # REVIEW: Retrieve the current read status for a particular post in a discussion forum topic.
-# => GET /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)/ReadStatus
+# => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/ReadStatus
 def get_forum_topic_post_read_status(org_unit_id, forum_id, topic_id, post_id)
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/ReadStatus"
     _get(path)
@@ -378,7 +378,7 @@ def get_forum_topic_post_read_status(org_unit_id, forum_id, topic_id, post_id)
 end
 
 # REVIEW: Retrieve all the vote data for a particular post in a discussion forum topic.
-# => GET /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)/Votes
+# => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Votes
 def get_forum_topic_post_vote_data(org_unit_id, forum_id, topic_id, post_id)
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Votes"
     _get(path)
@@ -386,24 +386,154 @@ def get_forum_topic_post_vote_data(org_unit_id, forum_id, topic_id, post_id)
 end
 
 # REVIEW: Retrieve the current user’s vote data for a particular post in a discussion forum topic.
-# => GET /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)/Votes/MyVote
+# => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Votes/MyVote
 def get_current_user_forum_topic_post_vote_data(org_unit_id, forum_id, topic_id, post_id)
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Votes/MyVote"
     _get(path)
     # RETURNS: UserVoteData JSON data block
 end
 
-# TODO: Create a new post in a discussion forum topic.
-# => POST /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/
-# TODO: Update a particular post in a discussion forum topic.
-# => PUT /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)
-# TODO: Update the approval status of a particular post in a discussion forum topic.
-# => PUT /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)/Approval
-# TODO: Update the flagged status of a particular post in a discussion forum topic.
-# => PUT /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)/Flag
-# TODO: Update the current user context’s rating for a particular post in a discussion forum topic.
-# => PUT /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)/Rating/MyRating
-# TODO: Update the read status of a particular post in a discussion forum topic.
-# => PUT /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)/ReadStatus
-# TODO: Update a discussion forum topic post’s vote data for the current user.
-# => PUT /d2l/api/le/(version)/(orgUnitId)/discussions/forums/(forumId)/topics/(topicId)/posts/(postId)/Votes/MyVote
+def check_create_post_data_validity(create_post_data)
+  schema = {
+      'type' => 'object',
+      'required' => %w(ParentPostId Subject Message IsAnonymous),
+      'properties' =>
+      {
+          'ParentPostId' => { 'type' => %w(integer null) },
+          'Subject' => { 'type' => "string" },
+          'Message' =>
+          {
+            'type' => 'object',
+            'properties'=>
+            {
+              "Content" => { 'type' => "string" },
+              "Type" => { 'type' => "string" }
+            }
+          },
+          'IsAnonymous' => { 'type' => 'boolean' },
+      }
+  }
+  JSON::Validator.validate!(schema, create_post_data, validate_schema: true)
+end
+
+
+# REVIEW: Create a new post in a discussion forum topic.
+# => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/
+# NOTE: No file attachments? Send it normally :)
+# NOTE: File attachments? Send using Multipart/Mixed body conforming to RFC2388
+# RETURNS: Post JSON data block
+def create_topic_post(org_unit_id, forum_id, topic_id, create_post_data, files = [])
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/"
+  payload = {
+    "ParentPostId" => nil, # integer or nil
+    "Subject" => "",
+    "Message" => {
+      "Content" => "",
+      "Type" => "Text|Html"
+    },
+    "IsAnonymous" => false
+  }.merge!(create_post_data)
+  check_create_post_data_validity(payload)
+  if files == []
+    # can do a simple POST request.
+    _post(path, payload)
+  else
+    # Have to do multipart/mixed body custom POST request.
+    _upload_post_data(path, payload, files, "POST")
+  end
+end
+
+# REVIEW: Update a particular post in a discussion forum topic.
+# => PUT /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}
+# RETURNS: Post JSON data block
+def update_topic_post(org_unit_id, forum_id, topic_id, post_id, create_post_data)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}"
+  payload = {
+    "ParentPostId" => nil, # integer or nil
+    "Subject" => "",
+    "Message" => {
+      "Content" => "",
+      "Type" => "Text|Html"
+    },
+    "IsAnonymous" => false
+  }.merge!(create_post_data)
+  check_create_post_data_validity(payload)
+  _put(path, payload)
+end
+
+# REVIEW: Update the approval status of a particular post in a discussion forum topic.
+# => PUT /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Approval
+# RETURNS: ApprovalData JSON data block
+def update_topic_post_approval_status(org_unit_id, forum_id, topic_id, post_id, is_approved)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Approval"
+  unless is_approved == true || is_approved == false
+    raise ArgumentError, "Argument 'is_approved' is not a boolean value."
+  else
+    payload = {
+      "IsApproved" => is_approved
+    }
+    _put(path, payload)
+  end
+end
+
+
+# REVIEW: Update the flagged status of a particular post in a discussion forum topic.
+# => PUT /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Flag
+# RETURNS: FlagData JSON data block
+def update_topic_post_flagged_status(org_unit_id, forum_id, topic_id, post_id, is_flagged)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Flag"
+  unless is_flagged == true || is_flagged == false
+    raise ArgumentError, "Argument 'is_flagged' is not a boolean value."
+  else
+    payload = {
+      "IsFlagged" => is_flagged
+    }
+    _put(path, payload)
+  end
+end
+
+# REVIEW: Update the current user context’s rating for a particular post in a discussion forum topic.
+# => PUT /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Rating/MyRating
+# RETURNS: UserRatingData JSON data block
+def update_topic_post_current_user_rating(org_unit_id, forum_id, topic_id, post_id, rating)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Rating/MyRating"
+  unless rating.is_a? Numeric || rating.nil?
+    raise ArgumentError, "Argument 'rating' is not a number or null value."
+  else
+    payload = {
+      "Rating" => rating
+    }
+    _put(path, payload)
+  end
+end
+
+
+# REVIEW: Update the read status of a particular post in a discussion forum topic.
+# => PUT /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/ReadStatus
+# RETURNS: ReadStatusData JSON data block
+def update_topic_post_read_status(org_unit_id, forum_id, topic_id, post_id, is_read)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/ReadStatus"
+  unless is_read == true || is_read == false
+    raise ArgumentError, "Argument 'is_read' is not a boolean value."
+  else
+    payload = {
+      "IsRead" => is_read
+    }
+    _put(path, payload)
+  end
+end
+
+# REVIEW: Update a discussion forum topic post’s vote data for the current user.
+# => PUT /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Votes/MyVote
+# RETURNS: ??
+def update_topic_post_current_user_vote_data(org_unit_id, forum_id, topic_id, post_id, vote)
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Votes/MyVote"
+  unless vote.is_a? String
+    raise ArgumentError, "Argument 'vote' is not a string value."
+  else
+    payload = {
+      "Vote" => vote
+    }
+    _put(path, payload)
+  end
+end

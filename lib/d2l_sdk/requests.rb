@@ -336,6 +336,11 @@ def _news_upload(path, json, files, method)
   response.body
 end
 
+# bridge function ~~~
+def _upload_post_data(path, json, files, method)
+  _news_upload(path, json, files, method)
+end
+
 # performs a put request using the path and the payload arguments. After first
 # creating an authenticated uri, the put request is performed using the
 # authenticated uri, the payload argument, and specifying that the payload is
@@ -397,9 +402,9 @@ def display_response_code(code)
     end
 end
 
-#################
-###Versions######
-#################
+##################
+### Versions #####
+##################
 def get_all_products_supported_versions
   path = "/d2l/api/versions/"
   _get(path)
