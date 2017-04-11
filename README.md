@@ -1,5 +1,5 @@
 # Ruby Valence SDK
-[![Gem Version](https://badge.fury.io/rb/d2l_sdk.svg)](https://badge.fury.io/rb/d2l_sdk)
+[![Gem Version](https://badge.fury.io/rb/d2l_sdk.svg)](https://badge.fury.io/rb/d2l_sdk) <a href = "https://docs.google.com/presentation/d/1RjwFW2URxTPECRUJzhJBpF6IPyHj_rOp47_DP1qEg7E/edit#slide=id.p" ><img src="https://lh3.ggpht.com/9rwhkrvgiLhXVBeKtScn1jlenYk-4k3Wyqt1PsbUr9jhGew0Gt1w9xbwO4oePPd5yOM=w300" width="25"></a>
 
 The Ruby Valence SDK utilizes a CRUD based API that facilitates HTTP methods coinciding with Brightspace's routing table to perform common CRUD functions.
 
@@ -13,6 +13,10 @@ The Valence sdk
 > The Valence API is Rest-like, allowing interactions through HTTP with the back-end of a host. Most all of the Learning Platform functions that comprise D2L's Rest-like API are usable through this Ruby SDK implementation.
 
 While not all functions have been implemented for the Learning Platform of the Valence sdk, all critical CRUD functionalities have been implemented.
+
+***NOTE:*** I have been previously asked if some functions could be implemented without requiring input that is a Hash conforming particularly to D2L's specified API. Unfortunately, there are more often times than not JSON blocks that need to be passed with over 10 values defined. In these cases, it is unfortunately rather ugly to call functions with all of these arguments. Some API calls have been done this way due to their relatively small number of required JSON parameter values. Others quite simply cannot be done this way. 
+
+If, at any time, you feel that you have an idea for a particular function of the SDK or just want to suggest something, please submit an Issue. Also, if there are any issues, for obvious reasons, please submit an Issue for this too. I greatly appreciate any feedback or contribution!!
 
 ### Index
 1. [Tech] (#tech)
@@ -259,6 +263,33 @@ $ gem cleanup d2l_sdk
   * `get_section_id_by_section_code(String code)`
   * `get_section_data_by_code(String code)`
 9. **TODO:** Course Content
+  * `delete_module(String org_unit_id, String module_id)`
+  * `delete_topic(String org_unit_id, String topic_id)`
+  * `get_module(String org_unit_id, String module_id)`
+  * `get_module_structure(String org_unit_id, String module_id)`
+  * `get_root_modules(String org_unit_id)`
+  * `get_topic(String org_unit_id, String topic_id)`
+  * `get_topic_file(String org_unit_id, String topic_id, optional Bool stream)`
+  * **TODO:**`add_child_to_module(String org_unit_id, String module_id, optional JSON child)`
+  * `create_root_module(String org_unit_id, JSON content_module)`
+  * `update_module(String org_unit_id, String module_id, JSON content_module)`
+  * `update_topic(String org_unit_id, String topic_id, JSON content_topic)`
+  * `get_course_overview(String org_unit_id)`
+  * `get_course_overview_file_attachment(String org_unit_id)`
+  * `delete_isbn_association(String org_unit_id, String isbn)`
+  * `get_org_units_of_isbn(String isbn)`
+  * `get_isbns_of_org_unit(String org_unit_id)`
+  * `get_isbn_org_unit_association(String org_unit_id, String isbn)`
+  * `create_isbn_org_unit_association(String org_unit_id, JSON isbn_association_data)`
+  * `get_user_overdue_items(String org_unit_ids_CSV, optional boolean completion, optional String start_date_time, optional end_date_time)`
+  * `get_current_user_still_due_items(String org_unit_ids_CSV, optional boolean completion, optional String start_date_time, optional end_date_time)`
+  * `get_current_user_organized_scheduled_items(String org_unit_ids_CSV, optional boolean completion, optional String start_date_time, optional end_date_time)`
+  * `get_current_user_scheduled_item_count(String org_unit_ids_CSV, optional boolean completion, optional String start_date_time, optional end_date_time)`
+  * `get_current_user_completed_scheduled_items(String org_unit_ids_CSV, optional String completion_from_date_time, optional completed_to_date_time)`
+  * `get_current_user_completed_scheduled_items_with_due_date(String org_unit_ids_CSV, optional String completion_from_date_time, optional completed_to_date_time)`
+  * `get_current_user_scheduled_item_count(String org_unit_ids_CSV, optional boolean completion, optional String start_date_time, optional end_date_time)`
+  * `get_current_user_org_unit_scheduled_item_count(String org_unit_ids_CSV, optional boolean completion, optional String start_date_time, optional end_date_time)`
+  * `get_user_overdue_items(String org_unit_ids_CSV, optional boolean completion, optional String start_date_time, optional end_date_time)`
 10. **TODO:** Course Templates
 11. **TODO:** Datahub
 12. **TODO:** Demographics
