@@ -22,12 +22,12 @@ end
 # if since and until are specified, all items between these two dates are fetched
 # if since > until, an empty feed list is returned
 # purpose: fetch the feed for the current user context
-def get_current_user_feed(since = "", until = "")
+def get_current_user_feed(since = "", until_ = "")
   path = "/d2l/api/lp/#{$lp_ver}/feed/"
   # if since is specified, then until can be. Until is not required though.
   if since != ""
     path += "?since=#{since}"
-    path += "&until=#{until}" if until != ""
+    path += "&until=#{until_}" if until_ != ""
   end
   _get(path)
 end
