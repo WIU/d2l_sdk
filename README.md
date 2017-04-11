@@ -123,8 +123,8 @@ $ gem cleanup d2l_sdk
   * `remove_profile_image_by_user_id(int user_id)`
   * `get_current_user_profile`
   * `get_current_user_profile_image(int thumbnail_size)`
-  * `get_user_profile_by_profile_id(int profile_id = 0)`
-  * `get_profile_image(int profile_id, int thumbnail_size = 0)`
+  * `get_user_profile_by_profile_id(optional int profile_id)`
+  * `get_profile_image(int profile_id, optional int thumbnail_size)`
   * `get_user_profile_by_user_id(int user_id)`
   * `get_user_profile_image(int user_id)`
   * **TODO:**`update_current_user_profile_image`
@@ -132,15 +132,15 @@ $ gem cleanup d2l_sdk
   * **TODO:**`update_profile_image_by_user_id`
   * **TODO:**`update_current_user_profile_data`
   * **TODO:**`update_profile_by_profile_id`
-  * UNSTABLE:`get_lis_roles(String lis_urn = '')`
-  * UNSTABLE:`get_user_role_lis_mappings_by_urn(String lis_urn = '', int d2lid = 0)`
-  * UNSTABLE:`get_user_role_lis_mappings_by_role(String role_id, int d2lid = 0)`
+  * UNSTABLE:`get_lis_roles(optional String lis_urn)`
+  * UNSTABLE:`get_user_role_lis_mappings_by_urn(optional String lis_urn, optional int d2lid)`
+  * UNSTABLE:`get_user_role_lis_mappings_by_role(String role_id, optional int d2lid)`
   * **TODO:**&&UNSTABLE:`map_user_role_to_lis_roles(String role_id, String[] mappings)`
   * `get_current_user_locale_settings`
   * `get_local_account_settings(int user_id)`
   * `update_current_user_locale_account_settings(int locale_id)`
   * `update_user_locale_account_settings(int user_id, int locale_id)`
-  * UNSTABLE:`get_all_locales(String bookmark = '')`
+  * UNSTABLE:`get_all_locales(optional String bookmark)`
   * UNSTABLE:`get_locale_properties(int locale_id)`
 2. Semesters
   * `create_semester_data(JSON semester_data)`
@@ -156,16 +156,16 @@ $ gem cleanup d2l_sdk
   * `delete_course_by_id(int org_unit_id)`
   * `get_parent_outypes_courses_schema_constraints`
   * `get_course_by_id(String org_unit_id)`
-  * `get_course_image(int org_unit_id, int width = 0, int height = 0)`
+  * `get_course_image(int org_unit_id, optional int width, optional int height)`
   * `create_course_data(JSON course_data)`
   * `update_course_data(int course_id, JSON course_data)`
   * `update_course_image(int org_unit_id, String image_file_path)`
   * `get_copy_job_request_status(int org_unit_id, String job_token)`
   * `create_new_copy_job_request(int org_unit_it, JSON create_copy_job_request)`
-  * **TODO:**UNSTABLE:`get_copy_job_logs(String bookmark = '', int page_size = 0, int source_org_unit_id = 0, int destination_org_unit_id = 0, String start_date = '', String end_date = '')`
+  * **TODO:**UNSTABLE:`get_copy_job_logs(optional String bookmark, optional int page_size, optional int source_org_unit_id, optional int destination_org_unit_id, optional String start_date, optional String end_date)`
   * `get_course_import_job_request_status(int org_unit_id, string job_token)`
-  * `get_course_import_job_request_logs(int org_unit_id, String job_token, String bookmark = '')`
-  * `create_course_import_request(int org_unit_id, String file_path, String callback_url = '')`
+  * `get_course_import_job_request_logs(int org_unit_id, String job_token, optional String bookmark)`
+  * `create_course_import_request(int org_unit_id, String file_path, optional String callback_url)`
   * `get_org_department_classes(String org_unit_id)`
   * `get_all_courses`
   * `get_courses_by_name(String org_unit_name)`
@@ -185,12 +185,12 @@ $ gem cleanup d2l_sdk
   * `get_organization_info`
   * `delete_relationship_of_child_with_parent(Int parent_ou_id, Int child_ou_id)`
   * `delete_relationship_of_parent_with_child(Int parent_ou_id, Int child_ou_id)`
-  * `get_properties_of_all_org_units(String org_unit_type = '', String org_unit_code = '', String org_unit_name = '', String bookmark = '')`
+  * `get_properties_of_all_org_units(optional String org_unit_type, optional String org_unit_code, optional String org_unit_name, optional String bookmark)`
   * `get_org_unit_properties(String org_unit_id)`
-  * `get_all_childless_org_units(String org_unit_type = '', String org_unit_code = '', String org_unit_name = '', String bookmark = '')`
-  * `get_all_orphans(String org_unit_type = '', String org_unit_code = '', String org_unit_name = '', String bookmark = '')`
-  * `get_org_unit_ancestors(String org_unit_id, int ou_type_id = 0)`
-  * `get_org_unit_children(String org_unit_id, Int ou_type_id = 0)`
+  * `get_all_childless_org_units(optional String org_unit_type, optional String org_unit_code, optional String org_unit_name, optional String bookmark)`
+  * `get_all_orphans(optional String org_unit_type, optional String org_unit_code, optional String org_unit_name, optional String bookmark)`
+  * `get_org_unit_ancestors(String org_unit_id, optional int ou_type_id)`
+  * `get_org_unit_children(String org_unit_id, optional Int ou_type_id)`
   * `get_paged_org_unit_children(String org_unit_id, String bookmark)`
   * `get_org_unit_descendants(String org_unit_id, Int ou_type_id)`
   * `get_paged_org_unit_descendants(String org_unit_id, Int ou_type_id, String bookmark)`
