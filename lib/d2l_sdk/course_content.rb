@@ -203,7 +203,7 @@ end
 # Update a particular module for an org unit.
 # INPUT: ContentObjectData of type Module
 # NOTE: Cannot use this action to affect a module’s existing Structure property.
-def update_module(org_unit_id, module_id) # PUT
+def update_module(org_unit_id, module_id, content_module) # PUT
   query_string = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/modules/#{module_id}"
   payload = {
     "Title" => "",
@@ -330,8 +330,8 @@ end
 ### SCHEDULED ITEMS######
 #########################
 
-# REVIEW: Retrieve the calling user’s scheduled items.
-def get_user_overdue_items(org_unit_ids_CSV, completion = nil,
+# REVIEW: Retrieve the calling user scheduled items.
+def get_calling_user_scheduled_items(org_unit_ids_CSV, completion = nil,
                            start_date_time = '', end_date_time = '') # GET
   query_string = "/d2l/api/le/#{$le_ver}/content/myItems/?"
   query_string += "orgUnitIdsCSV=#{org_unit_ids_CSV}&"
@@ -342,9 +342,9 @@ def get_user_overdue_items(org_unit_ids_CSV, completion = nil,
   # Returns: An ObjectListPage JSON block containing a list of ScheduledItem blocks
 end
 
-# REVIEW: Retrieve the calling user’s scheduled items still due.
-def get_current_user_still_due_items(org_unit_ids_CSV, completion = nil,
-                                     start_date_time = '', end_date_time = '')
+# REVIEW: Retrieve the calling user scheduled items still due.
+def get_current_user_scheduled_items_still_due(org_unit_ids_CSV, completion = nil,
+                                               start_date_time = '', end_date_time = '')
   query_string = "/d2l/api/le/#{$le_ver}/content/myItems/due/?"
   query_string += "orgUnitIdsCSV=#{org_unit_ids_CSV}&"
   query_string += "completion=#{completion}&" unless completion.nil?
@@ -354,7 +354,7 @@ def get_current_user_still_due_items(org_unit_ids_CSV, completion = nil,
   # Returns: An ObjectListPage JSON block containing a list of ScheduledItem blocks
 end
 
-# REVIEW: Retrieve the quantities of the calling user’s scheduled items, organized by org unit.
+# REVIEW: Retrieve the quantities of the calling user scheduled items, organized by org unit.
 # GET /d2l/api/le/(version)/content/myItems/itemCounts/
 def get_current_user_organized_scheduled_items(org_unit_ids_CSV,
                                                completion = nil,
@@ -382,7 +382,7 @@ def get_current_user_scheduled_item_count(org_unit_ids_CSV, completion = nil,
   # Returns: An ObjectListPage JSON block containing a list of ScheduledItem blocks
 end
 
-# REVIEW: Retrieve the calling user’s completed scheduled items.
+# REVIEW: Retrieve the calling user completed scheduled items.
 # GET /d2l/api/le/(version)/content/myItems/completions/
 def get_current_user_completed_scheduled_items(org_unit_ids_CSV,
                                                completion_from_date_time = '',
@@ -408,7 +408,7 @@ def get_current_user_completed_scheduled_items_with_due_date(org_unit_ids_CSV,
   # Returns: An ObjectListPage JSON block containing a list of ScheduledItem blocks
 end
 
-# REVIEW: Retrieve the calling user’s scheduled items for a particular org unit.
+# REVIEW: Retrieve the calling user scheduled items for a particular org unit.
 # GET /d2l/api/le/(version)/#{org_unit_id}/content/myItems/
 def get_current_user_scheduled_items_by_org_unit(org_unit_id, completion = nil,
                                                  start_date_time = '',
@@ -423,9 +423,9 @@ end
 
 # REVIEW: Retrieve the calling user’s scheduled items still due for a particular org unit.
 # GET /d2l/api/le/(version)/#{org_unit_id}/content/myItems/due/
-def get_current_user_org_unit_scheduled_item_count(org_unit_id, completion = nil,
-                                                   start_date_time = '',
-                                                   end_date_time = '') # GET
+def get_current_user_org_unit_scheduled_items(org_unit_id, completion = nil,
+                                              start_date_time = '',
+                                              end_date_time = '') # GET
   query_string = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/myItems/due/?"
   query_string += "completion=#{completion}&" unless completion.nil?
   query_string += "startDateTime=#{start_date_time}&" unless start_date_time == ''
@@ -434,10 +434,10 @@ def get_current_user_org_unit_scheduled_item_count(org_unit_id, completion = nil
   # Returns: An ObjectListPage JSON block containing a list of ScheduledItem blocks
 end
 
-# REVIEW: Retrieve the quantity of the calling user’s scheduled items for provided org unit.
+# REVIEW: Retrieve the quantity of the calling user scheduled items for provided org unit.
 # GET /d2l/api/le/(version)/#{org_unit_id}/content/myItems/itemCount
-def get_user_overdue_items(org_unit_id, completion = nil, start_date_time = '',
-                           end_date_time = '') # GET
+def get_calling_user_overdue_items_count(org_unit_id, completion = nil, start_date_time = '',
+                                         end_date_time = '') # GET
   query_string = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/myItems/itemCount?"
   query_string += "completion=#{completion}&" unless completion.nil?
   query_string += "startDateTime=#{start_date_time}&" unless start_date_time == ''
@@ -448,7 +448,7 @@ end
 
 # REVIEW: Retrieve quantity of the calling user’s scheduled items still due for a particular org unit.
 # GET /d2l/api/le/(version)/#{org_unit_id}/content/myItems/due/itemCount
-def get_user_overdue_items(org_unit_id, completion = nil, start_date_time = '',
+def get_calling_user_due_items_count(org_unit_id, completion = nil, start_date_time = '',
                            end_date_time = '') # GET
   query_string = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/myItems/due/itemCount?"
   query_string += "completion=#{completion}&" unless completion.nil?
@@ -504,7 +504,7 @@ end
 # Retrieve the table of course content for an org unit.
 def get_org_unit_toc(org_unit_id, ignore_module_data_restrictions = false) # GET
   query_string = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/toc"
-  query_string += "?ignoreModuleDateRestrictions=true" if ignore_module_data_restrictions
+  query_string += '?ignoreModuleDateRestrictions=true' if ignore_module_data_restrictions
   _get(query_string)
   # Returns: a TableOfContents JSON block.
 end
@@ -513,7 +513,8 @@ end
 ### USER PROGRESS
 #################
 
-# Retrieves the aggregate count of completed and required content topics in an org unit for the calling user.
+# Retrieves the aggregate count of completed and required content topics
+# in an org unit for the calling user.
 # levels: 1=OrgUnit, 2=RootModule, 3=Topic
 def get_current_user_progress(org_unit_id, level) # GET
   query_string = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/completions/mycount/"
@@ -526,10 +527,19 @@ end
 
 # TODO: --UNSTABLE-- Retrieve the user progress items in an org unit, for specific users or content topics.
 # _get "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/userprogress/"
+def get_progress_of_users
+
+end
 
 # TODO: --UNSTABLE-- Retrieve one user’s progress within an org unit for a particular content topic.
 # _get "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/userprogress/#{topic_id}"
+def get_user_progress
+
+end
 
 # TODO: --UNSTABLE-- Update a user progress item.
 # _post "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/userprogress/"
 # payload: UserProgressData
+def update_user_progress
+
+end

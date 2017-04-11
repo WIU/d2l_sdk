@@ -268,7 +268,7 @@ end
 # COLOUR SCHEMES:#######
 ########################
 
-# REVIEW: Retrieve the colour scheme for an org unit.
+# TODO: Retrieve the colour scheme for an org unit.
 # RETURNS: ColourScheme JSON data block containing the org unit’s current colour scheme.
 def get_org_unit_color_scheme(org_unit_id)
   path = "/d2l/api/lp/#{$lp_ver}/orgstructure/#{org_unit_id}/colours"

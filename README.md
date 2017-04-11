@@ -1,5 +1,5 @@
 # Ruby Valence SDK
-[![Gem Version](https://badge.fury.io/rb/d2l_sdk.svg)](https://badge.fury.io/rb/d2l_sdk) <a href = "https://docs.google.com/presentation/d/1RjwFW2URxTPECRUJzhJBpF6IPyHj_rOp47_DP1qEg7E/edit#slide=id.p" ><img src="https://lh3.ggpht.com/9rwhkrvgiLhXVBeKtScn1jlenYk-4k3Wyqt1PsbUr9jhGew0Gt1w9xbwO4oePPd5yOM=w300" width="25"></a> <a href = "https://community.brightspace.com/tlc/wiki/illinois_connection_april_7_2017" > <img src=""></a>
+[![Gem Version](https://badge.fury.io/rb/d2l_sdk.svg)](https://badge.fury.io/rb/d2l_sdk) <a href = "https://docs.google.com/presentation/d/1RjwFW2URxTPECRUJzhJBpF6IPyHj_rOp47_DP1qEg7E/edit#slide=id.p" ><img src="https://lh3.ggpht.com/9rwhkrvgiLhXVBeKtScn1jlenYk-4k3Wyqt1PsbUr9jhGew0Gt1w9xbwO4oePPd5yOM=w300" width="25"></a> <a href = "https://community.brightspace.com/tlc/wiki/illinois_connection_april_7_2017" > <img src="https://ltsa.sheridancollege.ca/learning-technology-portal/wp-content/uploads/sites/9/2014/10/brightspace-logo.jpeg" width="25"></a>
 
 The Ruby Valence SDK utilizes a CRUD based API that facilitates HTTP methods coinciding with Brightspace's routing table to perform common CRUD functions.
 
@@ -200,7 +200,7 @@ $ gem cleanup d2l_sdk
   * `get_paged_org_unit_descendants(Int org_unit_id, Int ou_type_id, String bookmark)`
   * `get_org_unit_parents(Int org_unit_id, Int ou_type_id)`
   * `create_custom_org_unit(JSON org_unit_data)`
-  * `add_child_org_unit(Int org_unit_id, String child_org_unit_id)`
+  * `add_child_org_unit(Int org_unit_id, Int child_org_unit_id)`
   * `add_parent_to_org_unit(Int parent_ou_id, Int child_ou_id)`
   * `update_org_unit(Int org_unit_id, JSON org_unit_data)`
   * **TODO:**`get_org_unit_color_scheme(Int org_unit_id)`
@@ -224,56 +224,56 @@ $ gem cleanup d2l_sdk
   * `get_enrollments_details_of_current_user(Int org_unit_id)`
   * `get_org_unit_enrollments(Int org_unit_id, optional Int role_id, optional Int bookmark)`
   * `get_org_unit_enrollment_data_by_user(Int org_unit_id, Int user_id)`
-  * `get_all_enrollments_of_user(Int user_id, optional String org_unit_type_id, optional String role_d, optional String bookmark)`
+  * `get_all_enrollments_of_user(Int user_id, optional Int org_unit_type_id, optional String role_d, optional String bookmark)`
   * `create_user_enrollment(JSON course_enrollment_data)`
   * `get_user_enrollment_data_by_org_unit(Int user_id, Int org_unit_id)`
   * `delete_current_user_org_unit_pin(Int org_unit_id)`
   * `pin_org_unit_for_current_context(Int org_unit_id)`
-  * `remove_auditee(String auditor_id, String auditee_id)`
-  * `get_auditee(String auditee_id)`
-  * `get_auditor(String auditor_id)`
-  * `get_auditor_auditees(String auditor_id)`
-  * `add_auditor_auditee(String auditor_id, String auditee_id)`
+  * `remove_auditee(Int auditor_id, Int auditee_id)`
+  * `get_auditee(Int auditee_id)`
+  * `get_auditor(Int auditor_id)`
+  * `get_auditor_auditees(Int auditor_id)`
+  * `add_auditor_auditee(Int auditor_id, Int auditee_id)`
 7. Groups
-  * `delete_group_category(Int org_unit_id, String group_category_id)`
-  * `delete_group(Int org_unit_id, String group_category_id, String group_id)`
-  * `remove_user_from_group(Int org_unit_id, String group_category_id, String group_id, Int user_id)`
+  * `delete_group_category(Int org_unit_id, Int group_category_id)`
+  * `delete_group(Int org_unit_id, Int group_category_id, Int group_id)`
+  * `remove_user_from_group(Int org_unit_id, Int group_category_id, Int group_id, Int user_id)`
   * `get_all_org_unit_group_categories(Int org_unit_id)`
-  * `get_org_unit_group_category(Int org_unit_id, String group_category_id)`
-  * `get_all_group_category_groups(Int org_unit_id, String group_category_id)`
-  * `get_org_unit_group(Int org_unit_id, String group_category_id, String group_id)`
+  * `get_org_unit_group_category(Int org_unit_id, Int group_category_id)`
+  * `get_all_group_category_groups(Int org_unit_id, Int group_category_id)`
+  * `get_org_unit_group(Int org_unit_id, Int group_category_id, Int group_id)`
   * `create_org_unit_group_category(Int org_unit_id, JSON group_category_data)`
-  * `create_org_unit_group(Int org_unit_id String group_category_id, JSON group_data)`
-  * `update_org_unit_group(Int org_unit_id, String group_category_id, String group_id, JSON group_data)`
-  * `enroll_user_in_group(Int org_unit_id, String group_category_id, String group_id, Int user_id)`
-  * `update_org_unit_group_category(Int org_unit_id, String group_category_id, JSON group_category_data)`
-  * `is_group_category_locker_set_up(Int org_unit_id, String group_category_id)`
+  * `create_org_unit_group(Int org_unit_id, Int group_category_id, JSON group_data)`
+  * `update_org_unit_group(Int org_unit_id, Int group_category_id, Int group_id, JSON group_data)`
+  * `enroll_user_in_group(Int org_unit_id, Int group_category_id, Int group_id, Int user_id)`
+  * `update_org_unit_group_category(Int org_unit_id, Int group_category_id, JSON group_category_data)`
+  * `is_group_category_locker_set_up(Int org_unit_id, Int group_category_id)`
 8. Sections
-  * `delete_section(Int org_unit_id, String section_id)`
+  * `delete_section(Int org_unit_id, Int section_id)`
   * `get_org_unit_sections(Int org_unit_id)`
   * `get_org_unit_section_property_data(Int org_unit_id)`
-  * `get_section_data(Int org_unit_id, String section_id)`
+  * `get_section_data(Int org_unit_id, Int section_id)`
   * `create_org_unit_section(Int org_unit_id JSON section_data)`
-  * `enroll_user_in_org_section(Int org_unit_id, String section_id, JSON section_data)`
+  * `enroll_user_in_org_section(Int org_unit_id, Int section_id, JSON section_data)`
   * `initialize_org_unit_sections(Int org_unit_id, JSON section_property_data)`
   * `update_org_unit_section_properties(Int org_unit_id, JSON section_property_data)`
-  * `update_org_unit_section_info(Int org_unit_id, String section_id, JSON section_data)`
+  * `update_org_unit_section_info(Int org_unit_id, Int section_id, JSON section_data)`
   * `create_section_code(String star_number, String course_data)`
   * `get_section_by_section_code(String code)`
   * `get_section_id_by_section_code(String code)`
   * `get_section_data_by_code(String code)`
 9. **TODO:** Course Content
-  * `delete_module(Int org_unit_id, String module_id)`
-  * `delete_topic(Int org_unit_id, String topic_id)`
-  * `get_module(Int org_unit_id, String module_id)`
-  * `get_module_structure(Int org_unit_id, String module_id)`
+  * `delete_module(Int org_unit_id, Int module_id)`
+  * `delete_topic(Int org_unit_id, Int topic_id)`
+  * `get_module(Int org_unit_id, Int module_id)`
+  * `get_module_structure(Int org_unit_id, Int module_id)`
   * `get_root_modules(Int org_unit_id)`
-  * `get_topic(Int org_unit_id, String topic_id)`
-  * `get_topic_file(Int org_unit_id, String topic_id, optional Bool stream)`
-  * **TODO:**`add_child_to_module(Int org_unit_id, String module_id, optional JSON child)`
+  * `get_topic(Int org_unit_id, Int topic_id)`
+  * `get_topic_file(Int org_unit_id, Int topic_id, optional Bool stream)`
+  * **TODO:**`add_child_to_module(Int org_unit_id, Int module_id, optional JSON child)`
   * `create_root_module(Int org_unit_id, JSON content_module)`
-  * `update_module(Int org_unit_id, String module_id, JSON content_module)`
-  * `update_topic(Int org_unit_id, String topic_id, JSON content_topic)`
+  * `update_module(Int org_unit_id, Int module_id, JSON content_module)`
+  * `update_topic(Int org_unit_id, Int topic_id, JSON content_topic)`
   * `get_course_overview(Int org_unit_id)`
   * `get_course_overview_file_attachment(Int org_unit_id)`
   * `delete_isbn_association(Int org_unit_id, String isbn)`
@@ -334,58 +334,58 @@ $ gem cleanup d2l_sdk
   * `get_all_demographic_types(optional String bookmark)`
   * `get_demographic_type(String data_type_id)`
 13. Discussions
-  * `delete_org_unit_discussion(Int org_unit_id, String forum_id)`
+  * `delete_org_unit_discussion(Int org_unit_id, Int forum_id)`
   * `get_org_unit_discussions(Int org_unit_id)`
-  * `get_org_unit_discussion(Int org_unit_id, String forum_id)`
+  * `get_org_unit_discussion(Int org_unit_id, Int forum_id)`
   * `create_org_unit_discussion(Int org_unit_id, JSON forum_data)`
-  * `update_forum(Int org_unit_id, String forum_id, JSON forum_data)`
-  * `delete_topic(Int org_unit_id, String forum_id, String topic_id)`
-  * `delete_topic_group_restriction(Int org_unit_id, String forum_id, String topic_id)`
-  * `get_forum_topics(Int org_unit_id, String forum_id)`
-  * `get_forum_topic(Int org_unit_id, String forum_id, String topic_id)`
-  * `get_forum_topic_group_restrictions(Int org_unit_id, String forum_id, String topic_id)`
-  * `create_forum_topic(Int org_unit_id, String forum_id, JSON create_topic_data)`
-  * `update_forum_topic(Int org_unit_id, String forum_id, String topic_id, JSON create_topic_data)`
-  * `add_group_to_group_restriction_list(Int org_unit_id, String forum_id, String topic_id, String group_id)`
-  * `delete_topic_post(Int org_unit_id, String forum_id, String topic_id, String post_id)`
-  * `get_forum_topic_posts(Int org_unit_id, String forum_id, String topic_id, optional Int page_size, optional Int page_number, optional boolean threads_only, optional Int thread_id, optional String sort)`
-  * `get_forum_topic_post(Int org_unit_id, String forum_id, String topic_id, String post_id)`
-  * `get_forum_topic_post_approval_status(Int org_unit_id, String forum_id, String topic_id, String post_id)`
-  * `get_forum_topic_post_flagged_status(Int org_unit_id, String forum_id, String topic_id, String post_id)`
-  * `get_forum_topic_post_rating_data(Int org_unit_id, String forum_id, String topic_id, String post_id)`
-  * `get_current_user_forum_topic_post_rating_data(Int org_unit_id, String forum_id, String topic_id, String post_id)`
-  * `get_forum_topic_post_read_status(Int org_unit_id, String forum_id, String topic_id, String post_id)`
-  * `get_forum_topic_post_vote_data(Int org_unit_id, String forum_id, String topic_id, String post_id)`
-  * `get_current_user_forum_topic_post_vote_data(Int org_unit_id, String forum_id, String topic_id, String post_id)`
-  * `create_topic_post(Int org_unit_id, String forum_id, String topic_id, JSON create_post_data, optional String[] files)`
-  * `update_topic_post(Int org_unit_id, String forum_id, String topic_id, String post_id, JSON create_post_data)`
-  * `update_topic_post_approval_status(Int org_unit_id, String forum_id, String topic_id, String post_id, boolean is_approved)`
-  * `update_topic_post_flagged_status(Int org_unit_id, String forum_id, String topic_id, String post_id, boolean is_flagged)`
-  * `update_topic_post_current_user_rating(Int org_unit_id, String forum_id, String topic_id, String post_id, Int rating)`
-  * `update_topic_post_read_status(Int org_unit_id, String forum_id, String topic_id, String post_id, boolean is_read)`
-  * `update_topic_post_current_user_vote_data(Int org_unit_id, String forum_id, String topic_id, String post_id, String vote)`
-14. **TODO:** Dropbox
+  * `update_forum(Int org_unit_id, Int forum_id, JSON forum_data)`
+  * `delete_topic(Int org_unit_id, Int forum_id, Int topic_id)`
+  * `delete_topic_group_restriction(Int org_unit_id, Int forum_id, Int topic_id)`
+  * `get_forum_topics(Int org_unit_id, Int forum_id)`
+  * `get_forum_topic(Int org_unit_id, Int forum_id, Int topic_id)`
+  * `get_forum_topic_group_restrictions(Int org_unit_id, Int forum_id, Int topic_id)`
+  * `create_forum_topic(Int org_unit_id, Int forum_id, JSON create_topic_data)`
+  * `update_forum_topic(Int org_unit_id, Int forum_id, Int topic_id, JSON create_topic_data)`
+  * `add_group_to_group_restriction_list(Int org_unit_id, Int forum_id, Int topic_id, Int group_id)`
+  * `delete_topic_post(Int org_unit_id, Int forum_id, Int topic_id, Int post_id)`
+  * `get_forum_topic_posts(Int org_unit_id, Int forum_id, Int topic_id, optional Int page_size, optional Int page_number, optional boolean threads_only, optional Int thread_id, optional String sort)`
+  * `get_forum_topic_post(Int org_unit_id, Int forum_id, Int topic_id, Int post_id)`
+  * `get_forum_topic_post_approval_status(Int org_unit_id, Int forum_id, Int topic_id, Int post_id)`
+  * `get_forum_topic_post_flagged_status(Int org_unit_id, Int forum_id, Int topic_id, Int post_id)`
+  * `get_forum_topic_post_rating_data(Int org_unit_id, Int forum_id, Int topic_id, Int post_id)`
+  * `get_current_user_forum_topic_post_rating_data(Int org_unit_id, Int forum_id, Int topic_id, Int post_id)`
+  * `get_forum_topic_post_read_status(Int org_unit_id, Int forum_id, Int topic_id, Int post_id)`
+  * `get_forum_topic_post_vote_data(Int org_unit_id, Int forum_id, Int topic_id, Int post_id)`
+  * `get_current_user_forum_topic_post_vote_data(Int org_unit_id, Int forum_id, Int topic_id, Int post_id)`
+  * `create_topic_post(Int org_unit_id, Int forum_id, Int topic_id, JSON create_post_data, optional String[] files)`
+  * `update_topic_post(Int org_unit_id, Int forum_id, Int topic_id, Int post_id, JSON create_post_data)`
+  * `update_topic_post_approval_status(Int org_unit_id, Int forum_id, Int topic_id, Int post_id, boolean is_approved)`
+  * `update_topic_post_flagged_status(Int org_unit_id, Int forum_id, Int topic_id, Int post_id, boolean is_flagged)`
+  * `update_topic_post_current_user_rating(Int org_unit_id, Int forum_id, Int topic_id, Int post_id, Int rating)`
+  * `update_topic_post_read_status(Int org_unit_id, Int forum_id, Int topic_id, Int post_id, boolean is_read)`
+  * `update_topic_post_current_user_vote_data(Int org_unit_id, Int forum_id, Int topic_id, Int post_id, String vote)`
+14. Dropbox
   * `get_org_unit_dropbox_folders(Int org_unit_id, optional boolean only_current_students_and_groups)`
   * `get_dropbox_folder(Int org_unit_id, Int folder_id)`
-  * `get_dropbox_file_attachment(Int org_unit_id, Int folder_id, String file_id)`
+  * `get_dropbox_file_attachment(Int org_unit_id, Int folder_id, Int file_id)`
   * `create_dropbox_folder(Int org_unit_id, JSON dropbox_folder_update_data)`
   * `update_dropbox_folder(Int org_unit_id, JSON dropbox_folder_update_data)`
   * `get_current_user_assessable_folders(optional int type)`
   * `get_dropbox_folder_submissions(Int org_unit_id, Int folder_id, optional boolean active_only)`
-  * `get_dropbox_submission_file(Int org_unit_id, Int folder_id, Int submission_id, String file_id)`
+  * `get_dropbox_submission_file(Int org_unit_id, Int folder_id, Int submission_id, Int file_id)`
   * TODO:`post_new_group_submission(???)`
   * TODO:`post_current_user_new_submission(???)`
   * `mark_file_as_read(Int org_unit_id, Int folder_id, Int submission_id)`
-  * `remove_feedback_entry_file_attachment(Int org_unit_id, Int folder_id, entity_type, Int entity_id, String file_id)`
+  * `remove_feedback_entry_file_attachment(Int org_unit_id, Int folder_id, entity_type, Int entity_id, Int file_id)`
   * `get_dropbox_folder_entity_feedback_entry(Int org_unit_id, Int folder_id, Int entity_id)`
-  * `get_feedback_entry_file_attachment(Int org_unit_id, Int folder_id, Int entity_id, String file_id)`
+  * `get_feedback_entry_file_attachment(Int org_unit_id, Int folder_id, Int entity_id, Int file_id)`
   * TODO:`post_feedback_without_attachment(Int org_unit_id, Int folder_id, Int entity_id, entity_type, ??? dropbox_feedback)`
   * TODO:`attach_file_to_feedback_entry(???)`
   * TODO:`initiate_feedback_entry_file_upload(???)`
   * `get_dropbox_folder_categories(Int org_unit_id)`
   * `get_dropbox_folder_category_info(Int org_unit_id, Int category_id)`
   * `update_dropbox_folder_category(Int org_unit_id, Int category_id, Int dropbox_category_id, String dropbox_category_name)`
-15. **TODO:** Grades
+15. Grades
   * `delete_org_unit_grade_object(Int org_unit_id, Int grade_object_id)`
   * `get_org_unit_grades(Int org_unit_id)`
   * `get_org_unit_grade_object(Int org_unit_id, Int grade_object_id)`
@@ -407,53 +407,53 @@ $ gem cleanup d2l_sdk
   * `delete_course_completion(Int org_unit_id, Int completion_id)`
   * `get_org_unit_completion_records(Int org_unit_id, optional Int user_id, optional String start_expiry , optional String end_expiry , optional String bookmark)`
   * `get_user_completion_records(user_id, optional String start_expiry , optional String end_expiry , optional String bookmark)`
-  * TODO:`create_course_completion(Int org_unit_id, course_completion_data)`
-  * TODO:`update_course_completion(Int org_unit_id, completion_id, course_completion_data)`
+  * TODO:`create_course_completion(Int org_unit_id, JSON course_completion_data)`
+  * TODO:`update_course_completion(Int org_unit_id, Int completion_id, JSON course_completion_data)`
   * `get_grade_item_statistics(Int org_unit_id, Int grade_object_id)`
   * `get_org_unit_grade_config(Int org_unit_id)`
-  * TODO:`update_org_unit_grade_config(Int org_unit_id, grade_setup_info)`
+  * TODO:`update_org_unit_grade_config(Int org_unit_id, ??? grade_setup_info)`
   * `get_grade_exempt_users(Int org_unit_id, Int grade_object_id)`
   * `get_is_user_exempt(Int org_unit_id, Int grade_object_id, Int user_id)`
   * `exempt_user_from_grade(Int org_unit_id, Int grade_object_id, Int user_id)`
   * `remove_user_grade_exemption(Int org_unit_id, Int grade_object_id, Int user_id)`
   * `get_user_grade_exemptions(Int org_unit_id, Int user_id)`
-  * TODO:`bulk_grade_exemption_update(Int org_unit_id, Int user_id, bulk_grade_exmption_update_block)`
+  * TODO:`bulk_grade_exemption_update(Int org_unit_id, Int user_id, JSON bulk_grade_exemption_update_block)`
   * TODO:UNSTABLE:`get_org_unit_rubrics`
   * TODO:UNSTABLE:`get_org_unit_assessment`
   * TODO:UNSTABLE:`update_org_unit_assessment`
 16. **TODO:** Lockers
 17. **TODO:** Logging
-18. **TODO:** LTI
+18. LTI
   * `delete_lti_link(Int lti_link_id)`
   * `get_org_unit_lti_links(Int org_unit_id)`
-  * `get_lti_link_info(Int org_unit_id, String lti_link_id)`
+  * `get_lti_link_info(Int org_unit_id, Int lti_link_id)`
   * `register_lti_link(Int org_unit_id, JSON create_lti_link_data)`
-  * `create_lti_quicklink(Int org_unit_id, String lti_link_id)`
+  * `create_lti_quicklink(Int org_unit_id, Int lti_link_id)`
   * `update_lti_link(Int lti_link_id, JSON create_lti_link_data)`
   * `delete_LTI_tool_provider_registration(Int tp_id)`
   * `get_org_unit_lti_tool_providers(Int org_unit_id)`
   * `get_lti_tool_provider_information(Int org_unit_id, Int tp_id)`
   * `register_lti_tool_provider(Int org_unit_id, JSON create_lti_provider_data)`
   * `update_lti_tool_provider(Int tp_id, JSON create_lti_provider_data)`
-19. **TODO:** News
-  * `delete_news_item(Int org_unit_id, String news_item_id)`
-  * `delete_news_item_attachment(Int org_unit_id, String news_item_id, String file_id)`
+19. News
+  * `delete_news_item(Int org_unit_id, Int news_item_id)`
+  * `delete_news_item_attachment(Int org_unit_id, Int news_item_id, Int file_id)`
   * `get_current_user_feed(optional String since , optional String until )`
   * `get_org_unit_news_items(Int org_unit_id, optional String since )`
   * UNSTABLE:`get_deleted_news(Int org_unit_id, optional boolean global)`
-  * `get_org_unit_news_item(Int org_unit_id, String news_item_id)`
-  * `get_news_item_attachment(Int org_unit_id, String news_item_id, String file_id)`
+  * `get_org_unit_news_item(Int org_unit_id, Int news_item_id)`
+  * `get_news_item_attachment(Int org_unit_id, Int news_item_id, Int file_id)`
   * TODO:`create_news_item(Int org_unit_id, JSON news_item_data, optional String[] attachments)`
-  * UNSTABLE:`restore_news_item(Int org_unit_id, String news_item_id)`
-  * TODO:`add_news_item_attachment(Int org_unit_id, String news_item_id, JSON attachment_data)`
-  * `hide_news_item(Int org_unit_id, String news_item_id)`
-  * `publish_draft_news_item(Int org_unit_id, String news_item_id)`
-  * `unhide_news_item(Int org_unit_id, String news_item_id)`
-  * TODO:`update_news_item(Int org_unit_id, String news_item_id, JSON news_item_data)`
+  * UNSTABLE:`restore_news_item(Int org_unit_id, Int news_item_id)`
+  * TODO:`add_news_item_attachment(Int org_unit_id, Int news_item_id, JSON attachment_data)`
+  * `hide_news_item(Int org_unit_id, Int news_item_id)`
+  * `publish_draft_news_item(Int org_unit_id, Int news_item_id)`
+  * `unhide_news_item(Int org_unit_id, Int news_item_id)`
+  * TODO:`update_news_item(Int org_unit_id, Int news_item_id, JSON news_item_data)`
 20. **TODO::UNSTABLE:** Permissions
-21. **TODO:** Calendar
-  * `delete_org_unit_calendar_event(Int org_unit_id, String event_id)`
-  * `get_org_unit_calendar_event(Int org_unit_id, String event_id)`
+21. Calendar
+  * `delete_org_unit_calendar_event(Int org_unit_id, Int event_id)`
+  * `get_org_unit_calendar_event(Int org_unit_id, Int event_id)`
   * `get_current_user_calendar_events_by_org_unit(Int org_unit_id, optional boolean associated_events_only)`
   * `get_current_user_calendar_events_by_org_units(optional boolean association, optional boolean event_type, Int org_unit_ids_csv, UTCDateTime start_date_time, UTCDateTime end_date_time)`
   * `get_current_user_events_by_org_unit(optional boolean association, optional boolean event_type, UTCDateTime start_date_time, UTCDateTime end_date_time)`
@@ -462,7 +462,7 @@ $ gem cleanup d2l_sdk
   * `get_paged_calendar_events_by_org_units(Int org_unit_ids_csv, UTCDateTime start_date_time, UTCDateTime end_date_time, optional String bookmark)`
   * `get_user_calendar_events(Int org_unit_id, Int user_id, UTCDateTime start_date_time, UTCDateTime end_date_time, optional String bookmark)`
   * `create_event(Int org_unit_id, JSON event_data)`
-  * `update_event(Int org_unit_id, String event_id, JSON event_data)`
+  * `update_event(Int org_unit_id, Int event_id, JSON event_data)`
 22. ???
 23. Profit
  
@@ -478,6 +478,7 @@ $ gem cleanup d2l_sdk
 * December 1, 2016: Project began
 * December 20, 2016: Release version 0.1.2 published to RubyGems.org as `d2l_api`
 * March 7, 2017: Release version 0.1.7 published to RubyGems.org as `d2l_sdk`
+* April 7, 2017: Presentation at Brightspace Illinois Connection on the SDK.
 
 ## Credits
 Matt Mencel: Assigning and assisting in this project.

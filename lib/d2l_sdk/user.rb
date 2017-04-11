@@ -19,7 +19,7 @@ def check_user_data_validity(user_data)
         'properties' => {
             'OrgDefinedId' => { 'type' => 'string' },
             'FirstName' => { 'type' => 'string' },
-            'MiddleName' => { 'type' => 'string' },
+            'MiddleName' => { 'type' => %w(string null) },
             'LastName' => { 'type' => 'string' },
             'ExternalEmail' => { 'type' => %w(string null) },
             'UserName' => { 'type' => 'string' },
@@ -214,7 +214,7 @@ def check_updated_user_data_validity(user_data)
         'properties' => {
             'OrgDefinedId' => { 'type' => %w(string null) },
             'FirstName' => { 'type' => 'string' },
-            'MiddleName' => { 'type' => 'string' },
+            'MiddleName' => { 'type' => %w(string null)  },
             'LastName' => { 'type' => 'string' },
             'ExternalEmail' => { 'type' => %w(string null) },
             'UserName' => { 'type' => 'string' },
@@ -254,7 +254,7 @@ def update_user_data(user_id, new_data)
     # Define a path referencing the user data using the user_id
     path = "/d2l/api/lp/#{$lp_ver}/users/" + user_id.to_s
     _put(path, payload)
-    puts '[+] User data updated successfully'.green
+    #puts '[+] User data updated successfully'.green
     # Returns a UserData JSON block of the updated user's data
 end
 
@@ -596,7 +596,7 @@ end
 
 # NOTE: UNSTABLE
 # REVIEW: retrieve mappings between user roles and LIS roles
-def get_user_role_lis_mappings(lis_urn = "", d2lid = 0)
+def get_user_role_lis_mappings_by_urn(lis_urn = "", d2lid = 0)
   path = "/d2l/api/lp/#{$lp_ver}/imsconfig/map/roles/"
   path += "#{lis_urn}" if lis_urn != ""
   path += "#{d2lid}" if d2lid != 0
@@ -606,7 +606,7 @@ end
 
 # NOTE: UNSTABLE
 # REVIEW: retrieve mapping between a user role and a LIS role
-def get_user_role_lis_mappings(role_id, d2lid = 0)
+def get_user_role_lis_mappings_by_role(role_id, d2lid = 0)
   path = "/d2l/api/lp/#{$lp_ver}/imsconfig/map/roles/#{role_id}"
   path += "#{d2lid}" if d2lid != 0
   _get(path)
@@ -643,28 +643,34 @@ end
 
 
 
-# TODO: Add schema check for update_locale conforming to the D2L update_locale
+# Add schema check for update_locale conforming to the D2L update_locale
 # JSON data block of form: { "LocaleId" : <D2LID>}.
-def is_valid_locale_id(locale_id)
-
+def valid_locale_id?(locale_id)
+  # check if its an integer OR if its a string comprised of only numbers.
+  locale_id.is_a?(Numeric) || locale_id.is_a?(String) && !!locale_id.match(/^(\d)+$/)
 end
 
 # REVIEW: Update the current user’s locale account settings.
-# TODO: Add schema check for update_locale
 # update_locale = { "LocaleId" : <D2LID>}
-def update_current_user_locale_account_settings(update_locale)
-  payload = {"LocaleId" => 0}.merge!(update_locale)
+def update_current_user_locale_account_settings(locale_id)
+  unless valid_locale_id?(locale_id)
+    raise ArgumentError, "Variable 'update_locale' is not a "
+  end
+  payload = {'LocaleId' => locale_id}
   path = "/d2l/api/lp/#{$lp_ver}/accountSettings/mysettings/locale/"
+  
   # requires UpdateSettings JSON data block
   # update_locale = { "LocaleId" : <D2LID>}
   _put(path, payload)
 end
 
 # REVIEW: Update the locale account settings for a particular user.
-# TODO: Add schema check for update_locale
 # update_locale = { "LocaleId" : <D2LID>}
-def update_user_locale_account_settings(user_id, update_locale)
-  payload = {"LocaleId" => 0}.merge!(update_locale)
+def update_user_locale_account_settings(user_id, locale_id)
+  unless valid_locale_id?(locale_id)
+    raise ArgumentError, "Variable 'update_locale' is not a "
+  end
+  payload = {'LocaleId' => locale_id}
   path = "/d2l/api/lp/#{$lp_ver}/accountSettings/#{user_id}/locale/"
   # requires UpdateSettings JSON data block
   # update_locale = { "LocaleId" : <D2LID>}

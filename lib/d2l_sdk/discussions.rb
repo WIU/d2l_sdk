@@ -7,7 +7,7 @@ require 'json-schema'
 
 # REVIEW: Delete a particular discussion forum from an org unit.
 # => DELETE /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}
-def dete_org_unit_discussion(org_unit_id, forum_id)
+def delete_org_unit_discussion(org_unit_id, forum_id)
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}"
     _delete(path)
 end
@@ -202,7 +202,7 @@ def check_create_topic_data_validity(create_topic_data)
           'DisplayUnlockDatesInCalendar' => { 'type' => %w(boolean null) } # Added with LE API v1.12
       }
   }
-  JSON::Validator.validate!(schema, forum_data, validate_schema: true)
+  JSON::Validator.validate!(schema, create_topic_data, validate_schema: true)
 end
 
 # REVIEW: Create a new topic for the provided discussion forum in an org unit.
@@ -233,7 +233,7 @@ def create_forum_topic(org_unit_id, forum_id, create_topic_data)
     "RatingType" => nil, # : <string:RATING_T>|null,
     "DisplayInCalendar" => nil, # : <boolean>|null,  // Added with LE API v1.12
     "DisplayUnlockDatesInCalendar" => nil, # : <boolean>|null  // Added with LE API v1.12
-  }
+  }.merge!(create_topic_data)
   check_create_topic_data_validity(payload) # REVIEW: Validity check of topic data
   _post(path, payload)
   # RETURNS: Topic JSON data block
@@ -267,7 +267,7 @@ def update_forum_topic(org_unit_id, forum_id, topic_id, create_topic_data)
     "RatingType" => nil, # : <string:RATING_T>|null,
     "DisplayInCalendar" => nil, # : <boolean>|null,  // Added with LE API v1.12
     "DisplayUnlockDatesInCalendar" => nil, # : <boolean>|null  // Added with LE API v1.12
-  }
+  }.merge!(create_topic_data)
   check_create_topic_data_validity(payload) # REVIEW: Validity check of topic data
   _post(path, payload)
   # RETURNS: Topic JSON data block

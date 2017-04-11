@@ -81,6 +81,36 @@ def _post(path, payload, isD2l = true)
     end
 end
 
+# performs a put request using the path and the payload arguments. After first
+# creating an authenticated uri, the put request is performed using the
+# authenticated uri, the payload argument, and specifying that the payload is
+# formatted in JSON.
+def _put(path, payload, isD2l = true)
+    auth_uri = path
+    auth_uri = create_authenticated_uri(path, 'PUT') if isD2l == true
+    # Perform the put action, updating the data; Provide feedback to client.
+    RestClient.put(auth_uri, payload.to_json, content_type: :json) do |response|
+      case response.code
+      when 200
+        return nil if response == ""
+        JSON.parse(response)
+        #ap JSON.parse(response.body)
+      else
+        display_response_code(response.code)
+        ap JSON.parse(response.body) if $debug
+      end
+    end
+end
+
+# Performs a delete request by creating an authenticated uri and using the
+# RestClient delete method and specifying the content_type as being JSON.
+def _delete(path, isD2l = true, headers = {})
+    headers[:content_type] = :json
+    auth_uri = path
+    auth_uri = create_authenticated_uri(path, 'DELETE') if isD2l == true
+    RestClient.delete(auth_uri, headers)
+end
+
 # NOTE: multipart code examples referrenced from danielwestendorf--
 # FTC 1867 and FTC 2388 implementations are based upon the following url:
 # => "https://coderwall.com/p/c-mu-a/http-posts-in-ruby"
@@ -341,25 +371,7 @@ def _upload_post_data(path, json, files, method)
   _news_upload(path, json, files, method)
 end
 
-# performs a put request using the path and the payload arguments. After first
-# creating an authenticated uri, the put request is performed using the
-# authenticated uri, the payload argument, and specifying that the payload is
-# formatted in JSON.
-def _put(path, payload, isD2l = true)
-    auth_uri = path
-    auth_uri = create_authenticated_uri(path, 'PUT') if isD2l == true
-    # Perform the put action, updating the data; Provide feedback to client.
-    RestClient.put(auth_uri, payload.to_json, content_type: :json)
-end
 
-# Performs a delete request by creating an authenticated uri and using the
-# RestClient delete method and specifying the content_type as being JSON.
-def _delete(path, isD2l = true, headers = {})
-    headers[:content_type] = :json
-    auth_uri = path
-    auth_uri = create_authenticated_uri(path, 'DELETE') if isD2l == true
-    RestClient.delete(auth_uri, headers)
-end
 
 # based upon the specific code that is returned from the http method, this
 # displays the response, in the case that it is an error within the request

@@ -147,13 +147,17 @@ end
 # => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/submissions/group/(groupId)
 # INPUT: multipart/mixed body should contain a JSON part encoding the submission’s descriptive comments
 #        in RichText, followed by the submission file’s data.
+def post_new_group_submission
 
+end
 
 # TODO: Post a new submission for the current user context to a particular dropbox folder.
 # => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/submissions/mysubmissions/
 # INPUT: multipart/mixed body should contain a JSON part encoding the submission’s descriptive comments
 #        in RichText, followed by the submission file’s data.
+def post_current_user_new_submission
 
+end
 
 # REVIEW: Mark a submitted file as read.
 # => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/submissions/#{submission_id}/files/#{file_id}/markAsRead
@@ -248,8 +252,15 @@ end
 
 # TODO: Attach an uploaded file to a particular entity’s feedback entry in a specific dropbox folder.
 # => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/#{entity_id}/attach
+def attach_file_to_feedback_entry
+
+end
+
 # TODO: Initiate a resumable file upload request for a particular entity’s feedback for a specific dropbox folder.
 # => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/dropbox/folders/#{folder_id}/feedback/#{entity_type}/#{entity_id}/upload
+def initiate_feedback_entry_file_upload
+
+end
 
 ##########################
 ## FOLDER CATEGORIES: ####

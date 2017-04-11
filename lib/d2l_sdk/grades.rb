@@ -357,7 +357,7 @@ def get_org_unit_completion_records(org_unit_id, user_id = 0, start_expiry = '',
     # parameter (or the first segment if the parameter is empty or missing).
 end
 
-# REVIEW: Retrieve all the course completion records for a user.
+# TODO: Retrieve all the course completion records for a user.
 # RETURNS: This action returns a paged result set containing the resulting
 # CourseCompletion data blocks for the segment following your bookmark
 # parameter (or the first segment if the parameter is empty or missing).
@@ -483,7 +483,7 @@ end
 #       a conflict will be added to the result set and that grade will not
 #       be exempted or unexempted.
 # RETURNS: a JSON array of BulkGradeObjectExemptionConflict blocks.
-def bulk_grade_exemption_update(org_unit_id, user_id, bulk_grade_exmption_update_block)
+def bulk_grade_exemption_update(org_unit_id, user_id, bulk_grade_exemption_update_block)
     # Grade.BulkGradeObjectExemptionUpdate JSON data block example:
     # {"ExemptedIds" => [0,1,2,3], # D2LIDs
     # "UnexemptedIds" => [0,1,2,3], # D2LIDs

@@ -65,6 +65,8 @@ end
 # Required: "Name", "Code"
 # /d2l/api/lp/(version)/coursetemplates/ [POST]
 def create_course_template(course_template_data)
+    #TODO: make a bridge function that allows this to be done with 4 arguments, rather than 
+    #      just a JSON.
     # Path- root path to use for this course offering’s course content
     #       if your back-end service has path enforcement set on for
     #       new org units, leave this property as an empty string
@@ -89,6 +91,7 @@ end
 # course template JSON object. If it does conform, then nothing happens and it
 # simply returns true. If it does not conform, then the JSON validator raises
 # an exception.
+#TODO: get rid of this, and make the template update only require 2 more args.
 def check_course_template_updated_data_validity(course_template_data)
     schema = {
         'type' => 'object',

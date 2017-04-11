@@ -147,15 +147,15 @@ def update_course_data(course_id, new_data)
 end
 
 # REVIEW: Update the course image for a course offering.
-def update_course_image(org_unit_id, image_file)
+def update_course_image(org_unit_id, image_file_path)
   path = "/d2l/api/lp/#{$lp_ver}/courses/#{org_unit_id}/image"
   # (SCHEMA) Make sure file isnt > 2MB
-  if File.size(image_file) > 2000000
-    raise ArgumentError, "File referrenced by 'image_file' must be less than 1000KB."
-  elsif MIME::Types.type_for(image_file).first.media_type.downcase != "image"
-    raise ArgumentError, "File referrenced by 'image_file' is not a valid image."
+  if File.size(image_file_path) > 2000000
+    raise ArgumentError, "File referrenced by 'image_file_path' must be less than 1000KB."
+  elsif MIME::Types.type_for(image_file_path).first.media_type.downcase != "image"
+    raise ArgumentError, "File referrenced by 'image_file_path' is not a valid image."
   end
-  _image_upload(path, image_file, "PUT")
+  _image_upload(path, image_file_path, "PUT")
   # PUT /d2l/api/lp/(version)/courses/(orgUnitId)/image
 end
 
@@ -273,11 +273,11 @@ end
 
 # REVIEW: Create a new course import job request.
 # INPUT: simple file upload process -- using "course package" as the uploaded file
-def create_course_import_request(org_unit_id, file, callback_url = '')
+def create_course_import_request(org_unit_id, file_path, callback_url = '')
     path = "/d2l/le/#{le_ver}/import/#{org_unit_id}/imports/"
     path += "?callbackUrl=#{callback_url}" if callback_url != ''
     # TODO: (SCHEMA) Find out WTH a 'course package' entails as far as standards.
-    _course_package_upload(path, file, "POST")
+    _course_package_upload(path, file_path, "POST")
     # RETURNS: Parsed CreateImportJobResponse JSON block.
 end
 
