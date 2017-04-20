@@ -52,7 +52,7 @@ def check_forum_data_validity(forum_data)
           'IsLocked' => { 'type' => 'boolean' },
           'RequiresApproval' => { 'type' => 'boolean' }, #: <boolean>,
           'MustPostToParticipate' => { 'type' => %w(boolean null) },
-          'DisplayInCalendar' => { 'type' => %w(boolean null) },  # Added with LE API v1.11
+          'DisplayInCalendar' => { 'type' => %w(boolean null) }, # Added with LE API v1.11
           'DisplayPostDatesInCalendar' => { 'type' => %w(boolean null) }
       }
   }
@@ -68,10 +68,10 @@ def create_org_unit_discussion(org_unit_id, forum_data)
         'Name' => '', #: <string>,
         'Description' => #: { <composite:RichText> },
         {
-            "Text" => "",#<string:plaintext_version_of_text>,
-            "Html" => nil #<string:HTML_formatted_version_of_text>|null
+            "Text" => "", # <string:plaintext_version_of_text>,
+            "Html" => nil # <string:HTML_formatted_version_of_text>|null
         },
-        'ShowDescriptionInTopics' => nil, #: <boolean>|null,  // Added with LE API v1.14
+        'ShowDescriptionInTopics' => nil, # : <boolean>|null,  // Added with LE API v1.14
         'StartDate' => nil, #: <string:UTCDateTime>|null,
         'EndDate' => nil, #: <string:UTCDateTime>|null,
         'PostStartDate' => nil, #: <string:UTCDateTime>|null,
@@ -101,8 +101,8 @@ def update_forum(org_unit_id, forum_id, forum_data)
       'Name' => '', #: <string>,
       'Description' => #: { <composite:RichText> },
       {
-          "Text" => "",#<string:plaintext_version_of_text>,
-          "Html" => nil #<string:HTML_formatted_version_of_text>|null
+          "Text" => "", # <string:plaintext_version_of_text>,
+          "Html" => nil # <string:HTML_formatted_version_of_text>|null
       },
       'ShowDescriptionInTopics' => nil, #: <boolean>|null,  // Added with LE API v1.14
       'StartDate' => nil, #: <string:UTCDateTime>|null,
@@ -214,8 +214,8 @@ def create_forum_topic(org_unit_id, forum_id, create_topic_data)
     "Name" => "", # : <string>,
     "Description" =>
     {
-        "Text" => "",#<string:plaintext_version_of_text>,
-        "Html" => nil #<string:HTML_formatted_version_of_text>|null
+        "Text" => "", # <string:plaintext_version_of_text>,
+        "Html" => nil # <string:HTML_formatted_version_of_text>|null
     }, # { <composite:RichTextInput> },
     "AllowAnonymousPosts" => false, # <boolean>,
     "StartDate" => nil, # <string:UTCDateTime>|null,
@@ -248,8 +248,8 @@ def update_forum_topic(org_unit_id, forum_id, topic_id, create_topic_data)
     "Name" => "", # : <string>,
     "Description" =>
     {
-        "Text" => "",#<string:plaintext_version_of_text>,
-        "Html" => nil #<string:HTML_formatted_version_of_text>|null
+        "Text" => "", # <string:plaintext_version_of_text>,
+        "Html" => nil # <string:HTML_formatted_version_of_text>|null
     }, # { <composite:RichTextInput> },
     "AllowAnonymousPosts" => false, # <boolean>,
     "StartDate" => nil, # <string:UTCDateTime>|null,
@@ -292,7 +292,6 @@ def add_group_to_group_restriction_list(org_unit_id, forum_id, topic_id, group_i
   end
 end
 
-
 ##################
 ## POSTS: ########
 ##################
@@ -312,7 +311,6 @@ def delete_current_user_context_post_rating
   # NOTE: Doing so is actually an update, setting the current user's rating
   #       of a post to null
 end
-
 
 # REVIEW: Retrieve all posts in a discussion forum topic.
 # => GET /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/
@@ -416,7 +414,6 @@ def check_create_post_data_validity(create_post_data)
   JSON::Validator.validate!(schema, create_post_data, validate_schema: true)
 end
 
-
 # REVIEW: Create a new post in a discussion forum topic.
 # => POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/
 # NOTE: No file attachments? Send it normally :)
@@ -497,7 +494,7 @@ end
 # RETURNS: UserRatingData JSON data block
 def update_topic_post_current_user_rating(org_unit_id, forum_id, topic_id, post_id, rating)
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Rating/MyRating"
-  unless rating.is_a? Numeric || rating.nil?
+  unless rating.is_a?(Numeric) || rating.nil?
     raise ArgumentError, "Argument 'rating' is not a number or null value."
   else
     payload = {

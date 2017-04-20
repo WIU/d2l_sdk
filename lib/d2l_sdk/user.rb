@@ -167,12 +167,12 @@ end
 # returns: array::matching_names
 def _get_user_by_string(parameter, search_string, range, regex = false)
     # puts "searching from #{range.min.to_s} to #{range.max.to_s}"
-    i = range.min
+    baseline = range.min
     matching_names = []
     # Average difference between each paged bookmarks beginnings is 109.6
-    while i.to_i < range.max
-        # path = "/d2l/api/lp/#{$lp_ver}/users/?bookmark=" + i.to_s
-        response = get_users_by_bookmark(i.to_s)
+    while baseline.to_i < range.max
+        # path = "/d2l/api/lp/#{$lp_ver}/users/?bookmark=" + baseline.to_s
+        response = get_users_by_bookmark(baseline.to_s)
         if response['PagingInfo']['HasMoreItems'] == false
             # ap 'response returned zero items, last page possible for this thread..'
             return matching_names
@@ -184,7 +184,7 @@ def _get_user_by_string(parameter, search_string, range, regex = false)
                 matching_names.push(user) if user[parameter].include? search_string
             end
         end
-        i = response['PagingInfo']['Bookmark']
+        baseline = response['PagingInfo']['Bookmark']
     end
     matching_names
 end
@@ -254,7 +254,7 @@ def update_user_data(user_id, new_data)
     # Define a path referencing the user data using the user_id
     path = "/d2l/api/lp/#{$lp_ver}/users/" + user_id.to_s
     _put(path, payload)
-    #puts '[+] User data updated successfully'.green
+    # puts '[+] User data updated successfully'.green
     # Returns a UserData JSON block of the updated user's data
 end
 
@@ -272,11 +272,11 @@ end
 # ACTIVATION:###########
 ########################
 # REVIEW: Retrieve a particular user’s activation settings.
-# RETURNS: a UserActivationData JSON block with the user’s current activation status.
+# RETURNS: a UserActivationData JSON block with the current activation status.
 def get_user_activation_settings(user_id)
   path = "/d2l/api/lp/#{$lp_ver}/users/#{user_id}/activation"
   _get(path)
-  # RETURNS: a UserActivationData JSON block with the user’s current activation status.
+  # RETURNS: a UserActivationData JSON block with the current activation status of the user.
 end
 
 # REVIEW: Update a particular user’s activation settings.
@@ -306,7 +306,6 @@ end
 def link_user_google_apps_account(google_apps_linking_item)
   # POST /d2l/api/gae/(version)/linkuser
 end
-
 
 ########################
 # NOTIFICATIONS:########
@@ -362,14 +361,12 @@ end
 def update_user_password(user_id, user_password_data)
   if user_password_data.is_a? String
     path = "/d2l/api/lp/#{$lp_ver}/users/#{user_id}/password"
-    payload = {"Password" => user_password_data}
+    payload = { "Password" => user_password_data }
     _put(path, payload)
   else
     raise ArgumentError, "Argument 'user_password_data' is not a String"
   end
 end
-
-
 
 ########################
 # ROLES:################
@@ -405,7 +402,6 @@ end
 def create_new_role_from_existing_role(deep_copy_role_id, role_copy_data)
   # POST /d2l/api/lp/(version)/roles/
 end
-
 
 ########################
 # PROFILES:#############
@@ -477,7 +473,6 @@ def get_user_profile_by_user_id(user_id)
   _get(path)
   # Returns UserProfile JSON data block
 end
-
 
 # Retrieve a particular profile image, by User ID.
 # RETURNS: This action returns a file stream containing the current user’s
@@ -620,7 +615,6 @@ def map_user_role_to_lis_roles(role_id, mappings)
   # PUT /d2l/api/lp/(version)/imsconfig/map/roles/(roleId)
 end
 
-
 ########################
 # SETTINGS:#############
 ########################
@@ -641,8 +635,6 @@ def get_locale_account_settings(user_id)
   # returns Locale JSON block
 end
 
-
-
 # Add schema check for update_locale conforming to the D2L update_locale
 # JSON data block of form: { "LocaleId" : <D2LID>}.
 def valid_locale_id?(locale_id)
@@ -656,7 +648,7 @@ def update_current_user_locale_account_settings(locale_id)
   unless valid_locale_id?(locale_id)
     raise ArgumentError, "Variable 'update_locale' is not a "
   end
-  payload = {'LocaleId' => locale_id}
+  payload = { 'LocaleId' => locale_id }
   path = "/d2l/api/lp/#{$lp_ver}/accountSettings/mysettings/locale/"
   
   # requires UpdateSettings JSON data block
@@ -670,7 +662,7 @@ def update_user_locale_account_settings(user_id, locale_id)
   unless valid_locale_id?(locale_id)
     raise ArgumentError, "Variable 'update_locale' is not a "
   end
-  payload = {'LocaleId' => locale_id}
+  payload = { 'LocaleId' => locale_id }
   path = "/d2l/api/lp/#{$lp_ver}/accountSettings/#{user_id}/locale/"
   # requires UpdateSettings JSON data block
   # update_locale = { "LocaleId" : <D2LID>}

@@ -52,14 +52,14 @@ def validate_create_export_job_data(create_export_job_data)
                   {
                       'type' => "object",
                       "properties" => {
-                        "Name" => {'type'=>"string"},
-                        "Value" => {'type'=>"string"}
+                        "Name" => { 'type'=>"string" },
+                        "Value" => { 'type'=>"string" }
                       }
                   }
             }
         }
     }
-    #ap schema
+    # ap schema
     JSON::Validator.validate!(schema, create_export_job_data, validate_schema: true)
     # returns true if the CreateExportJobData JSON block is valid
 end
@@ -93,7 +93,7 @@ def get_data_export_job(export_job_id)
 end
 
 def get_job_status_code(export_job_id)
-  get_data_export_job(export_job_id)["Status"] #if 2 is OKAY/COMPLETED
+  get_data_export_job(export_job_id)["Status"] # if 2 is OKAY/COMPLETED
 end
 
 # Downloads the identified job and stores the zip within the working directory
@@ -142,18 +142,18 @@ def unzip(file_path, csv_filter = //)
   Zip::File.open(file_path) { |zip_file|
     # for each file in the zip file
      zip_file.each { |f|
-     # create file path of export_jobs/#{f.name}
-     f_path=File.join("export_jobs", f.name)
-     # make the directory if not already made
-     FileUtils.mkdir_p(File.dirname(f_path))
-     # extract the file unless the file already exists
-     zip_file.extract(f, f_path) unless File.exist?(f_path)
-     # if the file is CSV and Enrollments, apply filters and proper
-     # CSV formatting to the file, writing it as base f.name  + filtered.csv
-     if (f.name.include? ".csv") && (f.name.include? "Enrollments")
-       filter_formatted_enrollments("export_jobs/#{f.name}", csv_filter, "export_jobs/instr.csv")
-     end
-   }
+      # create file path of export_jobs/#{f.name}
+      f_path=File.join("export_jobs", f.name)
+      # make the directory if not already made
+      FileUtils.mkdir_p(File.dirname(f_path))
+      # extract the file unless the file already exists
+      zip_file.extract(f, f_path) unless File.exist?(f_path)
+      # if the file is CSV and Enrollments, apply filters and proper
+      # CSV formatting to the file, writing it as base f.name  + filtered.csv
+      if (f.name.include? ".csv") && (f.name.include? "Enrollments")
+        filter_formatted_enrollments("export_jobs/#{f.name}", csv_filter, "export_jobs/instr.csv")
+      end
+     }
   }
 end
 
@@ -190,7 +190,7 @@ def filter_formatted_enrollments(csv_fname, regex_filter = //, instr_fname)
         # or skip in-filter OU_code,
         # or skip if the header
         # or skip if not within the INSTR SET of current/future courses
-      if row[3] == nil || row_num > 0 && !(row[3] =~ regex_filter) || (!current.include? row[3][4..-1])
+      if row[3].nil? || row_num > 0 && !(row[3] =~ regex_filter) || (!current.include? row[3][4..-1])
         row_num += 1
         next
       end
@@ -200,8 +200,8 @@ def filter_formatted_enrollments(csv_fname, regex_filter = //, instr_fname)
         # If it a UTC date time value, then parse as Time.
         if value =~ /\b[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]*Z\b/ # if the value is UTC formatted
           line << "\"#{Time.parse(value)}\""
-        elsif value == row[-1]# if its the last value in the row
-          line <<"\"#{value}\"" #  then dont put a comma at the end.
+        elsif value == row[-1] # if its the last value in the row
+          line << "\"#{value}\"" #  then dont put a comma at the end.
         else # not the last value in the row,
           line << "\"#{value}\"," # throw a comma after the value
         end

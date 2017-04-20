@@ -12,7 +12,7 @@ end
 
 # Delete a particular group from an org unit.
 def delete_group(org_unit_id, group_category_id, group_id)
-  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/(groupId)"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/#{group_category_id}/groups/#{group_id}"
   _delete(path)
 end
 

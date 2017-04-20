@@ -34,7 +34,7 @@ def check_dropbox_folder_update_data_validity(dropbox_folder_update_data)
                          GroupTypeId DueDate DisplayInCalendar NotificationEmail),
         'properties' =>
         {
-            'CategoryId' => { 'type' => %w(integer null)},
+            'CategoryId' => { 'type' => %w(integer null) },
             'Name' => { 'type' => 'string' },
             'CustomInstructions' =>
             {
@@ -113,7 +113,6 @@ def update_dropbox_folder(org_unit_id, dropbox_folder_update_data)
   # RETURNS: DropboxFolder JSON block
 end
 
-
 # REVIEW: Retrieve a list of org units for which the current user context has an
 #       assessment role on their dropbox folders (can see submissions and provide feedback).
 # => GET /d2l/api/le/#{$le_ver}/dropbox/orgUnits/feedback/
@@ -122,7 +121,6 @@ def get_current_user_assessable_folders(type = nil)
   path += "?type=#{type}" if type == 0 || type == 1
   _get(path)
 end
-
 
 ##################
 ## SUBMISSIONS: ##

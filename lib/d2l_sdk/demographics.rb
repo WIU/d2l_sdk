@@ -59,6 +59,7 @@ def get_user_demographics(user_id, field_ids = '', bookmark = '')
   path += "?"
   path += "fieldIds=#{field_ids}&" if field_ids != ''
   path += "bookmark=#{bookmark}" if bookmark != ''
+  _get(path)
 end
 
 def check_demographics_entry_data_validity(demographics_entry_data)
@@ -202,7 +203,7 @@ def update_demographics_field(field_id, demographics_field)
     "Name" => "String",
     "Description" => "String",
     "DataTypeId" => "String:GUID"
-  }
+  }.merge!(demographics_field)
   check_update_demographics_field(payload)
   _put(path, payload)
   # RETURNS: fetch form of a DemographicsField JSON block

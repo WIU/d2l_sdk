@@ -30,7 +30,7 @@ def _get(path, isD2l = true)
             display_response_code(response.code)
             ap JSON.parse(response.body) if @debug
         end
-      rescue => e
+      rescue # => e
         display_response_code(response.code)
         ap JSON.parse(response.body) if @debug
         raise
@@ -125,7 +125,7 @@ def _learning_repository_upload(path, file, method)
     # file = the File's name in the directory.
     # method = POST or PUT
     # json = the json appended to the end of the request body
-    auth_uri = path
+    # auth_uri = path
     auth_uri = create_authenticated_uri(path, method)
     uri = URI.parse(auth_uri)
 

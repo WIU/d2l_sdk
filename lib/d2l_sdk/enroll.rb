@@ -132,7 +132,6 @@ def create_user_enrollment(course_enrollment_data)
     # Returns: EnrollmentData JSON block for the newly enrolled user.
 end
 
-
 ########################
 # PINNING:##############
 ########################
