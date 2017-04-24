@@ -140,7 +140,7 @@ def check_content_module_validity(content_module)
                 "Type" => "string" #"Text|HTML"
               }
             }, # Added with LE v1.10 API
-            'Duration' => { 'type' => %w(integer null) } #Added in LE's unstable contract as of LE v10.6.8
+            'Duration' => { 'type' => %w(integer null) } # Added in LE's unstable contract as of LE v10.6.8
         }
     }
     JSON::Validator.validate!(schema, content_module, validate_schema: true)
@@ -172,8 +172,8 @@ def check_content_topic_validity(content_topic)
               }
             },
             'MajorUpdate' => { 'type' => %w(boolean null) }, # Added with LE v1.12 API
-            'MajorUpdateText' => { 'type' => 'string' }, #Added with LE v1.12 API
-            'ResetCompletionTracking' => { 'type' => %w(boolean null) } #Added with LE v1.12 API
+            'MajorUpdateText' => { 'type' => 'string' }, # Added with LE v1.12 API
+            'ResetCompletionTracking' => { 'type' => %w(boolean null) } # Added with LE v1.12 API
         }
     }
     JSON::Validator.validate!(schema, content_topic, validate_schema: true)
@@ -188,12 +188,12 @@ def create_root_module(org_unit_id, content_module) # GET
     "Title" => "",
     "ShortTitle" => "",
     "Type" => 0,
-    "ModuleStartDate" => nil, #<string:UTCDateTime>|null
-    "ModuleEndDate" => nil, #<string:UTCDateTime>|null
-    "ModuleDueDate" => nil, #<string:UTCDateTime>|null
+    "ModuleStartDate" => nil, # <string:UTCDateTime>|null
+    "ModuleEndDate" => nil, # <string:UTCDateTime>|null
+    "ModuleDueDate" => nil, # <string:UTCDateTime>|null
     "IsHidden" => false,
     "IsLocked" => false,
-    "Description" => nil, #{ <composite:RichTextInput> }|null --Added with LE v1.10 API
+    "Description" => nil, # { <composite:RichTextInput> }|null --Added with LE v1.10 API
     "Duration" => nil #  <number>|null --Added in LE's +unstable+ contract as of LE v10.6.8
   }.merge!(content_module)
   check_content_module_validity(payload)
@@ -209,12 +209,12 @@ def update_module(org_unit_id, module_id, content_module) # PUT
     "Title" => "",
     "ShortTitle" => "",
     "Type" => 0,
-    "ModuleStartDate" => nil, #<string:UTCDateTime>|null
-    "ModuleEndDate" => nil, #<string:UTCDateTime>|null
-    "ModuleDueDate" => nil, #<string:UTCDateTime>|null
+    "ModuleStartDate" => nil, # <string:UTCDateTime>|null
+    "ModuleEndDate" => nil, # <string:UTCDateTime>|null
+    "ModuleDueDate" => nil, # <string:UTCDateTime>|null
     "IsHidden" => false,
     "IsLocked" => false,
-    "Description" => nil, #{ <composite:RichTextInput> }|null --Added with LE v1.10 API
+    "Description" => nil, # { <composite:RichTextInput> }|null --Added with LE v1.10 API
     "Duration" => nil #  <number>|null --Added in LE's +unstable+ contract as of LE v10.6.8
   }.merge!(content_module)
   check_content_module_validity(payload)
@@ -239,8 +239,8 @@ def update_topic(org_unit_id, topic_id, content_topic) # GET
       'OpenAsExternalResource' => nil, # Added with LE v1.6 API
       'Description' => nil,
       'MajorUpdate' => nil, # Added with LE v1.12 API
-      'MajorUpdateText' => "", #Added with LE v1.12 API
-      'ResetCompletionTracking' => nil #Added with LE v1.12 API
+      'MajorUpdateText' => "", # Added with LE v1.12 API
+      'ResetCompletionTracking' => nil # Added with LE v1.12 API
   }.merge!(content_topic)
   check_content_topic_validity(content_topic)
   _put(query_string, payload)

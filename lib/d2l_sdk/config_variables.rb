@@ -39,7 +39,7 @@ def get_config_var_values(variable_id)
   # returns Values JSON data block
 end
 
-#Retrieve the current org value for a configuration variable.
+# Retrieve the current org value for a configuration variable.
 def get_config_var_current_org_value(variable_id)
   path = "/d2l/api/lp/#{$lp_ver}/configVariables/#{variable_id}/values/org"
   _get(path)

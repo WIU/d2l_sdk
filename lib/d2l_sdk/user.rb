@@ -179,7 +179,7 @@ def _get_user_by_string(parameter, search_string, range, regex = false)
         end
         response['Items'].each do |user|
             if regex && !user[parameter].nil?
-                matching_names.push(user) if (user[parameter] =~ search_string) != nil
+                matching_names.push(user) if !(user[parameter] =~ search_string).nil?
             elsif !user[parameter].nil?
                 matching_names.push(user) if user[parameter].include? search_string
             end

@@ -99,7 +99,7 @@ def create_course_data(course_data)
     # requires: CreateCourseOffering JSON block
     path = "/d2l/api/lp/#{$lp_ver}/courses/"
     _post(path, payload)
-    #puts '[+] Course creation completed successfully'.green
+    # puts '[+] Course creation completed successfully'.green
 end
 
 # Checks whether the updated course data conforms to the valence api for the
@@ -361,7 +361,7 @@ def get_courses_by_property_by_regex(property, regex)
     courses_results = []
     results = get_all_courses
     results.each do |x|
-        courses_results.push(x) if (x[property] =~ regex) != nil
+        courses_results.push(x) unless (x[property] =~ regex).nil?
     end
     courses_results
     # returns array of all matching courses in JSON format.

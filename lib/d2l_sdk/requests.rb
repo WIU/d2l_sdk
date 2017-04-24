@@ -21,7 +21,7 @@ def _get(path, isD2l = true)
     ap uri_string if @debug
     RestClient.get(uri_string) do |response, _request, _result|
       begin
-        #ap _request
+        # ap _request
         case response.code
         when 200
             # ap JSON.parse(response) # Here is the JSON fmt'd response printed
@@ -51,7 +51,7 @@ def _get_raw(path, isD2l = true)
           display_response_code(response.code)
           ap response.body
       end
-    rescue => e
+    rescue # => e
       display_response_code(response.code)
       ap response.body
       raise
@@ -156,7 +156,7 @@ def _course_package_upload(path, file, method)
     # file = the File's name in the directory.
     # method = POST or PUT
     # json = the json appended to the end of the request body
-    auth_uri = path
+    # auth_uri = path
     auth_uri = create_authenticated_uri(path, method)
     uri = URI.parse(auth_uri)
 
@@ -448,7 +448,7 @@ def get_versions
   # returns: SupportedVersion JSON block
 end
 
-#determine if a specific product component supports a particular API version
+# determine if a specific product component supports a particular API version
 def check_if_product_supports_api_version(product_code, version)
   path = "/d2l/api/#{product_code}/versions/#{version}"
   _get(path)

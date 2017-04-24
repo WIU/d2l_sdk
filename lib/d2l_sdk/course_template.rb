@@ -91,7 +91,7 @@ end
 # course template JSON object. If it does conform, then nothing happens and it
 # simply returns true. If it does not conform, then the JSON validator raises
 # an exception.
-#TODO: get rid of this, and make the template update only require 2 more args.
+# TODO: get rid of this, and make the template update only require 2 more args.
 def check_course_template_updated_data_validity(course_template_data)
     schema = {
         'type' => 'object',

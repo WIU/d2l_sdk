@@ -49,7 +49,7 @@ else
   }
   json = JSON.pretty_generate(config_hash)
   puts json if @debug
-  #puts JSON.parse(json)["hostname"] if @debug
+  # puts JSON.parse(json)["hostname"] if @debug
   config = File.new("d2l_config.json","w")
   config.puts(json)
   config.close

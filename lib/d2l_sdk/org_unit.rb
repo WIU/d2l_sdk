@@ -382,7 +382,7 @@ def create_custom_outype(create_org_unit_type_data)
     'Description' => '',
     'SortOrder' => 0
   }.merge!(create_org_unit_type_data)
-  #validate schema
+  # validate schema
   check_create_org_unit_type_data_validity(payload)
   path = "/d2l/api/lp/#{$lp_ver}/outypes/"
   _post(path, payload)
