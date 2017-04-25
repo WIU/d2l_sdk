@@ -39,7 +39,9 @@ end
 # exists in your system.
 def create_user_data(user_data)
     # Define a valid, empty payload and merge! with the user_data. Print it.
-    payload = { 'OrgDefinedId' => '', # String
+    payload = 
+              {
+                'OrgDefinedId' => '', # String
                 'FirstName' => 'TestUser', # String
                 'MiddleName' => 'Test', # String
                 'LastName' => 'Test', # String
@@ -108,11 +110,7 @@ end
 # Checks whether a username already exists
 # returns: true if the the user exists already
 def does_user_exist(username)
-    if !get_user_by_username(username.to_s).nil?
-        return true
-    else
-        return false
-    end
+    !get_user_by_username(username.to_s).nil?
 end
 
 # Initiates a multithreaded search to streamline the search of a user based upon
@@ -214,7 +212,7 @@ def check_updated_user_data_validity(user_data)
         'properties' => {
             'OrgDefinedId' => { 'type' => %w(string null) },
             'FirstName' => { 'type' => 'string' },
-            'MiddleName' => { 'type' => %w(string null)  },
+            'MiddleName' => { 'type' => %w(string null) },
             'LastName' => { 'type' => 'string' },
             'ExternalEmail' => { 'type' => %w(string null) },
             'UserName' => { 'type' => 'string' },

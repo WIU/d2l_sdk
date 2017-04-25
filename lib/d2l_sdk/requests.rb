@@ -222,7 +222,7 @@ def _ePortfolio_upload(path, file, method, description)
   uri = URI.parse(auth_uri)
 
   boundary = "xxBOUNDARYxx"
-  header =  "Content-Type" => "multipart/form-data; boundary=#{boundary}" }
+  header = { "Content-Type" => "multipart/form-data; boundary=#{boundary}" }
   # setup the post body
   post_body = []
   post_body << "--#{boundary}\r\n"
@@ -418,7 +418,8 @@ def get_product_supported_versions(product_code)
 end
 
 def get_latest_product_version(product_code)
-  get_product_supported_versions(product_code)["SupportedVersions"][-1]
+  begin
+    get_product_supported_versions(product_code)["SupportedVersions"][-1]
   rescue SocketError => e
     puts "\n[!] Error likely caused by an incorrect 'd2l_config.json' hostname value: #{e}"
     exit

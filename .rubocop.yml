@@ -42,7 +42,7 @@ Style/IndentHash:
 Style/AsciiComments:
   Enabled: false
 
-Style/DefWithParantheses:
+Style/DefWithParentheses:
   Enabled: false
 
 Style/AccessorMethodName:
