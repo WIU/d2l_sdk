@@ -37,36 +37,36 @@ def check_create_lti_link_data_validity(create_lti_link_data)
                          UseToolProviderSecuritySettings CustomParameters),
         'properties' =>
         {
-            "Title" => { 'type' => 'string' },
-            "Url" => { 'type' => 'string' },
-            "Description" => { 'type' => 'string' },
-            "Key" => { 'type' => 'string' },
-            "PlainSecret" => { 'type' => 'string' },
-            "IsVisible" => { 'type' => 'boolean' },
-            "SignMessage" => { 'type' => 'boolean' },
-            "SignWithTc" => { 'type' => 'boolean' },
-            "SendTcInfo" => { 'type' => 'boolean' },
-            "SendContextInfo" => { 'type' => 'boolean' },
-            "SendUserId" => { 'type' => 'boolean' },
-            "SendUserName" => { 'type' => 'boolean' },
-            "SendUserEmail" => { 'type' => 'boolean' },
-            "SendLinkTitle" => { 'type' => 'boolean' },
-            "SendLinkDescription" => { 'type' => 'boolean' },
-            "SendD2LUserName" => { 'type' => 'boolean' },
-            "SendD2LOrgDefinedId" => { 'type' => 'boolean' },
-            "SendD2LOrgRoleId" => { 'type' => 'boolean' },
-            "UseToolProviderSecuritySettings" => { 'type' => 'boolean' },
-            "CustomParameters" =>
+            'Title' => { 'type' => 'string' },
+            'Url' => { 'type' => 'string' },
+            'Description' => { 'type' => 'string' },
+            'Key' => { 'type' => 'string' },
+            'PlainSecret' => { 'type' => 'string' },
+            'IsVisible' => { 'type' => 'boolean' },
+            'SignMessage' => { 'type' => 'boolean' },
+            'SignWithTc' => { 'type' => 'boolean' },
+            'SendTcInfo' => { 'type' => 'boolean' },
+            'SendContextInfo' => { 'type' => 'boolean' },
+            'SendUserId' => { 'type' => 'boolean' },
+            'SendUserName' => { 'type' => 'boolean' },
+            'SendUserEmail' => { 'type' => 'boolean' },
+            'SendLinkTitle' => { 'type' => 'boolean' },
+            'SendLinkDescription' => { 'type' => 'boolean' },
+            'SendD2LUserName' => { 'type' => 'boolean' },
+            'SendD2LOrgDefinedId' => { 'type' => 'boolean' },
+            'SendD2LOrgRoleId' => { 'type' => 'boolean' },
+            'UseToolProviderSecuritySettings' => { 'type' => 'boolean' },
+            'CustomParameters' =>
             { # define the CustomParameter array
                 # 'description' => 'The array of CustomParameters
                 'type' => %w(array null),
                 'items' =>
                   {
-                      'type' => "object",
-                      "properties" => 
+                      'type' => 'object',
+                      "properties" =>
                       {
-                        "Name" => {'type'=>"string"},
-                        "Value" => {'type'=>"string"}
+                        "Name" => { 'type' => 'string' },
+                        "Value" => { 'type' => 'string' }
                       }
                   }
             }
@@ -80,26 +80,26 @@ end
 def register_lti_link(org_unit_id, create_lti_link_data)
   path = "/d2l/api/le/#{$le_ver}/lti/link/#{org_unit_id}"
   payload = {
-    "Title" => '',
-    "Url" => '',
-    "Description" => '',
-    "Key" => '',
-    "PlainSecret" => '',
-    "IsVisible" => false,
-    "SignMessage" => false,
-    "SignWithTc" => false,
-    "SendTcInfo" => false,
-    "SendContextInfo" => false,
-    "SendUserId" => false,
-    "SendUserName" => false,
-    "SendUserEmail" => false,
-    "SendLinkTitle" => false,
-    "SendLinkDescription" => false,
-    "SendD2LUserName" => false,
-    "SendD2LOrgDefinedId" => false,
-    "SendD2LOrgRoleId" => false,
-    "UseToolProviderSecuritySettings" => false,
-    "CustomParameters" => nil # or Array of CustomParameter
+    'Title' => '',
+    'Url' => '',
+    'Description' => '',
+    'Key' => '',
+    'PlainSecret' => '',
+    'IsVisible' => false,
+    'SignMessage' => false,
+    'SignWithTc' => false,
+    'SendTcInfo' => false,
+    'SendContextInfo' => false,
+    'SendUserId' => false,
+    'SendUserName' => false,
+    'SendUserEmail' => false,
+    'SendLinkTitle' => false,
+    'SendLinkDescription' => false,
+    'SendD2LUserName' => false,
+    'SendD2LOrgDefinedId' => false,
+    'SendD2LOrgRoleId' => false,
+    'UseToolProviderSecuritySettings' => false,
+    'CustomParameters' => nil # or Array of CustomParameter
     # e.g. [{"Name" => "", "Value" => ""},{"Name" => "", "Value" => ""}]
   }.merge!(create_lti_link_data)
   check_create_lti_link_data_validity(payload)
@@ -119,26 +119,26 @@ end
 def update_lti_link(lti_link_id, create_lti_link_data)
   path = "/d2l/api/le/#{$le_ver}/lti/link/#{lti_link_id}"
   payload = {
-    "Title" => '',
-    "Url" => '',
-    "Description" => '',
-    "Key" => '',
-    "PlainSecret" => '',
-    "IsVisible" => false,
-    "SignMessage" => false,
-    "SignWithTc" => false,
-    "SendTcInfo" => false,
-    "SendContextInfo" => false,
-    "SendUserId" => false,
-    "SendUserName" => false,
-    "SendUserEmail" => false,
-    "SendLinkTitle" => false,
-    "SendLinkDescription" => false,
-    "SendD2LUserName" => false,
-    "SendD2LOrgDefinedId" => false,
-    "SendD2LOrgRoleId" => false,
-    "UseToolProviderSecuritySettings" => false,
-    "CustomParameters" => nil # or Array of CustomParameter
+    'Title' => '',
+    'Url' => '',
+    'Description' => '',
+    'Key' => '',
+    'PlainSecret' => '',
+    'IsVisible' => false,
+    'SignMessage' => false,
+    'SignWithTc' => false,
+    'SendTcInfo' => false,
+    'SendContextInfo' => false,
+    'SendUserId' => false,
+    'SendUserName' => false,
+    'SendUserEmail' => false,
+    'SendLinkTitle' => false,
+    'SendLinkDescription' => false,
+    'SendD2LUserName' => false,
+    'SendD2LOrgDefinedId' => false,
+    'SendD2LOrgRoleId' => false,
+    'UseToolProviderSecuritySettings' => false,
+    'CustomParameters' => nil # or Array of CustomParameter
     # e.g. [{"Name" => "", "Value" => ""},{"Name" => "", "Value" => ""}]
   }.merge!(create_lti_link_data)
   check_create_lti_link_data_validity(payload)
@@ -181,24 +181,24 @@ def check_create_lti_provider_data_validity(create_lti_provider_data)
                          SendD2LOrgDefinedId SendD2LOrgRoleId),
         'properties' =>
         {
-            "LaunchPoint" => { 'type' => 'string' },
-            "Secret" => { 'type' => 'string' },
-            "UseDefaultTcInfo" => { 'type' => 'string' },
-            "Key" => { 'type' => 'string' },
-            "Name" => { 'type' => 'string' },
-            "Description" => { 'type' => 'string' },
-            "ContactEmail" => { 'type' => 'string' },
-            "IsVisible" => { 'type' => 'boolean' },
-            "SendTcInfo" => { 'type' => 'boolean' }, # LE's 1.12+
-            "SendContextInfo" => { 'type' => 'boolean' }, # LE's 1.12+
-            "SendUserId" => { 'type' => 'boolean' }, # LE's 1.12+
-            "SendUserName" => { 'type' => 'boolean' }, # LE's 1.12+
-            "SendUserEmail" => { 'type' => 'boolean' }, # LE's 1.12+
-            "SendLinkTitle" => { 'type' => 'boolean' }, # LE's 1.12+
-            "SendLinkDescription" => { 'type' => 'boolean' }, # LE's 1.12+
-            "SendD2LUserName" => { 'type' => 'boolean' }, # LE's 1.12+
-            "SendD2LOrgDefinedId" => { 'type' => 'boolean' }, # LE's 1.12+
-            "SendD2LOrgRoleId" => { 'type' => 'boolean' } # LE's 1.12+
+            'LaunchPoint' => { 'type' => 'string' },
+            'Secret' => { 'type' => 'string' },
+            'UseDefaultTcInfo' => { 'type' => 'string' },
+            'Key' => { 'type' => 'string' },
+            'Name' => { 'type' => 'string' },
+            'Description' => { 'type' => 'string' },
+            'ContactEmail' => { 'type' => 'string' },
+            'IsVisible' => { 'type' => 'boolean' },
+            'SendTcInfo' => { 'type' => 'boolean' }, # LE's 1.12+
+            'SendContextInfo' => { 'type' => 'boolean' }, # LE's 1.12+
+            'SendUserId' => { 'type' => 'boolean' }, # LE's 1.12+
+            'SendUserName' => { 'type' => 'boolean' }, # LE's 1.12+
+            'SendUserEmail' => { 'type' => 'boolean' }, # LE's 1.12+
+            'SendLinkTitle' => { 'type' => 'boolean' }, # LE's 1.12+
+            'SendLinkDescription' => { 'type' => 'boolean' }, # LE's 1.12+
+            'SendD2LUserName' => { 'type' => 'boolean' }, # LE's 1.12+
+            'SendD2LOrgDefinedId' => { 'type' => 'boolean' }, # LE's 1.12+
+            'SendD2LOrgRoleId' => { 'type' => 'boolean' } # LE's 1.12+
         }
     }
     JSON::Validator.validate!(schema, create_lti_provider_data, validate_schema: true)
@@ -210,24 +210,24 @@ end
 def register_lti_tool_provider(org_unit_id, create_lti_provider_data)
   path = "/d2l/api/le/#{$le_ver}/lti/tp/#{org_unit_id}"
   payload = {
-    "LaunchPoint" => '',
-    "Secret" => '',
-    "UseDefaultTcInfo" => '',
-    "Key" => '',
-    "Name" => '',
-    "Description" => '',
-    "ContactEmail" => '',
-    "IsVisible" => false,
-    "SendTcInfo" => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
-    "SendContextInfo" => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
-    "SendUserId" => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
-    "SendUserName" => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
-    "SendUserEmail" => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
-    "SendLinkTitle" => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
-    "SendLinkDescription" => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
-    "SendD2LUserName" => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
-    "SendD2LOrgDefinedId" => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
-    "SendD2LOrgRoleId" => false # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'LaunchPoint' => '',
+    'Secret' => '',
+    'UseDefaultTcInfo' => '',
+    'Key' => '',
+    'Name' => '',
+    'Description' => '',
+    'ContactEmail' => '',
+    'IsVisible' => false,
+    'SendTcInfo' => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'SendContextInfo' => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'SendUserId' => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'SendUserName' => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'SendUserEmail' => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'SendLinkTitle' => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'SendLinkDescription' => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'SendD2LUserName' => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'SendD2LOrgDefinedId' => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'SendD2LOrgRoleId' => false # Appears in LE's 1.12+ contract as of LE v10.6.0
   }.merge!(create_lti_provider_data)
   check_create_lti_provider_data_validity(payload)
   _post(path, payload)
@@ -241,24 +241,24 @@ end
 def update_lti_tool_provider(tp_id, create_lti_provider_data)
   path = "/d2l/api/le/#{$le_ver}/lti/tp/#{tp_id}" # tp_id = tool provider id
   payload = {
-    "LaunchPoint" => '',
-    "Secret" => '',
-    "UseDefaultTcInfo" => '',
-    "Key" => '',
-    "Name" => '',
-    "Description" => '',
-    "ContactEmail" => '',
-    "IsVisible" => false,
-    "SendTcInfo" => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
-    "SendContextInfo" => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
-    "SendUserId" => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
-    "SendUserName" => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
-    "SendUserEmail" => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
-    "SendLinkTitle" => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
-    "SendLinkDescription" => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
-    "SendD2LUserName" => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
-    "SendD2LOrgDefinedId" => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
-    "SendD2LOrgRoleId" => false # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'LaunchPoint' => '',
+    'Secret' => '',
+    'UseDefaultTcInfo' => '',
+    'Key' => '',
+    'Name' => '',
+    'Description' => '',
+    'ContactEmail' => '',
+    'IsVisible' => false,
+    'SendTcInfo' => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'SendContextInfo' => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'SendUserId' => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'SendUserName' => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'SendUserEmail' => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'SendLinkTitle' => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'SendLinkDescription' => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'SendD2LUserName' => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'SendD2LOrgDefinedId' => false, # Appears in LE's 1.12+ contract as of LE v10.6.0
+    'SendD2LOrgRoleId' => false # Appears in LE's 1.12+ contract as of LE v10.6.0
   }.merge!(create_lti_provider_data)
   check_create_lti_provider_data_validity(payload)
   _put(path, payload)

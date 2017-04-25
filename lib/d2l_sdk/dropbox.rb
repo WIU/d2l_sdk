@@ -118,7 +118,7 @@ end
 # => GET /d2l/api/le/#{$le_ver}/dropbox/orgUnits/feedback/
 def get_current_user_assessable_folders(type = nil)
   path = "/d2l/api/le/#{$le_ver}/dropbox/orgUnits/feedback/"
-  path += "?type=#{type}" if type == 0 || type == 1
+  path += "?type=#{type}" if type.zero? || type == 1
   _get(path)
 end
 
@@ -231,7 +231,7 @@ def post_feedback_without_attachment(org_unit_id, folder_id, entity_id, entity_t
             { # RICHTEXT
               "Text" => "String",
               "Html" => "String"
-            }, 
+            },
             "FeedbackIsOverridden" => false
           },
           # more CriterionOutcome hashes here! :D

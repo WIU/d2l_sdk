@@ -52,8 +52,8 @@ def validate_create_export_job_data(create_export_job_data)
                   {
                       'type' => "object",
                       "properties" => {
-                        "Name" => { 'type'=>"string" },
-                        "Value" => { 'type'=>"string" }
+                        "Name" => { 'type' => "string" },
+                        "Value" => { 'type' => "string" }
                       }
                   }
             }
@@ -107,7 +107,7 @@ def download_job_csv(export_job_id)
       when 2 # If the status was okay, break loop + return download of job
         zip_fname = 'export1.zip'
         puts "Job complete, writing to zip: #{zip_fname}"
-        File.write(zip_fname,_get_raw("/d2l/api/lp/#{$lp_ver}/dataExport/download/#{export_job_id}"))
+        File.write(zip_fname, _get_raw("/d2l/api/lp/#{$lp_ver}/dataExport/download/#{export_job_id}"))
         unzip(zip_fname, /sec_|off_/) # unzip file; filter if Enrollments + CSV
         puts "file downloaded and unzipped"
         break
@@ -121,14 +121,14 @@ def download_job_csv(export_job_id)
         break
       else # else, print out the status and wait 10 seconds before next attempt
         puts "The job is not currently ready to download\n Status Code: #{status}"
-        if status == 0
+        if status.zero?
           puts "Status description: Queued -  Export job has been received for processing."
         else
           puts "Status description: Processing - Currently in process of exporting data set."
         end
         puts "Sleeping for 10 seconds.."
         sleep 10
-        attempt = attempt + 1
+        attempt += 1
       end
       # returns: ZIP file containing a CSV file of data from the export job
     end
@@ -139,22 +139,22 @@ end
 def unzip(file_path, csv_filter = //)
   puts "Unzipping file: #{file_path}"
   # Unzip the file
-  Zip::File.open(file_path) { |zip_file|
+  Zip::File.open(file_path) do |zip_file|
     # for each file in the zip file
-     zip_file.each { |f|
-      # create file path of export_jobs/#{f.name}
-      f_path=File.join("export_jobs", f.name)
-      # make the directory if not already made
-      FileUtils.mkdir_p(File.dirname(f_path))
-      # extract the file unless the file already exists
-      zip_file.extract(f, f_path) unless File.exist?(f_path)
-      # if the file is CSV and Enrollments, apply filters and proper
-      # CSV formatting to the file, writing it as base f.name  + filtered.csv
-      if (f.name.include? ".csv") && (f.name.include? "Enrollments")
-        filter_formatted_enrollments("export_jobs/#{f.name}", csv_filter, "export_jobs/instr.csv")
-      end
-     }
-  }
+    zip_file.each do |f|
+       # create file path of export_jobs/#{f.name}
+       f_path = File.join("export_jobs", f.name)
+       # make the directory if not already made
+       FileUtils.mkdir_p(File.dirname(f_path))
+       # extract the file unless the file already exists
+       zip_file.extract(f, f_path) unless File.exist?(f_path)
+       # if the file is CSV and Enrollments, apply filters and proper
+       # CSV formatting to the file, writing it as base f.name  + filtered.csv
+       if (f.name.include? ".csv") && (f.name.include? "Enrollments")
+         filter_formatted_enrollments("export_jobs/#{f.name}", csv_filter, "export_jobs/instr.csv")
+       end
+    end
+  end
 end
 
 # Get all 'current' courses, assuming all instr courses are current
@@ -176,7 +176,7 @@ end
 # future course, or nil for their ou code.
 def filter_formatted_enrollments(csv_fname, regex_filter = //, instr_fname)
   # Create csv with 'filtered' pre-appended to '.csv' substring
-  filtered_csv = csv_fname.gsub(/\.csv/,"filtered.csv")
+  filtered_csv = csv_fname.gsub(/\.csv/, "filtered.csv")
   File.open(filtered_csv, 'w') do |file|
     # set row num to 0 to keep track of headers
     row_num = 0
@@ -190,7 +190,7 @@ def filter_formatted_enrollments(csv_fname, regex_filter = //, instr_fname)
         # or skip in-filter OU_code,
         # or skip if the header
         # or skip if not within the INSTR SET of current/future courses
-      if row[3].nil? || row_num > 0 && !(row[3] =~ regex_filter) || (!current.include? row[3][4..-1])
+      if row[3].nil? || row_num > 0 && (row[3] !~ regex_filter) || (!current.include? row[3][4..-1])
         row_num += 1
         next
       end

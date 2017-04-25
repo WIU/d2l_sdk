@@ -83,17 +83,18 @@ def create_course_data(course_data)
     # Define a valid, empty payload and merge! with the user_data. Print it.
     # can be an issue if more than one course template associated with
     # a course and the last course template parent to a course cannot be deleted
-    payload = { 'Name' => '', # String
-                'Code' => 'off_SEMESTERCODE_STARNUM', # String
-                'Path' => '', # String
-                'CourseTemplateId' => 99_989, # number: D2L_ID
-                'SemesterId' => nil, # number: D2L_ID  | nil
-                'StartDate' => nil, # String: UTCDateTime | nil
-                'EndDate' => nil, # String: UTCDateTime | nil
-                'LocaleId' => nil, # number: D2L_ID | nil
-                'ForceLocale' => false, # bool
-                'ShowAddressBook' => false # bool
-              }.merge!(course_data)
+    payload = { 
+        'Name' => '', # String
+        'Code' => 'off_SEMESTERCODE_STARNUM', # String
+        'Path' => '', # String
+        'CourseTemplateId' => 99_989, # number: D2L_ID
+        'SemesterId' => nil, # number: D2L_ID  | nil
+        'StartDate' => nil, # String: UTCDateTime | nil
+        'EndDate' => nil, # String: UTCDateTime | nil
+        'LocaleId' => nil, # number: D2L_ID | nil
+        'ForceLocale' => false, # bool
+        'ShowAddressBook' => false # bool
+    }.merge!(course_data)
     check_course_data_validity(payload)
     # ap payload
     # requires: CreateCourseOffering JSON block
@@ -115,7 +116,7 @@ def check_updated_course_data_validity(course_data)
             'Code' => { 'type' => 'string' },
             'StartDate' => { 'type' => ['string', "null"] },
             'EndDate' => { 'type' => ['string', "null"] },
-            'IsActive' => { 'type' => "boolean" },
+            'IsActive' => { 'type' => "boolean" }
         }
     }
     JSON::Validator.validate!(schema, course_data, validate_schema: true)
@@ -128,12 +129,13 @@ end
 # Utilize the second argument and perform a PUT action to replace the old data
 def update_course_data(course_id, new_data)
     # Define a valid, empty payload and merge! with the new data.
-    payload = { 'Name' => '', # String
-                'Code' => 'off_SEMESTERCODE_STARNUM', # String
-                'StartDate' => nil, # String: UTCDateTime | nil
-                'EndDate' => nil, # String: UTCDateTime | nil
-                'IsActive' => false # bool
-              }.merge!(new_data)
+    payload = { 
+      'Name' => '', # String
+      'Code' => 'off_SEMESTERCODE_STARNUM', # String
+      'StartDate' => nil, # String: UTCDateTime | nil
+      'EndDate' => nil, # String: UTCDateTime | nil
+      'IsActive' => false # bool
+    }.merge!(new_data)
     check_updated_course_data_validity(payload)
     # ap payload
     # Define a path referencing the courses path
@@ -150,7 +152,7 @@ end
 def update_course_image(org_unit_id, image_file_path)
   path = "/d2l/api/lp/#{$lp_ver}/courses/#{org_unit_id}/image"
   # (SCHEMA) Make sure file isnt > 2MB
-  if File.size(image_file_path) > 2000000
+  if File.size(image_file_path) > 2_000_000
     raise ArgumentError, "File referrenced by 'image_file_path' must be less than 1000KB."
   elsif MIME::Types.type_for(image_file_path).first.media_type.downcase != "image"
     raise ArgumentError, "File referrenced by 'image_file_path' is not a valid image."
@@ -225,7 +227,7 @@ def create_new_copy_job_request(org_unit_id, create_copy_job_request)
   # Check each one of the components to see if they are valid Component types
   payload["Components"].each do |component|
     # If one of the components is not valid, cancel the CopyJobRequest operation
-    if(!course_component?(key))
+    unless course_component?(key)
       puts "'#{component}' specified is not a valid Copy Job Request component"
       puts "Please retry with a valid course component such as 'Dropbox' or 'Grades'"
       break

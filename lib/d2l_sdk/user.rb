@@ -39,7 +39,7 @@ end
 # exists in your system.
 def create_user_data(user_data)
     # Define a valid, empty payload and merge! with the user_data. Print it.
-    payload = 
+    payload =
               {
                 'OrgDefinedId' => '', # String
                 'FirstName' => 'TestUser', # String
@@ -177,7 +177,7 @@ def _get_user_by_string(parameter, search_string, range, regex = false)
         end
         response['Items'].each do |user|
             if regex && !user[parameter].nil?
-                matching_names.push(user) if !(user[parameter] =~ search_string).nil?
+                matching_names.push(user) unless (user[parameter] =~ search_string).nil?
             elsif !user[parameter].nil?
                 matching_names.push(user) if user[parameter].include? search_string
             end
@@ -648,7 +648,7 @@ def update_current_user_locale_account_settings(locale_id)
   end
   payload = { 'LocaleId' => locale_id }
   path = "/d2l/api/lp/#{$lp_ver}/accountSettings/mysettings/locale/"
-  
+
   # requires UpdateSettings JSON data block
   # update_locale = { "LocaleId" : <D2LID>}
   _put(path, payload)

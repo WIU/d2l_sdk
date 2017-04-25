@@ -112,7 +112,7 @@ def check_create_enrollment_data_validity(enrollment_data)
         'properties' => {
             'OrgUnitId' => { 'type' => 'integer' },
             'UserId' => { 'type' => 'integer' },
-            'RoleId' => { 'type' => 'integer' },
+            'RoleId' => { 'type' => 'integer' }
         }
     }
     JSON::Validator.validate!(schema, enrollment_data, validate_schema: true)
@@ -120,10 +120,11 @@ end
 
 # Create a new enrollment for a user.
 def create_user_enrollment(course_enrollment_data)
-    payload = { 'OrgUnitId' => '', # String
-                'UserId' => '', # String
-                'RoleId' => '', # String
-              }.merge!(course_enrollment_data)
+    payload = { 
+      'OrgUnitId' => '', # String
+      'UserId' => '', # String
+      'RoleId' => '', # String
+    }.merge!(course_enrollment_data)
     # ap payload
     # requires: CreateEnrollmentData JSON block
     path = "/d2l/api/lp/#{$lp_ver}/enrollments/"
@@ -169,7 +170,7 @@ end
 # Input: auditee_id (D2LID as single JSON number) - Auditee to be removed
 def remove_auditee(auditor_id, auditee_id)
   path = "/d2l/api/le/#{$le_ver}/auditing/auditors/#{auditor_id}/auditees/"
-  _delete(path, true, {AuditeeId: auditee_id})
+  _delete(path, true, { AuditeeId: auditee_id })
 end
 
 # REVIEW: Retrieve information for an auditee.

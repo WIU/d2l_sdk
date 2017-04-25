@@ -50,9 +50,10 @@ def check_course_template_data_validity(course_template_data)
             'Name' => { 'type' => 'string' },
             'Code' => { 'type' => 'string' },
             'Path' => { 'type' => 'string' },
-            'ParentOrgUnitIds' => { 'type' => 'array',
-                                    'items' => { 'type' => 'integer', 'minItems' => 1 }
-                         }
+            'ParentOrgUnitIds' => { 
+                'type' => 'array',
+                'items' => { 'type' => 'integer', 'minItems' => 1 }
+            }
         }
     }
     JSON::Validator.validate!(schema, course_template_data, validate_schema: true)
@@ -65,17 +66,18 @@ end
 # Required: "Name", "Code"
 # /d2l/api/lp/(version)/coursetemplates/ [POST]
 def create_course_template(course_template_data)
-    # TODO: make a bridge function that allows this to be done with 4 arguments, rather than 
+    # TODO: make a bridge function that allows this to be done with 4 arguments, rather than
     #      just a JSON.
     # Path- root path to use for this course offering’s course content
     #       if your back-end service has path enforcement set on for
     #       new org units, leave this property as an empty string
     # Define a valid, empty payload and merge! with the user_data. Print it.
-    payload = { 'Name' => '', # String
-                'Code' => 'off_SEMESTERCODE_STARNUM', # String
-                'Path' => '', # String
-                'ParentOrgUnitIds' => [99_989], # number: D2L_ID
-              }.merge!(course_template_data)
+    payload = { 
+      'Name' => '', # String
+      'Code' => 'off_SEMESTERCODE_STARNUM', # String
+      'Path' => '', # String
+      'ParentOrgUnitIds' => [99_989], # number: D2L_ID
+    }.merge!(course_template_data)
     check_course_template_data_validity(payload)
     puts 'Creating Course Template:'
     ap payload
@@ -111,9 +113,10 @@ end
 # /d2l/api/lp/(version)/coursetemplates/(orgUnitId) [PUT]
 def update_course_template(org_unit_id, new_data)
     # Define a valid, empty payload and merge! with the new data.
-    payload = { 'Name' => '', # String
-                'Code' => 'off_SEMESTERCODE_STARNUM', # String
-              }.merge!(new_data)
+    payload = { 
+      'Name' => '', # String
+      'Code' => 'off_SEMESTERCODE_STARNUM', # String
+    }.merge!(new_data)
     puts "Updating course template #{org_unit_id}"
     check_course_template_updated_data_validity(payload)
     # ap payload

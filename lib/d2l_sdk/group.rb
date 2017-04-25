@@ -53,15 +53,15 @@ def validate_create_group_category_data(group_category_data)
   schema = {
       'type' => 'object',
       'required' => %w(Name Description EnrollmentStyle
-                      EnrollmentQuality AutoEnroll RandomizeEnrollments
-                      NumberOfGroups MaxUsersPerGroup AllocateAfterExpiry
-                      SelfEnrollmentExpiryDate GroupPrefix),
+                       EnrollmentQuality AutoEnroll RandomizeEnrollments
+                       NumberOfGroups MaxUsersPerGroup AllocateAfterExpiry
+                       SelfEnrollmentExpiryDate GroupPrefix),
       'properties' => {
           'Name' => { 'type' => 'string' },
           'Description' =>
           {
             'type' => 'object',
-            'properties'=>{
+            'properties' => {
               "Content" => "string",
               "Type" => "string" # "Text|HTML"
             }
@@ -80,7 +80,7 @@ def validate_create_group_category_data(group_category_data)
           'EnrollmentStyle' => { 'type' => 'integer' }, # num GRPENROLL_T
            # if non-nil, values for NumberOfGroups and MaxUsersPerGroup are IGNORED
           'EnrollmentQuantity' => { 'type' => %w(integer null) },
-          'AutoEnroll' => { 'type' => 'boolean'},
+          'AutoEnroll' => { 'type' => 'boolean' },
           'RandomizeEnrollments' => { 'type' => 'boolean' },
           'NumberOfGroups' => { 'type' => %w(integer null) }, # nil, 0, 1, 3, 5
           'MaxUsersPerGroup' => { 'type' => %w(integer null) }, # 1, 3, 5
@@ -99,18 +99,19 @@ end
 #### requirements of values
 # Create a new group category for an org unit.
 def create_org_unit_group_category(org_unit_id, group_category_data)
-  payload = { 'Name' => '', # String
-              'Description' => {}, # RichTextInput
-              'EnrollmentStyle' => 0, # number : group_enroll
-              'EnrollmentQuantity' => nil, # number | null
-              'AutoEnroll' => false, # bool
-              'RandomizeEnrollments' => false, # bool
-              'NumberOfGroups' => nil, # number | nil
-              'MaxUsersPerGroup' => nil, # number | nil
-              'AllocateAfterExpiry' => false, # bool
-              'SelfEnrollmentExpiryDate' => nil, # string: UTCDateTime | nil
-              'GroupPrefix' => nil, # String | nil
-            }.merge!(group_category_data)
+  payload = { 
+    'Name' => '', # String
+    'Description' => {}, # RichTextInput
+    'EnrollmentStyle' => 0, # number : group_enroll
+    'EnrollmentQuantity' => nil, # number | null
+    'AutoEnroll' => false, # bool
+    'RandomizeEnrollments' => false, # bool
+    'NumberOfGroups' => nil, # number | nil
+    'MaxUsersPerGroup' => nil, # number | nil
+    'AllocateAfterExpiry' => false, # bool
+    'SelfEnrollmentExpiryDate' => nil, # string: UTCDateTime | nil
+    'GroupPrefix' => nil, # String | nil
+  }.merge!(group_category_data)
   # Requires: JSON block of GroupCategoryData
   path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/"
   _post(path, payload)
@@ -129,7 +130,7 @@ def validate_group_data(group_data)
           'Description' =>
           {
             'type' => 'object',
-            'properties'=>
+            'properties' =>
             {
               "Content" => "string",
               "Type" => "string" #"Text|HTML"
@@ -213,7 +214,6 @@ end
 
 # update a particular group category for an org unit
 def update_org_unit_group_category(org_unit_id, group_category_id, group_category_data)
-
   payload = { 'Name' => '', # String
               'Description' => {}, # RichTextInput
               'AutoEnroll' => false, # bool
@@ -226,7 +226,7 @@ def update_org_unit_group_category(org_unit_id, group_category_id, group_categor
   # Returns a GroupCategoryData JSON block, in the Fetch form, of updated grp. cat.
 end
 
-def is_group_category_locker_set_up(org_unit_id, group_category_id)
+def group_category_locker_set_up?(org_unit_id, group_category_id)
     path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/#{group_category_id}/locker"
     _get(path)["HasLocker"]
     # returns true if the group cat. locker has been setup already

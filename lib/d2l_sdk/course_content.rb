@@ -51,7 +51,7 @@ def get_topic_file(org_unit_id, topic_id, stream = false) # GET
   _get(query_string)
 end
 
-# TODO Add a child +module+ or +topic+ to a specific module’s structure.
+# TODO: Add a child +module+ or +topic+ to a specific module’s structure.
 # Can be used in multiple ways. D2L categorizes it into 3 different ways:
 # --Module: add child module to parent module
 # --Link Topic: add child topic to parent module structure consisting of a LINK
@@ -66,7 +66,7 @@ end
 #               1. +ContentObjectData+ JSON data block of type Topic
 #               2. File attachment data itself you want to store in OU content area
 # Returns (if successful) a JSON data block containing properties of the newly created object
-def add_child_to_module(org_unit_id, module_id, child ={}) # POST
+def add_child_to_module(org_unit_id, module_id, child = {}) # POST
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/modules/#{module_id}/structure/"
   payload = {}
   # TODO: Add child module to a module
@@ -134,7 +134,7 @@ def check_content_module_validity(content_module)
             'IsLocked' => { 'type' => 'boolean' },
             'Description' => {
               'type' => 'object',
-              'properties'=>
+              'properties' =>
               {
                 "Content" => "string",
                 "Type" => "string" # "Text|HTML"
@@ -149,7 +149,7 @@ end
 def check_content_topic_validity(content_topic)
     schema = {
         'type' => 'object',
-        'required' => %w(Title ShortTitle Type  TopicType Url StartDate
+        'required' => %w(Title ShortTitle Type TopicType Url StartDate
                          EndDate DueDate IsHidden IsLocked OpenAsExternalResource
                          Description MajoyUpdate MajorUpdateText ResetCompletionTracking),
         'properties' => {
@@ -307,7 +307,7 @@ def validate_isbn_association_data(isbn_association_data)
       'properties' => {
           'OrgUnitId' => { 'type' => 'integer' },
           'Isbn' => { 'type' => 'string' },
-          'IsRequired' => { 'type' => 'boolean' },
+          'IsRequired' => { 'type' => 'boolean' }
       }
   }
   JSON::Validator.validate!(schema, isbn_association_data, validate_schema: true)
@@ -332,7 +332,7 @@ end
 
 # REVIEW: Retrieve the calling user scheduled items.
 def get_calling_user_scheduled_items(org_unit_ids_CSV, completion = nil,
-                           start_date_time = '', end_date_time = '') # GET
+                                     start_date_time = '', end_date_time = '') # GET
   query_string = "/d2l/api/le/#{$le_ver}/content/myItems/?"
   query_string += "orgUnitIdsCSV=#{org_unit_ids_CSV}&"
   query_string += "completion=#{completion}&" unless completion.nil?
@@ -449,7 +449,7 @@ end
 # REVIEW: Retrieve quantity of the calling user’s scheduled items still due for a particular org unit.
 # GET /d2l/api/le/(version)/#{org_unit_id}/content/myItems/due/itemCount
 def get_calling_user_due_items_count(org_unit_id, completion = nil, start_date_time = '',
-                           end_date_time = '') # GET
+                                     end_date_time = '') # GET
   query_string = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/myItems/due/itemCount?"
   query_string += "completion=#{completion}&" unless completion.nil?
   query_string += "startDateTime=#{start_date_time}&" unless start_date_time == ''
@@ -523,7 +523,6 @@ def get_current_user_progress(org_unit_id, level) # GET
   # Returns: ObjectListPage JSON block containing
   # a list of ContentAggregateCompletion items.
 end
-
 
 # TODO: --UNSTABLE-- Retrieve the user progress items in an org unit, for specific users or content topics.
 # _get "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/userprogress/"

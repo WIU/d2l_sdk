@@ -208,9 +208,9 @@ def create_org_unit_grade_category(org_unit_id, grade_category_data)
     payload =
     {
       'Name' => '', # <string>,
-      'ShortName'=> '', # <string>,
-      'CanExceedMax'=> false, # <boolean>,
-      'ExcludeFromFinalGrade'=> false, # <boolean>,
+      'ShortName' => '', # <string>,
+      'CanExceedMax' => false, # <boolean>,
+      'ExcludeFromFinalGrade' => false, # <boolean>,
       'StartDate' => nil, # <string:UTCDateTime>|null,
       'EndDate' => nil, # <string:UTCDateTime>|null,
       'Weight' => nil, # <number:decimal>|null,

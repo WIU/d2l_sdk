@@ -214,7 +214,6 @@ def create_event(org_unit_id, event_data)
   }.merge!(event_data)
   check_calendar_event_data_validity(payload) # NOTE: Test later
   _post(path, payload)
-
 end
 
 # REVIEW: Create Schema checker; Check that this payload conforms to it.

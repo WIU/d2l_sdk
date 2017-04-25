@@ -187,7 +187,7 @@ def check_update_demographics_field(demographics_data)
         'required' => %w(Name Description),
         'properties' => {
             'Name' => { 'type' => 'string' },
-            'Description' => { 'type' => 'string' },
+            'Description' => { 'type' => 'string' }
         }
     }
     JSON::Validator.validate!(schema, demographics_data, validate_schema: true)

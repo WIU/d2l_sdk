@@ -21,11 +21,12 @@ end
 # via executing a POST http method using a predefined path and the new payload.
 def create_semester_data(semester_data)
     # Define a valid, empty payload and merge! with the semester_data. Print it.
-    payload = { 'Type' => 5, # Number:D2LID
-                'Name' => 'Winter 2013 Semester', # String
-                'Code' => '201701', # String #YearNUM where NUM{sp:01,su:06,fl:08}
-                'Parents' => [6606], # ARR of Number:D2LID
-              }.merge!(semester_data)
+    payload = { 
+      'Type' => 5, # Number:D2LID
+      'Name' => 'Winter 2013 Semester', # String
+      'Code' => '201701', # String #YearNUM where NUM{sp:01,su:06,fl:08}
+      'Parents' => [6606], # ARR of Number:D2LID
+    }.merge!(semester_data)
     # ap payload
     check_semester_data_validity(payload)
     path = "/d2l/api/lp/#{$lp_ver}/orgstructure/"

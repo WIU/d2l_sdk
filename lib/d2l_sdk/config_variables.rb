@@ -47,7 +47,7 @@ def get_config_var_current_org_value(variable_id)
 end
 
 # Retrieve all the org unit override values for a configuration variable.
-def get_all_config_var_org_unit_override_values(variable_id, bookmark='')
+def get_all_config_var_org_unit_override_values(variable_id, bookmark = '')
   path = "/d2l/api/lp/#{$lp_ver}/configVariables/#{variable_id}/values/orgUnits/"
   path += "?bookmark=#{bookmark}" if bookmark != ''
   _get(path)
@@ -91,7 +91,7 @@ end
 def set_config_var_org_value(variable_id, org_value)
   path = "/d2l/api/lp/#{$lp_ver}/configVariables/#{variable_id}/values/org"
   if org_value.is_a? String || org_value.nil?
-    payload = {"OrgValue" => org_value}
+    payload = { 'OrgValue' => org_value }
     _put(path, payload)
   else
     raise ArgumentError, "Argument 'org_value' is not a String or nil"
@@ -102,7 +102,7 @@ end
 def set_config_var_override_value(variable_id, org_unit_id, org_unit_value)
   path = "/d2l/api/lp/#{$lp_ver}/configVariables/#{variable_id}/values/orgUnits/#{org_unit_id}"
   if org_unit_value.is_a? String || org_unit_value.nil?
-    payload = {"OrgUnitValue" => org_unit_value}
+    payload = { 'OrgUnitValue' => org_unit_value }
     _put(path, payload)
   else
     raise ArgumentError, "Argument 'org_unit_value' is not a String or nil"
@@ -113,7 +113,7 @@ end
 def set_config_var_role_value(variable_id, role_id, role_value)
   path = "/d2l/api/lp/#{$lp_ver}/configVariables/#{variable_id}/values/roles/#{role_id}"
   if role_value.is_a? String || role_value.nil?
-    payload = {"RoleValue" => role_value}
+    payload = { 'RoleValue' => role_value }
     _put(path, payload)
   else
     raise ArgumentError, "Argument 'role_value' is not a String or nil"
@@ -124,7 +124,7 @@ end
 def set_config_var_system_value(variable_id, system_value)
   path = "/d2l/api/lp/#{$lp_ver}/configVariables/#{variable_id}/values/system"
   if system_value.is_a?(String) || system_value.nil?
-    payload = {"SystemValue" => system_value}
+    payload = { 'SystemValue' => system_value }
     _put(path, payload)
   else
     raise ArgumentError, "Argument 'system_value' is not a String or nil"
@@ -139,9 +139,9 @@ end
 
 # NOTE: UNSTABLE!!!
 # TODO: UNSTABLE!!! --Restore the default resolution strategy for an org unit configuration variable.
-def restore_default_org_unit_config_var_resolution(variable_id)
+def restore_default_org_unit_config_var_resolution(variable_id); end
   # DELETE /d2l/api/lp/(version)/configVariables/(variableId)/resolver
-end
+
 
 # NOTE: UNSTABLE!!!
 # REVIEW: Retrieve the resolution strategy for an org unit configuration variable.
@@ -152,9 +152,9 @@ end
 
 # NOTE: UNSTABLE!!!
 # TODO: UNSTABLE!!! --Update the resolution strategy for an org unit configuration variable.
-def update_org_unit_config_var_resolution(resolver_value)
+def update_org_unit_config_var_resolution(resolver_value); end
   # PUT /d2l/api/lp/(version)/configVariables/(variableId)/resolver
-end
+
 
 ################################################################################
 ###############################     TOOLS    ###################################
@@ -193,7 +193,7 @@ def check_and_create_update_status_payload(update_status)
   if update_status != true && update_status != false
     raise ArgumentError, 'update_status is not a boolean'
   end
-  payload = {"Status" => update_status} # Tools.UpdateStatus JSON data block
+  payload = { 'Status' => update_status } # Tools.UpdateStatus JSON data block
   payload
 end
 
@@ -262,11 +262,11 @@ def update_org_unit_level_tool_info(org_unit_id, tool_id, org_unit_information)
   path = "/d2l/api/lp/#{$lp_ver}/tools/orgUnits/#{org_unit_id}/#{tool_id}"
   payload =
   {
-    "ToolId" => "", # <string:D2LID>
-    "DisplayName" => "",  # <string> ## added with LP v1.6 API
-    "OrgUnitId" => 0, # D2LID:number
-    "Status" => false, # boolean
-    "CustomNavbarName" => "" # <string>
+    'ToolId' => '', # <string:D2LID>
+    'DisplayName' => '', # <string> ## added with LP v1.6 API
+    'OrgUnitId' => 0, # D2LID:number
+    'Status' => false, # boolean
+    'CustomNavbarName' => '' # <string>
   }.merge!(org_unit_information)
   check_org_unit_information_validity(payload) # NOTE: Check this later.
   _put(path, payload)

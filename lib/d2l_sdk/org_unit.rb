@@ -34,7 +34,7 @@ def delete_relationship_of_parent_with_child(parent_ou_id, child_ou_id)
 end
 
 def get_properties_of_all_org_units(org_unit_type = '', org_unit_code = '', org_unit_name = '',
-                                bookmark = '')
+                                    bookmark = '')
     path = "/d2l/api/lp/#{$lp_ver}/orgstructure/"
     path += "?orgUnitType=#{org_unit_type}" if org_unit_type != ''
     path += "?orgUnitCode=#{org_unit_code}" if org_unit_code != ''
@@ -165,9 +165,10 @@ def check_org_unit_data_validity(org_unit_data)
             'Type' => { 'type' => 'integer' },
             'Name' => { 'type' => 'string' },
             'Code' => { 'type' => 'string' },
-            'Parents' => { 'type' => 'array',
-                           'items' => { 'type' => 'integer', 'minItems' => 1 }
-                         }
+            'Parents' => { 
+              'type' => 'array',
+              'items' => { 'type' => 'integer', 'minItems' => 1 }
+            }
         }
     }
     JSON::Validator.validate!(schema, org_unit_data, validate_schema: true)
@@ -177,11 +178,12 @@ end
 def create_custom_org_unit(org_unit_data)
     # Requires the type to have the correct parent. This will work fine in this
     # sample, as the department (101) can have the parent Organiation (6606)
-    payload = { 'Type' => 101, # Number:D2LID
-                'Name' => 'custom_ou_name', # String
-                'Code' => 'custom_ou_code', # String
-                'Parents' => [6606], # Number:D2LID
-              }.merge!(org_unit_data)
+    payload = { 
+      'Type' => 101, # Number:D2LID
+      'Name' => 'custom_ou_name', # String
+      'Code' => 'custom_ou_code', # String
+      'Parents' => [6606], # Number:D2LID
+    }.merge!(org_unit_data)
     check_org_unit_data_validity(payload)
     path = "/d2l/api/lp/#{$lp_ver}/orgstructure/"
     # Requires: OrgUnitCreateData JSON block

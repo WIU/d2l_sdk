@@ -31,13 +31,13 @@ def check_forum_data_validity(forum_data)
       'type' => 'object',
       'required' => %w(Name Description ShowDescriptionInTopics StartDate
                        EndDate PostStartDate PostEndDate IsHidden
-                       IsLocked  RequiresApproval MustPostToParticipate
+                       IsLocked RequiresApproval MustPostToParticipate
                        DisplayInCalendar DisplayPostDatesInCalendar),
       'properties' => {
           'Name' => { 'type' => 'string' },
           'Description' => {
             'type' => 'object',
-            'properties'=>
+            'properties' =>
             {
               "Text" => { 'type' => "string" },
               "Html" => { 'type' => %w(string null) }
@@ -121,8 +121,6 @@ def update_forum(org_unit_id, forum_id, forum_data)
   check_forum_data_validity(payload)
   _put(path, payload)
 # RETURNS: Forum JSON block
-
-
 end
 
 ##################
@@ -169,7 +167,7 @@ def check_create_topic_data_validity(create_topic_data)
       'type' => 'object',
       'required' => %w(Name Description AllowAnonymousPosts StartDate
                        EndDate UnlockStartDate UnlockEndDate IsHidden
-                       IsLocked  RequiresApproval ScoreOutOf IsAutoScore
+                       IsLocked RequiresApproval ScoreOutOf IsAutoScore
                        IncludeNonScoredValues ScoringType MustPostToParticipate
                        RatingType DisplayInCalendar DisplayUnlockDatesInCalendar),
       'properties' =>
@@ -318,10 +316,10 @@ end
 def get_forum_topic_posts(org_unit_id, forum_id, topic_id, page_size = 0, page_number = 0,
                           threads_only = nil, thread_id = 0, sort = '')
     path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/?"
-    path += "pageSize=#{page_size}&" unless page_size == 0
-    path += "pageNumber=#{page_number}&" unless page_number == 0
+    path += "pageSize=#{page_size}&" unless page_size.zero?
+    path += "pageNumber=#{page_number}&" unless page_number.zero?
     path += "threadsOnly=#{threads_only}&" unless threads_only.nil?
-    path += "threadId=#{thread_id}&" unless thread_id == 0
+    path += "threadId=#{thread_id}&" unless thread_id.zero?
     path += "sort=#{sort}" unless sort == ''
     _get(path)
     # RETURNS: JSON array of Post data blocks containing the properties for all the post
@@ -408,7 +406,7 @@ def check_create_post_data_validity(create_post_data)
               "Type" => { 'type' => "string" }
             }
           },
-          'IsAnonymous' => { 'type' => 'boolean' },
+          'IsAnonymous' => { 'type' => 'boolean' }
       }
   }
   JSON::Validator.validate!(schema, create_post_data, validate_schema: true)
