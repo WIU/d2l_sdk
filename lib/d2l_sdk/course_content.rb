@@ -93,14 +93,14 @@ def add_child_to_module(org_unit_id, module_id, child ={}) # POST
       "Title" => "title_string", # String
       "ShortTitle" => "title_short_string", # String
       "Type" => 1,
-      "TopicType" => 3, #<number:TOPIC_T>
+      "TopicType" => 3, # <number:TOPIC_T>
       "Url" => "URL", # the URL you want to fetch when the user opens the link-type topic.
       "StartDate" => nil, # nil || string:UTCDateTime
       "EndDate" => nil, # nil || string:UTCDateTime
       "DueDate" => nil, # nil || string:UTCDateTime
       "IsHidden" => false,
       "IsLocked" => false,
-      "OpenAsExternalResource" => nil, #or boolean
+      "OpenAsExternalResource" => nil, # or boolean
       "description" => {
         "Text" => "",
         "HTML" => nil # -or- HTML formatted string
@@ -108,7 +108,7 @@ def add_child_to_module(org_unit_id, module_id, child ={}) # POST
       "MajorUpdate" => nil, # or bool
       "MajorUpdateText" => "MajorUpdateText",
       "ResetCompletionTracking" => nil, # or bool
-      "Duration" => nil, #nil, number
+      "Duration" => nil, # nil, number
     }.merge!(child["module"])
     _post(path, payload)
   # TODO: Add child file-type topics to a module
@@ -137,7 +137,7 @@ def check_content_module_validity(content_module)
               'properties'=>
               {
                 "Content" => "string",
-                "Type" => "string" #"Text|HTML"
+                "Type" => "string" # "Text|HTML"
               }
             }, # Added with LE v1.10 API
             'Duration' => { 'type' => %w(integer null) } # Added in LE's unstable contract as of LE v10.6.8
@@ -319,7 +319,7 @@ def create_isbn_org_unit_association(org_unit_id, isbn_association_data) # GET
   payload = {
     "OrgUnitId" => 0,
     "Isbn" => ""
-    #"IsRequired" => false ## optional
+    # "IsRequired" => false ## optional
   }.merge!(isbn_association_data)
   _post(query_string, payload)
   # Returns: a IsbnAssociation JSON data block specifying
@@ -527,19 +527,13 @@ end
 
 # TODO: --UNSTABLE-- Retrieve the user progress items in an org unit, for specific users or content topics.
 # _get "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/userprogress/"
-def get_progress_of_users
-
-end
+def get_progress_of_users; end
 
 # TODO: --UNSTABLE-- Retrieve one user’s progress within an org unit for a particular content topic.
 # _get "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/userprogress/#{topic_id}"
-def get_user_progress
-
-end
+def get_user_progress; end
 
 # TODO: --UNSTABLE-- Update a user progress item.
 # _post "/d2l/api/le/#{$le_ver}/#{org_unit_id}/content/userprogress/"
 # payload: UserProgressData
-def update_user_progress
-
-end
+def update_user_progress; end

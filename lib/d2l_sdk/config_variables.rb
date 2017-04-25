@@ -11,7 +11,7 @@ require_relative 'auth'
 
 # Retrieve the definitions for all the configuration variables the
 # user has access to view.
-def get_all_config_var_definitions(search='', bookmark='')
+def get_all_config_var_definitions(search = '', bookmark = '')
   path = "/d2l/api/lp/#{$lp_ver}/configVariables/definitions/"
   path += "?search=#{search}" if search != ''
   path += "?bookmark=#{bookmark}" if bookmark != ''
@@ -32,7 +32,7 @@ end
 # NOTE: These provide access to the values assigned to configuration
 #       variables in the running back-end service.
 
-#Retrieve the value summary for a configuration variable.
+# Retrieve the value summary for a configuration variable.
 def get_config_var_values(variable_id)
   path = "/d2l/api/lp/#{$lp_ver}/configVariables/#{variable_id}/values"
   _get(path)
@@ -70,7 +70,7 @@ def get_config_var_org_unit_effective_value(variable_id, org_unit_id)
 end
 
 # Retrieve all the role override values for a configuration variable.
-def get_all_config_var_org_unit_role_override_values(variable_id, bookmark='')
+def get_all_config_var_org_unit_role_override_values(variable_id, bookmark = '')
   path = "/d2l/api/lp/#{$lp_ver}/configVariables/#{variable_id}/values/roles/"
   path += "?bookmark=#{bookmark}" if bookmark != ''
   _get(path)
@@ -243,7 +243,7 @@ end
 def check_org_unit_information_validity(data_block)
     schema = {
         'type' => 'object',
-        'required' => %w(ToolId DisplayName OrgUnitId Status CustomNavbarName),
+        'required' => %w( ToolId DisplayName OrgUnitId Status CustomNavbarName ),
         'properties' => {
             'ToolId' => { 'type' => 'string' },
             'DisplayName' => { 'type' => 'string' },
@@ -263,7 +263,7 @@ def update_org_unit_level_tool_info(org_unit_id, tool_id, org_unit_information)
   payload =
   {
     "ToolId" => "", # <string:D2LID>
-    "DisplayName" => "",   # <string> ## added with LP v1.6 API
+    "DisplayName" => "",  # <string> ## added with LP v1.6 API
     "OrgUnitId" => 0, # D2LID:number
     "Status" => false, # boolean
     "CustomNavbarName" => "" # <string>

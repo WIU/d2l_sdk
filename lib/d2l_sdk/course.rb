@@ -11,7 +11,7 @@ require 'mime/types'
 # Then, a delete http method is executed using this path, deleting the course.
 def delete_course_by_id(org_unit_id)
     path = "/d2l/api/lp/#{$lp_ver}/courses/#{org_unit_id}" # setup user path
-    #ap path
+    # ap path
     _delete(path)
     puts '[+] Course data deleted successfully'.green
 end
@@ -317,6 +317,7 @@ def get_courses_by_code(org_unit_code)
   end
   courses
 end
+
 # Retrieves all courses that have a particular string (org_unit_name) within
 # their names. This is done by first defining that none are found yet and then
 # searching through all course  for ones that do have a particular string within

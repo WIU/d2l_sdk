@@ -504,7 +504,6 @@ def update_topic_post_current_user_rating(org_unit_id, forum_id, topic_id, post_
   end
 end
 
-
 # REVIEW: Update the read status of a particular post in a discussion forum topic.
 # => PUT /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/ReadStatus
 # RETURNS: ReadStatusData JSON data block

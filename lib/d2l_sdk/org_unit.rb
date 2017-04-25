@@ -399,7 +399,7 @@ def update_outype(outype_id, create_org_unit_type_data)
     'Description' => '',
     'SortOrder' => 0
   }.merge!(create_org_unit_type_data)
-  #validate schema
+  # validate schema
   check_create_org_unit_type_data_validity(payload)
   path = "/d2l/api/lp/#{$lp_ver}/outypes/#{outype_id}"
   _post(path, payload)

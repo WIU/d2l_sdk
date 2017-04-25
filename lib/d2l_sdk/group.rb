@@ -63,9 +63,9 @@ def validate_create_group_category_data(group_category_data)
             'type' => 'object',
             'properties'=>{
               "Content" => "string",
-              "Type" => "string" #"Text|HTML"
+              "Type" => "string" # "Text|HTML"
             }
-          }, #RichTextInput
+          }, # RichTextInput
           # if set to SingleUserMemberSpecificGroup, values set for NumberOfGroups
           # and MaxUsersPerGroup are IGNORED
           # ----------------------------------
@@ -77,16 +77,16 @@ def validate_create_group_category_data(group_category_data)
           # 4 = SelfEnrollmentNumberOfGroups
           # 5 = PeoplePerNumberOfGroupsSelfEnrollment
           # ----------------------------------
-          'EnrollmentStyle' => { 'type' => 'integer' }, #num GRPENROLL_T
+          'EnrollmentStyle' => { 'type' => 'integer' }, # num GRPENROLL_T
            # if non-nil, values for NumberOfGroups and MaxUsersPerGroup are IGNORED
           'EnrollmentQuantity' => { 'type' => %w(integer null) },
           'AutoEnroll' => { 'type' => 'boolean'},
           'RandomizeEnrollments' => { 'type' => 'boolean' },
-          'NumberOfGroups' => { 'type' => %w(integer null) }, #nil, 0, 1, 3, 5
-          'MaxUsersPerGroup' => { 'type' => %w(integer null) }, #1, 3, 5
+          'NumberOfGroups' => { 'type' => %w(integer null) }, # nil, 0, 1, 3, 5
+          'MaxUsersPerGroup' => { 'type' => %w(integer null) }, # 1, 3, 5
           # if MaxUsersPerGroup has a value, then set this to true.
           'AllocateAfterExpiry' => { 'type' => 'boolean' },
-          'SelfEnrollmentExpiryDate' => { 'type' => %w(string null) }, #UTCDATETIME
+          'SelfEnrollmentExpiryDate' => { 'type' => %w(string null) }, # UTCDATETIME
           # Prepends group prefix to GroupName and GroupCode
           'GroupPrefix' => { 'type' => %w(string null) }
       }

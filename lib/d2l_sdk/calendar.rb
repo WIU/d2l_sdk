@@ -177,7 +177,7 @@ end
 def create_event(org_unit_id, event_data)
   # POST /d2l/api/le/#{$le_ver}/#{org_unit_id}/calendar/event/
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/calendar/event/"
-  payload = { #Calendar.EventDataInfo
+  payload = { # Calendar.EventDataInfo
     "Title" => "",
     "Description" => "",
     "StartDateTime" => nil, # UTCDateTime || nil
