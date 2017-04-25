@@ -34,7 +34,6 @@ def get_course_by_id(org_unit_id)
     # returns: JSON object of the course
 end
 
-
 def get_course_image(org_unit_id, width = 0, height = 0)
   path = "/d2l/api/lp/#{$lp_ver}/courses/#{org_unit_id}/image"
   if width > 0 && height > 0
@@ -68,7 +67,6 @@ def check_course_data_validity(course_data)
     }
     JSON::Validator.validate!(schema, course_data, validate_schema: true)
 end
-
 
 # Creates the course based upon a merged result of the argument course_data
 # and a preformatted payload. This is then passed as a new payload in the
@@ -153,7 +151,7 @@ def update_course_image(org_unit_id, image_file_path)
   path = "/d2l/api/lp/#{$lp_ver}/courses/#{org_unit_id}/image"
   # (SCHEMA) Make sure file isnt > 2MB
   raise ArgumentError, "File referrenced by 'image_file_path' must be less than 1000KB." if File.size(image_file_path) > 2_000_000
-  raise ArgumentError, "File referrenced by 'image_file_path' is not a valid image." if MIME::Types.type_for(image_file_path).first.media_type.downcase != "image"
+  raise ArgumentError, "File referrenced by 'image_file_path' is not a valid image." if MIME::Types.type_for(image_file_path).first.media_type.downcase.casecmp("image").zero?
   _image_upload(path, image_file_path, "PUT")
   # PUT /d2l/api/lp/(version)/courses/(orgUnitId)/image
 end

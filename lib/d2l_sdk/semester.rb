@@ -21,7 +21,7 @@ end
 # via executing a POST http method using a predefined path and the new payload.
 def create_semester_data(semester_data)
     # Define a valid, empty payload and merge! with the semester_data. Print it.
-    payload = { 
+    payload = {
       'Type' => 5, # Number:D2LID
       'Name' => 'Winter 2013 Semester', # String
       'Code' => '201701', # String #YearNUM where NUM{sp:01,su:06,fl:08}

@@ -199,7 +199,7 @@ def validate_update_group_category_data(group_category_data)
           'Name' => { 'type' => 'string' },
           'Description' => {
             'type' => 'object',
-            'properties'=> {
+            'properties' => {
               "Content" => "string",
               "Type" => "string" # "Text|HTML"
             }
@@ -213,7 +213,7 @@ end
 
 # update a particular group category for an org unit
 def update_org_unit_group_category(org_unit_id, group_category_id, group_category_data)
-  payload = { 
+  payload = {
     'Name' => '', # String
     'Description' => {}, # RichTextInput
     'AutoEnroll' => false, # bool

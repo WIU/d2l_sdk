@@ -274,7 +274,7 @@ end
 # REVIEW: Add a group to the group restriction list for a discussion forum topic.
 # => PUT /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/groupRestrictions/
 def add_group_to_group_restriction_list(org_unit_id, forum_id, topic_id, group_id)
-  raise ArgumentError, "Argument 'group_id' is not numeric value." if !group_id.is_a? Numeric
+  raise ArgumentError, "Argument 'group_id' is not numeric value." unless group_id.is_a? Numeric
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/groupRestrictions/"
   payload = { "GroupRestriction" => { "GroupId" => group_id } }
   _put(path, payload)

@@ -19,7 +19,7 @@ def get_all_logs(date_range_start, date_range_end, search = '', log_level = '',
     path += "&loggerAssembly=#{logger_assembly}" if logger_assembly != ''
     path += "&userId=#{user_id}" if user_id != 0
     path += "&messageGroupId=#{message_group_id}" if message_group_id != 0
-    path += "&includeTraces=#{include_traces}" if include_traces != nil
+    path += "&includeTraces=#{include_traces}" unless include_traces.nil?
     path += "&orgUnitId=#{org_unit_id}" if org_unit_id != 0
     path += "&bookmark=#{bookmark}" if bookmark != ''
     ap path
@@ -51,7 +51,7 @@ end
 # retrieve identified log message
 def get_log_message(log_message_id, include_traces = nil)
   path = "/d2l/api/lp/#{$lp_ver}/logging/#{log_message_id}/"
-  path += "?includeTraces=#{include_traces}" if !include_traces.nil?
+  path += "?includeTraces=#{include_traces}" unless include_traces.nil?
   _get(path)
   # returns Message JSON block
 end

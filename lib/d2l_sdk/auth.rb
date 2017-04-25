@@ -85,7 +85,7 @@ end
 def _get_string(path, http_method)
     timestamp = Time.now.to_i
     signature = format_signature(path, http_method, timestamp)
-    unless path.include? "/auth/api/token"
+    if !path.include? "/auth/api/token"
       build_authenticated_uri_query_string(signature, timestamp)
     else
       # build authenticated query string not using typical schema

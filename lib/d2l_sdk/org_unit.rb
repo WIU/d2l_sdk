@@ -370,7 +370,7 @@ def check_create_org_unit_type_data_validity(org_unit_type_data)
             'Code' => { 'type' => 'string' },
             'Name' => { 'type' => 'string' },
             'Description' => { 'type' => 'string' },
-            'SortOrder' => { 'type' => 'integer'}
+            'SortOrder' => { 'type' => 'integer' }
         }
     }
     JSON::Validator.validate!(schema, org_unit_type_data, validate_schema: true)

@@ -56,7 +56,7 @@ end
 
 # Create a new section in a particular org unit.
 def create_org_unit_section(org_unit_id, section_data)
-  payload = { 
+  payload = {
     'Name' => '', # String
     'Code' => '', # String
     'Description' => {}, # RichTextInput -- e.g. {'Content'=>'x', 'Type'=>'y'}
@@ -84,8 +84,7 @@ end
 
 # Enroll a user in a section for a particular org unit.
 def enroll_user_in_org_unit_section(org_unit_id, section_id, section_data)
-  payload = { 'UserId' => 9999, # Number : D2LID
-            }.merge!(section_data)
+  payload = { 'UserId' => 9999 }.merge!(section_data) # Number : D2LID
   # Check the validity of the SectionEnrollment that is passed as a payload
   check_section_enrollment_validity(payload)
   path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/sections/#{section_id}/enrollments/"
@@ -144,7 +143,7 @@ end
 
 # Update information for a section in a particular org unit.
 def update_org_unit_section_info(org_unit_id, section_id, section_data)
-    payload = { 
+    payload = {
         'Name' => '', # String
         'Code' => '', # String
         'Description' => {}, # RichTextInput -- e.g. {'Content'=>'x', 'Type'=>'y'}

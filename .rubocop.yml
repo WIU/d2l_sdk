@@ -12,7 +12,7 @@ Style/IndentationWidth:
 # extremely long schema declarations.
 Metrics/LineLength:
   Enabled: true
-  Max: 150
+  Max: 166
 
 Metrics/MethodLength:
   Enabled: true
