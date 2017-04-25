@@ -14,6 +14,10 @@ Metrics/LineLength:
   Enabled: true
   Max: 150
 
+Metrics/MethodLength:
+  Enabled: true
+  Max: 90
+
 # Due to the presence of global API keys, this is disabled.
 Style/GlobalVars:
   Enabled: false
@@ -45,4 +49,7 @@ Style/AccessorMethodName:
   Enabled: false
 
 Style/FirstParameterIndentation:
+  Enabled: false
+
+Style/IndentAssignment:
   Enabled: false
