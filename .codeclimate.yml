@@ -1,0 +1,28 @@
+engines:
+  rubocop:
+    enabled: true
+  reek:
+    enabled: true
+  duplication:
+    enabled: false
+  markdownlint:
+    enabled: true
+  fixme:
+    enabled: false
+ratings:
+   paths:
+   - Gemfile.lock
+   - "**.rb"
+   - "**.md"
+
+exclude_paths:
+- "pkg/*"
+- "old/*"
+- "spec/*"
+- "tests/*"
+- "example_tests/*"
+- "example_scripts/*"
+- ".vscode/*"
+- "backup/*"
+- "bin/*"
+

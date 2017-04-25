@@ -1,0 +1,27 @@
+# Some of the methods are schema checkers and require
+# extremely long schema declarations.
+Metrics/LineLength:
+    Enabled: true
+    Max: 90
+
+# SDK requires some methods to include higher amounts of parameters
+Metrics/ParameterLists:
+  Enabled: true
+  Max: 8
+
+
+Style/IndentationWidth:
+  Enabled: false
+
+Metrics/LineLength:
+  Enabled: true
+  Max: 100
+
+# Due to the presence of global API keys, this is disabled.
+Style/GlobalVars:
+  Enabled: false
+
+# Indentation of comments.
+Style/CommentIndentation:
+  Enabled: false
+
