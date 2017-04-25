@@ -84,7 +84,7 @@ def add_child_to_module(org_unit_id, module_id, child ={}) # POST
         "Text" => "blank",
         "HTML" => ""
       },
-      "Duration" => nil, #nil, number
+      "Duration" => nil, # nil, number
     }.merge!(child["module"])
     _post(path, payload)
   # TODO: Add child link-type topics to a module

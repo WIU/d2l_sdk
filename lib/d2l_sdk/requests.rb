@@ -94,7 +94,7 @@ def _put(path, payload, isD2l = true)
       when 200
         return nil if response == ""
         JSON.parse(response)
-        #ap JSON.parse(response.body)
+        # ap JSON.parse(response.body)
       else
         display_response_code(response.code)
         ap JSON.parse(response.body) if $debug
@@ -130,7 +130,7 @@ def _learning_repository_upload(path, file, method)
     uri = URI.parse(auth_uri)
 
     boundary = "xxBOUNDARYxx"
-    header = {"Content-Type" => "multipart/form-data; boundary=#{boundary}"}
+    header = { "Content-Type" => "multipart/form-data; boundary=#{boundary}" }
     # setup the post body
     post_body = []
     post_body << "--#{boundary}\n"
@@ -161,7 +161,7 @@ def _course_package_upload(path, file, method)
     uri = URI.parse(auth_uri)
 
     boundary = "xxBOUNDARYxx"
-    header = {"Content-Type" => "multipart/form-data; boundary=#{boundary}"}
+    header = { "Content-Type" => "multipart/form-data; boundary=#{boundary}" }
     # setup the post body
     post_body = []
     post_body << "--#{boundary}\n"
@@ -187,12 +187,12 @@ def _image_upload(path, file, method)
   # file = the File's name in the directory.
   # method = POST or PUT
   # json = the json appended to the end of the request body
-  auth_uri = path
+  # auth_uri = path
   auth_uri = create_authenticated_uri(path, method)
   uri = URI.parse(auth_uri)
 
   boundary = "xxBOUNDARYxx"
-  header = {"Content-Type" => "multipart/form-data; boundary=#{boundary}"}
+  header = { "Content-Type" => "multipart/form-data; boundary=#{boundary}" }
   # setup the post body
   post_body = []
   post_body << "--#{boundary}\n"
@@ -217,12 +217,12 @@ def _ePortfolio_upload(path, file, method, description)
   # filename = the File's name in the directory.
   # method = POST or PUT
   # json = the json appended to the end of the request body
-  auth_uri = path
+  # auth_uri = path
   auth_uri = create_authenticated_uri(path, method)
   uri = URI.parse(auth_uri)
 
   boundary = "xxBOUNDARYxx"
-  header = {"Content-Type" => "multipart/form-data; boundary=#{boundary}"}
+  header =  "Content-Type" => "multipart/form-data; boundary=#{boundary}" }
   # setup the post body
   post_body = []
   post_body << "--#{boundary}\r\n"
@@ -257,12 +257,12 @@ def _course_content_upload(path, json, file, method)
   # filename = the File's name in the directory.
   # method = POST or PUT
   # json = the json appended to the end of the request body
-  auth_uri = path
+  # auth_uri = path
   auth_uri = create_authenticated_uri(path, method)
   uri = URI.parse(auth_uri)
 
   boundary = "xxBOUNDARYxx"
-  header = {"Content-Type" => "multipart/mixed; boundary=#{boundary}"}
+  header = { "Content-Type" => "multipart/mixed; boundary=#{boundary}" }
   # setup the post body
   post_body = []
   post_body << "--#{boundary}\r\n"
@@ -293,12 +293,12 @@ def _dropbox_upload(path, json, file, method)
   # filename = the File's name in the directory.
   # method = POST or PUT
   # json = the json appended to the end of the request body
-  auth_uri = path
+  # auth_uri = path
   auth_uri = create_authenticated_uri(path, method)
   uri = URI.parse(auth_uri)
 
   boundary = "xxBOUNDARYxx"
-  header = {"Content-Type" => "multipart/mixed; boundary=#{boundary}"}
+  header = { "Content-Type" => "multipart/mixed; boundary=#{boundary}" }
   # setup the post body
   post_body = []
   post_body << "--#{boundary}\r\n"
@@ -331,12 +331,12 @@ def _news_upload(path, json, files, method)
   # files = array of filenames
   # method = POST or PUT
   # json = the json appended to the end of the request body
-  auth_uri = path
+  # auth_uri = path
   auth_uri = create_authenticated_uri(path, method)
   uri = URI.parse(auth_uri)
 
   boundary = "xxBOUNDARYxx"
-  header = {"Content-Type" => "multipart/mixed; boundary=#{boundary}"}
+  header = { "Content-Type" => "multipart/mixed; boundary=#{boundary}" }
   # setup the post body
   post_body = []
   post_body << "--#{boundary}\r\n"
@@ -382,35 +382,23 @@ end
 # the docs.valence.desire2learn.com website.
 def display_response_code(code)
     case code
-    when 400
-        puts '[!] 400: Bad Request'
-    when 401
-        puts '[!] 401: Unauthorized'
-
-    when 403
-        print '[!] Error Code Forbidden 403: accessing the page or resource '\
-              'you were trying to reach is absolutely forbidden for some reason.'
-    when 404
-        puts '[!] 404: Not Found'
-    when 405
-        puts '[!] 405: Method Not Allowed'
-    when 406
-        puts 'Unacceptable Type'\
-    	    'Unable to provide content type matching the client\'s Accept header.'
-    when 412
-        puts '[!] 412: Precondition failed\n'\
-          'Unsupported or invalid parameters, or missing required parameters.'
-    when 415
-        puts '[!] 415: Unsupported Media Type'\
-          'A PUT or POST payload cannot be accepted.'
-    when 423
-        puts '[!] 423'
-    when 500
-        puts '[!] 500: General Service Error\n'\
-          'Empty response body. The service has encountered an unexpected'\
-            'state and cannot continue to handle your action request.'
-    when 504
-        puts '[!] 504: Service Error'
+    when 400 then puts '[!] 400: Bad Request'
+    when 401 then puts '[!] 401: Unauthorized'
+    when 403 then puts '[!] Error Code Forbidden 403: accessing the page or resource '\
+                       'you were trying to reach is absolutely forbidden for some reason.'
+    when 404 then puts '[!] 404: Not Found'
+    when 405 then puts '[!] 405: Method Not Allowed'
+    when 406 then puts 'Unacceptable Type'\
+    	                 'Unable to provide content type matching the client\'s Accept header.'
+    when 412 then puts '[!] 412: Precondition failed\n'\
+                       'Unsupported or invalid parameters, or missing required parameters.'
+    when 415 then puts '[!] 415: Unsupported Media Type'\
+                       'A PUT or POST payload cannot be accepted.'
+    when 423 then puts '[!] 423'
+    when 500 then puts '[!] 500: General Service Error\n'\
+                       'Empty response body. The service has encountered an unexpected'\
+                       'state and cannot continue to handle your action request.'
+    when 504 then puts '[!] 504: Service Error'
     end
 end
 
@@ -430,8 +418,7 @@ def get_product_supported_versions(product_code)
 end
 
 def get_latest_product_version(product_code)
-  begin
-    get_product_supported_versions(product_code)["SupportedVersions"][-1]
+  get_product_supported_versions(product_code)["SupportedVersions"][-1]
   rescue SocketError => e
     puts "\n[!] Error likely caused by an incorrect 'd2l_config.json' hostname value: #{e}"
     exit
@@ -462,8 +449,8 @@ def check_supported_version_request_validity(supported_version_request)
             'type' => "object",
             "properties" =>
             {
-              "Productcode" => {'type'=>"string"},
-              "Version" => {'type'=>"string"}
+              "Productcode" => { 'type' => "string" },
+              "Version" => { 'type' => "string" }
             }
         }
     }
