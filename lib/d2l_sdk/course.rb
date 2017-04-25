@@ -83,7 +83,7 @@ def create_course_data(course_data)
     # Define a valid, empty payload and merge! with the user_data. Print it.
     # can be an issue if more than one course template associated with
     # a course and the last course template parent to a course cannot be deleted
-    payload = { 
+    payload = {
         'Name' => '', # String
         'Code' => 'off_SEMESTERCODE_STARNUM', # String
         'Path' => '', # String
@@ -114,9 +114,9 @@ def check_updated_course_data_validity(course_data)
         'properties' => {
             'Name' => { 'type' => 'string' },
             'Code' => { 'type' => 'string' },
-            'StartDate' => { 'type' => ['string', "null"] },
-            'EndDate' => { 'type' => ['string', "null"] },
-            'IsActive' => { 'type' => "boolean" }
+            'StartDate' => { 'type' => %w(string null) },
+            'EndDate' => { 'type' => %w(string null) },
+            'IsActive' => { 'type' => 'boolean' }
         }
     }
     JSON::Validator.validate!(schema, course_data, validate_schema: true)
@@ -129,7 +129,7 @@ end
 # Utilize the second argument and perform a PUT action to replace the old data
 def update_course_data(course_id, new_data)
     # Define a valid, empty payload and merge! with the new data.
-    payload = { 
+    payload = {
       'Name' => '', # String
       'Code' => 'off_SEMESTERCODE_STARNUM', # String
       'StartDate' => nil, # String: UTCDateTime | nil
@@ -152,11 +152,8 @@ end
 def update_course_image(org_unit_id, image_file_path)
   path = "/d2l/api/lp/#{$lp_ver}/courses/#{org_unit_id}/image"
   # (SCHEMA) Make sure file isnt > 2MB
-  if File.size(image_file_path) > 2_000_000
-    raise ArgumentError, "File referrenced by 'image_file_path' must be less than 1000KB."
-  elsif MIME::Types.type_for(image_file_path).first.media_type.downcase != "image"
-    raise ArgumentError, "File referrenced by 'image_file_path' is not a valid image."
-  end
+  raise ArgumentError, "File referrenced by 'image_file_path' must be less than 1000KB." if File.size(image_file_path) > 2_000_000
+  raise ArgumentError, "File referrenced by 'image_file_path' is not a valid image." if MIME::Types.type_for(image_file_path).first.media_type.downcase != "image"
   _image_upload(path, image_file_path, "PUT")
   # PUT /d2l/api/lp/(version)/courses/(orgUnitId)/image
 end
@@ -189,13 +186,13 @@ def check_create_copy_job_request_validity(create_copy_job_request)
         'properties' => {
             'SourceOrgUnitId' => { 'type' => 'integer' },
             'Components' => {
-                'type' => ['array', "null"],
+                'type' => %w(array null),
                 'items' =>
                   {
-                      'type' => "string"
+                      'type' => 'string'
                   }
             },
-            'CallbackUrl' => { 'type' => ['string', 'null'] }
+            'CallbackUrl' => { 'type' => %w(string null) }
         }
     }
     JSON::Validator.validate!(schema, create_copy_job_request, validate_schema: true)
@@ -227,11 +224,10 @@ def create_new_copy_job_request(org_unit_id, create_copy_job_request)
   # Check each one of the components to see if they are valid Component types
   payload["Components"].each do |component|
     # If one of the components is not valid, cancel the CopyJobRequest operation
-    unless course_component?(key)
-      puts "'#{component}' specified is not a valid Copy Job Request component"
-      puts "Please retry with a valid course component such as 'Dropbox' or 'Grades'"
-      break
-    end
+    next if course_component?(key)
+    puts "'#{component}' specified is not a valid Copy Job Request component"
+    puts "Please retry with a valid course component such as 'Dropbox' or 'Grades'"
+    break
   end
   path = "/d2l/api/le/#{$le_ver}/import/#{org_unit_id}/copy/"
   _post(path, payload)
@@ -315,7 +311,7 @@ def get_courses_by_code(org_unit_code)
   all_courses = get_all_courses
   courses = []
   all_courses.each do |course|
-    courses.push(course) if course["Code"].downcase.include? "#{org_unit_code}".downcase
+    courses.push(course) if course["Code"].downcase.include? org_unit_code.to_s.downcase
   end
   courses
 end

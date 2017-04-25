@@ -165,7 +165,7 @@ def check_org_unit_data_validity(org_unit_data)
             'Type' => { 'type' => 'integer' },
             'Name' => { 'type' => 'string' },
             'Code' => { 'type' => 'string' },
-            'Parents' => { 
+            'Parents' => {
               'type' => 'array',
               'items' => { 'type' => 'integer', 'minItems' => 1 }
             }
@@ -178,7 +178,7 @@ end
 def create_custom_org_unit(org_unit_data)
     # Requires the type to have the correct parent. This will work fine in this
     # sample, as the department (101) can have the parent Organiation (6606)
-    payload = { 
+    payload = {
       'Type' => 101, # Number:D2LID
       'Name' => 'custom_ou_name', # String
       'Code' => 'custom_ou_code', # String

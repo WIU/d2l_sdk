@@ -99,7 +99,7 @@ end
 #### requirements of values
 # Create a new group category for an org unit.
 def create_org_unit_group_category(org_unit_id, group_category_data)
-  payload = { 
+  payload = {
     'Name' => '', # String
     'Description' => {}, # RichTextInput
     'EnrollmentStyle' => 0, # number : group_enroll
@@ -126,14 +126,14 @@ def validate_group_data(group_data)
       'properties' =>
       {
           'Name' => { 'type' => 'string' },
-          "Code" => {'type' => 'string'},
+          "Code" => { 'type' => 'string' },
           'Description' =>
           {
             'type' => 'object',
             'properties' =>
             {
               "Content" => "string",
-              "Type" => "string" #"Text|HTML"
+              "Type" => "string" # "Text|HTML"
             }
           }
       }
@@ -197,15 +197,14 @@ def validate_update_group_category_data(group_category_data)
       'required' => %w(Name Description AutoEnroll RandomizeEnrollments),
       'properties' => {
           'Name' => { 'type' => 'string' },
-          'Description' =>
-          {
+          'Description' => {
             'type' => 'object',
-            'properties'=>{
+            'properties'=> {
               "Content" => "string",
-              "Type" => "string" #"Text|HTML"
+              "Type" => "string" # "Text|HTML"
             }
           },
-          'AutoEnroll' => { 'type' => 'boolean'},
+          'AutoEnroll' => { 'type' => 'boolean' },
           'RandomizeEnrollments' => { 'type' => 'boolean' }
       }
   }
@@ -214,11 +213,12 @@ end
 
 # update a particular group category for an org unit
 def update_org_unit_group_category(org_unit_id, group_category_id, group_category_data)
-  payload = { 'Name' => '', # String
-              'Description' => {}, # RichTextInput
-              'AutoEnroll' => false, # bool
-              'RandomizeEnrollments' => false, # bool
-            }.merge!(group_category_data)
+  payload = { 
+    'Name' => '', # String
+    'Description' => {}, # RichTextInput
+    'AutoEnroll' => false, # bool
+    'RandomizeEnrollments' => false, # bool
+  }.merge!(group_category_data)
   # Requires: JSON block of GroupCategoryData
   validate_update_group_category_data(payload)
   path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/#{group_category_data}"

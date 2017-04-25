@@ -281,17 +281,14 @@ end
 # RETURNS: ?
 def update_user_activation_settings(user_id, is_active)
   # PUT /d2l/api/lp/(version)/users/(userId)/activation
-  if is_active != true && is_active != false
-    raise ArgumentError, 'is_active is not a boolean'
-  else
-    path = "/d2l/api/lp/#{$lp_ver}/users/#{user_id}/activation"
-    payload =
-    {
-      "IsActive" => is_active
-    }
-    _put(path, payload)
-    # RETURNS: ?
-  end
+  raise ArgumentError, 'is_active is not a boolean' if is_active != true && is_active != false
+  path = "/d2l/api/lp/#{$lp_ver}/users/#{user_id}/activation"
+  payload =
+  {
+    "IsActive" => is_active
+  }
+  _put(path, payload)
+  # RETURNS: ?
 end
 
 ########################
@@ -357,13 +354,10 @@ end
 # REVIEW: Update a particular user’s password.
 # NOTE: 400 errors are implicitly invalid password
 def update_user_password(user_id, user_password_data)
-  if user_password_data.is_a? String
-    path = "/d2l/api/lp/#{$lp_ver}/users/#{user_id}/password"
-    payload = { "Password" => user_password_data }
-    _put(path, payload)
-  else
-    raise ArgumentError, "Argument 'user_password_data' is not a String"
-  end
+  raise ArgumentError, "Argument 'user_password_data' is not a String" unless user_password_data.is_a? String
+  path = "/d2l/api/lp/#{$lp_ver}/users/#{user_id}/password"
+  payload = { "Password" => user_password_data }
+  _put(path, payload)
 end
 
 ########################
@@ -582,7 +576,7 @@ end
 # REVIEW: retrieve list of known LIS roles
 def get_lis_roles(lis_urn = "")
   path = "/d2l/api/lp/#{$lp_ver}/imsconfig/roles/"
-  path += "#{lis_urn}" if lis_urn != ""
+  path += lis_urn.to_s if lis_urn != ""
   _get(path)
   # returns array of LIS role data blocks
 end
@@ -591,8 +585,8 @@ end
 # REVIEW: retrieve mappings between user roles and LIS roles
 def get_user_role_lis_mappings_by_urn(lis_urn = "", d2lid = 0)
   path = "/d2l/api/lp/#{$lp_ver}/imsconfig/map/roles/"
-  path += "#{lis_urn}" if lis_urn != ""
-  path += "#{d2lid}" if d2lid != 0
+  path += lis_urn.to_s if lis_urn != ""
+  path += d2lid.to_s if d2lid != 0
   _get(path)
   # returns JSON array of LIS role mapping data blocks
 end
@@ -601,7 +595,7 @@ end
 # REVIEW: retrieve mapping between a user role and a LIS role
 def get_user_role_lis_mappings_by_role(role_id, d2lid = 0)
   path = "/d2l/api/lp/#{$lp_ver}/imsconfig/map/roles/#{role_id}"
-  path += "#{d2lid}" if d2lid != 0
+  path += d2lid.to_s if d2lid != 0
   _get(path)
   # returns JSON array of LIS role mapping data blocks
 end

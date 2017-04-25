@@ -165,10 +165,10 @@ def check_content_topic_validity(content_topic)
             'OpenAsExternalResource' => { 'type' => %w(boolean null) }, # Added with LE v1.6 API
             'Description' => { # Added with LE v1.10 API
               'type' => 'object',
-              'properties'=>
+              'properties' =>
               {
                 "Content" => "string",
-                "Type" => "string" #"Text|HTML"
+                "Type" => "string" # "Text|HTML"
               }
             },
             'MajorUpdate' => { 'type' => %w(boolean null) }, # Added with LE v1.12 API

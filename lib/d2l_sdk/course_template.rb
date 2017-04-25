@@ -50,7 +50,7 @@ def check_course_template_data_validity(course_template_data)
             'Name' => { 'type' => 'string' },
             'Code' => { 'type' => 'string' },
             'Path' => { 'type' => 'string' },
-            'ParentOrgUnitIds' => { 
+            'ParentOrgUnitIds' => {
                 'type' => 'array',
                 'items' => { 'type' => 'integer', 'minItems' => 1 }
             }
@@ -72,7 +72,7 @@ def create_course_template(course_template_data)
     #       if your back-end service has path enforcement set on for
     #       new org units, leave this property as an empty string
     # Define a valid, empty payload and merge! with the user_data. Print it.
-    payload = { 
+    payload = {
       'Name' => '', # String
       'Code' => 'off_SEMESTERCODE_STARNUM', # String
       'Path' => '', # String
@@ -113,7 +113,7 @@ end
 # /d2l/api/lp/(version)/coursetemplates/(orgUnitId) [PUT]
 def update_course_template(org_unit_id, new_data)
     # Define a valid, empty payload and merge! with the new data.
-    payload = { 
+    payload = {
       'Name' => '', # String
       'Code' => 'off_SEMESTERCODE_STARNUM', # String
     }.merge!(new_data)

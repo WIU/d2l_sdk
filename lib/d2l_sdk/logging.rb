@@ -51,7 +51,7 @@ end
 # retrieve identified log message
 def get_log_message(log_message_id, include_traces = nil)
   path = "/d2l/api/lp/#{$lp_ver}/logging/#{log_message_id}/"
-  path += "?includeTraces=#{include_traces}" if include_traces != nil
+  path += "?includeTraces=#{include_traces}" if !include_traces.nil?
   _get(path)
   # returns Message JSON block
 end

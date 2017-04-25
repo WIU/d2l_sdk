@@ -30,9 +30,9 @@ end
 # REVIEW: Retrieve the calling user’s calendar events, within a
 #       number of org units (see query parameter)
 # RETURNS: An ObjectListPage JSON block containing a list of EventDataInfo JSON data blocks.
-def get_current_user_calendar_events_by_org_units(association = nil, event_type = nil,
-                                                  org_unit_ids_csv, start_date_time,
-                                                  end_date_time)
+def get_current_user_calendar_events_by_org_units(org_unit_ids_csv, start_date_time,
+                                                  end_date_time, association = nil, 
+                                                  event_type = nil)
   path = "/d2l/api/le/#{$le_ver}/calendar/events/myEvents/"
   path += "?orgUnitIdsCSV=#{org_unit_ids_csv}"
   path += "&startDateTime=#{start_date_time}"
@@ -44,8 +44,8 @@ end
 
 # REVIEW: Retrieve the calling user’s events for a particular org unit.
 # RETURNS: An ObjectListPage JSON block containing a list of EventDataInfo JSON data blocks.
-def get_current_user_events_by_org_unit(association = nil, event_type = nil,
-                                        start_date_time, end_date_time)
+def get_current_user_events_by_org_unit(start_date_time, end_date_time,
+                                        association = nil, event_type = nil)
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/calendar/events/myEvents/"
   path += "&startDateTime=#{start_date_time}"
   path += "&endDateTime=#{end_date_time}"
@@ -56,8 +56,8 @@ end
 
 # REVIEW: Retrieve a count of calling user’s calendar events, within a number of org units
 # RETURNS: An ObjectListPage JSON block containing a list of EventCountInfo JSON data blocks.
-def get_calendar_event_count(association = nil, event_type = nil, org_unit_ids_csv,
-                             start_date_time, end_date_time)
+def get_calendar_event_count(org_unit_ids_csv, start_date_time, end_date_time,
+                              association = nil, event_type = nil)
   path = "/d2l/api/le/#{$le_ver}/calendar/events/myEvents/itemCounts/"
   path += "?orgUnitIdsCSV=#{org_unit_ids_csv}"
   path += "&startDateTime=#{start_date_time}"
@@ -70,8 +70,8 @@ end
 # REVIEW: Retrieve a count of calling user’s calendar events, within the
 #       provided org unit context.
 # RETURNS: An EventCountInfo JSON data block.
-def get_org_unit_calendar_event_count(association = nil, event_type = nil,
-                                      start_date_time, end_date_time)
+def get_org_unit_calendar_event_count(start_date_time, end_date_time,
+                                      association = nil, event_type = nil)
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/calendar/events/myEvents/itemCounts/"
   path += "?startDateTime=#{start_date_time}"
   path += "&endDateTime=#{end_date_time}"
@@ -223,7 +223,7 @@ end
 def update_event(org_unit_id, event_id, event_data)
   # PUT /d2l/api/le/#{$le_ver}/#{org_unit_id}/calendar/event/#{event_id}
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/calendar/event/#{event_id}"
-  payload = { #Calendar.EventDataInfo
+  payload = { # Calendar.EventDataInfo
     "Title" => "",
     "Description" => "",
     "StartDateTime" => nil, # UTCDateTime || nil

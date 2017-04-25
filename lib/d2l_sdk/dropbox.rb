@@ -47,7 +47,7 @@ def check_dropbox_folder_update_data_validity(dropbox_folder_update_data)
             },
             'Availability' =>
             {
-                'type' => ['object', "null"],
+                'type' => %w(object null),
                 'properties' =>
                   {
                       'StartDate' => { 'type' => 'string' },

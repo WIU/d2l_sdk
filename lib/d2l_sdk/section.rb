@@ -144,10 +144,11 @@ end
 
 # Update information for a section in a particular org unit.
 def update_org_unit_section_info(org_unit_id, section_id, section_data)
-    payload = { 'Name' => '', # String
-                'Code' => '', # String
-                'Description' => {}, # RichTextInput -- e.g. {'Content'=>'x', 'Type'=>'y'}
-              }.merge!(section_data)
+    payload = { 
+        'Name' => '', # String
+        'Code' => '', # String
+        'Description' => {}, # RichTextInput -- e.g. {'Content'=>'x', 'Type'=>'y'}
+    }.merge!(section_data)
     # Check the validity of the SectionData that is passed as a payload
     check_section_data_validity(payload)
     path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/sections/section_id"

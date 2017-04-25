@@ -109,11 +109,7 @@ def update_user_demographics(user_id, demographics_entry_data)
     [
       {
         "Name" => "placeholder_name",
-        "Values" =>
-        [
-          "value1",
-          "value2"
-        ]
+        "Values" => %w(value1 value2)
       }
     ]
   }.merge!(demographics_entry_data)
@@ -136,7 +132,7 @@ end
 # Retrieve list of all demographics fields
 def get_all_demographic_fields(bookmark = '')
   path = "/d2l/api/lp/#{$lp_ver}/demographics/fields/"
-  path += "#{bookmark}" if bookmark != ''
+  path += bookmark.to_s if bookmark != ''
   _get(path)
   # returns paged result set of DemographicsField JSON blocks
 end
@@ -173,7 +169,7 @@ def create_demographic_field(demographics_field)
     "Name" => "String",
     "Description" => "String",
     "DataTypeId" => "String:GUID"
-  }
+  }.merge!(demographics_field)
   check_create_demographics_field(payload)
   _post(path, payload)
   # RETURNS: fetch form of a DemographicsField JSON block
@@ -217,7 +213,7 @@ end
 # uses DataTypeId's as a paging control value
 def get_all_demographic_types(bookmark = '')
   path = "/d2l/api/lp/#{$lp_ver}/demographics/dataTypes/"
-  path += "#{bookmark}" if bookmark != ''
+  path += bookmark.to_s if bookmark != ''
   _get(path)
   # returns paged result set of DemographicsDataType JSON blocks
 end

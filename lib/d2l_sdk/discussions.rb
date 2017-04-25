@@ -176,7 +176,7 @@ def check_create_topic_data_validity(create_topic_data)
           'Description' =>
           {
             'type' => 'object',
-            'properties'=>
+            'properties' =>
             {
               "Content" => { 'type' => "string" },
               "Type" => { 'type' => "string" }
@@ -191,7 +191,7 @@ def check_create_topic_data_validity(create_topic_data)
           'IsLocked' => { 'type' => 'boolean' },
           'RequiresApproval' => { 'type' => 'boolean' }, #: <boolean>,
           'ScoreOutOf' => { 'type' => %w(integer null) },
-          'IsAutoScore' => { 'type' => 'boolean' },  # Added with LE API v1.11
+          'IsAutoScore' => { 'type' => 'boolean' }, # Added with LE API v1.11
           'IncludeNonScoredValues' => { 'type' => 'boolean' },
           'ScoringType' => { 'type' => %w(string null) },
           'MustPostToParticipate' => { 'type' => 'boolean' }, #: <boolean>,
@@ -274,20 +274,11 @@ end
 # REVIEW: Add a group to the group restriction list for a discussion forum topic.
 # => PUT /d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/groupRestrictions/
 def add_group_to_group_restriction_list(org_unit_id, forum_id, topic_id, group_id)
-  if !group_id.is_a? Numeric
-    raise ArgumentError, "Argument 'group_id' is not numeric value."
-  else
-    path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/groupRestrictions/"
-    payload =
-    {
-      "GroupRestriction" =>
-      {
-          "GroupId" => group_id
-      }
-    }
-    _put(path, payload)
-    # RETURNS: ??
-  end
+  raise ArgumentError, "Argument 'group_id' is not numeric value." if !group_id.is_a? Numeric
+  path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/groupRestrictions/"
+  payload = { "GroupRestriction" => { "GroupId" => group_id } }
+  _put(path, payload)
+  # RETURNS: ??
 end
 
 ##################
@@ -400,7 +391,7 @@ def check_create_post_data_validity(create_post_data)
           'Message' =>
           {
             'type' => 'object',
-            'properties'=>
+            'properties' =>
             {
               "Content" => { 'type' => "string" },
               "Type" => { 'type' => "string" }
@@ -461,14 +452,9 @@ end
 # RETURNS: ApprovalData JSON data block
 def update_topic_post_approval_status(org_unit_id, forum_id, topic_id, post_id, is_approved)
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Approval"
-  unless is_approved == true || is_approved == false
-    raise ArgumentError, "Argument 'is_approved' is not a boolean value."
-  else
-    payload = {
-      "IsApproved" => is_approved
-    }
-    _put(path, payload)
-  end
+  raise ArgumentError, "Argument 'is_approved' is not a boolean value." unless is_approved == true || is_approved == false
+  payload = { "IsApproved" => is_approved }
+  _put(path, payload)
 end
 
 
@@ -477,14 +463,9 @@ end
 # RETURNS: FlagData JSON data block
 def update_topic_post_flagged_status(org_unit_id, forum_id, topic_id, post_id, is_flagged)
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Flag"
-  unless is_flagged == true || is_flagged == false
-    raise ArgumentError, "Argument 'is_flagged' is not a boolean value."
-  else
-    payload = {
-      "IsFlagged" => is_flagged
-    }
-    _put(path, payload)
-  end
+  raise ArgumentError, "Argument 'is_flagged' is not a boolean value." unless is_flagged == true || is_flagged == false
+  payload = { "IsFlagged" => is_flagged }
+  _put(path, payload)
 end
 
 # REVIEW: Update the current user context’s rating for a particular post in a discussion forum topic.
@@ -492,14 +473,9 @@ end
 # RETURNS: UserRatingData JSON data block
 def update_topic_post_current_user_rating(org_unit_id, forum_id, topic_id, post_id, rating)
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/Rating/MyRating"
-  unless rating.is_a?(Numeric) || rating.nil?
-    raise ArgumentError, "Argument 'rating' is not a number or null value."
-  else
-    payload = {
-      "Rating" => rating
-    }
-    _put(path, payload)
-  end
+  raise ArgumentError, "Argument 'rating' is not a number or null value." unless rating.is_a?(Numeric) || rating.nil?
+  payload = { "Rating" => rating }
+  _put(path, payload)
 end
 
 # REVIEW: Update the read status of a particular post in a discussion forum topic.
@@ -507,14 +483,9 @@ end
 # RETURNS: ReadStatusData JSON data block
 def update_topic_post_read_status(org_unit_id, forum_id, topic_id, post_id, is_read)
   path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/discussions/forums/#{forum_id}/topics/#{topic_id}/posts/#{post_id}/ReadStatus"
-  unless is_read == true || is_read == false
-    raise ArgumentError, "Argument 'is_read' is not a boolean value."
-  else
-    payload = {
-      "IsRead" => is_read
-    }
-    _put(path, payload)
-  end
+  raise ArgumentError, "Argument 'is_read' is not a boolean value." unless is_read == true || is_read == false
+  payload = { "IsRead" => is_read }
+  _put(path, payload)
 end
 
 # REVIEW: Update a discussion forum topic post’s vote data for the current user.

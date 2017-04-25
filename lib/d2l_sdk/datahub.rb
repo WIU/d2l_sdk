@@ -174,7 +174,7 @@ end
 # Filter all enrollments and withdrawals in a csv file, excluding data
 # that is not properly formatted (based on ou code), not a current or
 # future course, or nil for their ou code.
-def filter_formatted_enrollments(csv_fname, regex_filter = //, instr_fname)
+def filter_formatted_enrollments(csv_fname,  instr_fname, regex_filter = //)
   # Create csv with 'filtered' pre-appended to '.csv' substring
   filtered_csv = csv_fname.gsub(/\.csv/, "filtered.csv")
   File.open(filtered_csv, 'w') do |file|

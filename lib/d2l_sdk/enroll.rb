@@ -43,10 +43,10 @@ def get_all_enrollments_of_current_user(bookmark = '', sort_by = '', is_active =
     path = "/d2l/api/lp/#{$lp_ver}/enrollments/myenrollments/"
     path += "?bookmark=#{bookmark}" if bookmark != ''
     path += "?sortBy=#{sort_by}" if sort_by != ''
-    path += "?isActive=#{is_active}" if is_active != nil
+    path += "?isActive=#{is_active}" if !is_active.nil?
     path += "?startDateTime=#{start_date_time}" if start_date_time != ''
     path += "?endDateTime=#{end_date_time}" if end_date_time != ''
-    path += "?canAccess=#{can_access}" if can_access != nil
+    path += "?canAccess=#{can_access}" if !can_access.nil?
     _get(path)
     # Returns: paged result set containing the resulting MyOrgUnitInfo data blocks
 end
@@ -120,7 +120,7 @@ end
 
 # Create a new enrollment for a user.
 def create_user_enrollment(course_enrollment_data)
-    payload = { 
+    payload = {
       'OrgUnitId' => '', # String
       'UserId' => '', # String
       'RoleId' => '', # String
