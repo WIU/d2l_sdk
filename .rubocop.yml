@@ -2,7 +2,7 @@
 # SDK requires some methods to include higher amounts of parameters
 Metrics/ParameterLists:
   Enabled: true
-  Max: 8
+  Max: 12
 
 
 Style/IndentationWidth:
@@ -55,4 +55,13 @@ Style/IndentAssignment:
   Enabled: false
 
 Style/StringLiterals:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/PerceievedComplexity:
   Enabled: false
