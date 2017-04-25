@@ -2,11 +2,11 @@ engines:
   rubocop:
     enabled: true
   reek:
-    enabled: true
+    enabled: false
   duplication:
     enabled: false
   markdownlint:
-    enabled: true
+    enabled: false
   fixme:
     enabled: false
 ratings:

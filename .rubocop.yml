@@ -1,8 +1,3 @@
-# Some of the methods are schema checkers and require
-# extremely long schema declarations.
-Metrics/LineLength:
-    Enabled: true
-    Max: 90
 
 # SDK requires some methods to include higher amounts of parameters
 Metrics/ParameterLists:
@@ -13,9 +8,11 @@ Metrics/ParameterLists:
 Style/IndentationWidth:
   Enabled: false
 
+# Some of the methods are schema checkers and require
+# extremely long schema declarations.
 Metrics/LineLength:
   Enabled: true
-  Max: 100
+  Max: 150
 
 # Due to the presence of global API keys, this is disabled.
 Style/GlobalVars:
@@ -25,3 +22,27 @@ Style/GlobalVars:
 Style/CommentIndentation:
   Enabled: false
 
+# ! Checks trailing blank lines and final newline.
+Style/TrailingBlankLines:
+  Enabled: false
+
+Style/EmptyLines:
+  Enabled: false
+
+Style/StringLiters:
+   Enabled: false
+
+Style/IndentHash:
+  Enabled: false
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/DefWithParantheses:
+  Enabled: false
+
+Style/AccessorMethodName:
+  Enabled: false
+
+Style/FirstParameterIndentation:
+  Enabled: false
