@@ -176,7 +176,7 @@ def validate_group_enrollment_data(group_enrollment_data)
       'properties' => {
           'UserId' => { 'type' => 'integer' }
       }
-  }
+  }.merge!(group_enrollment_data)
   JSON::Validator.validate!(schema, course_data, validate_schema: true)
 end
 
@@ -221,7 +221,7 @@ def update_org_unit_group_category(org_unit_id, group_category_id, group_categor
   }.merge!(group_category_data)
   # Requires: JSON block of GroupCategoryData
   validate_update_group_category_data(payload)
-  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/#{group_category_data}"
+  path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/groupcategories/#{group_category_id}"
   _put(path, payload)
   # Returns a GroupCategoryData JSON block, in the Fetch form, of updated grp. cat.
 end
