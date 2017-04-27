@@ -164,13 +164,13 @@ def create_org_unit_grade_object(org_unit_id, grade_object, type)
 end
 
 # TODO: Update a specific grade object.
-#def update_org_unit_grade_object(org_unit_id, grade_object)
+# def update_org_unit_grade_object(org_unit_id, grade_object)
     # NOTE: if new name, it must be Unique
     # NOTE: must be grade object of type numeric, passfail, selectbox, or text
     # PUT /d2l/api/le/(version)/(orgUnitId)/grades/(gradeObjectId)
     # Return: This action returns a GradeObject JSON block for the grade object
     # that the service just updated.
-#end
+# end
 
 ########################
 # GRADE CATEGORIES:#####

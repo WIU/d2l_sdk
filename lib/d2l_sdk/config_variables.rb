@@ -90,7 +90,7 @@ end
 # REVIEW: Set a new org value for a configuration variable.
 def set_config_var_org_value(variable_id, org_value)
   path = "/d2l/api/lp/#{$lp_ver}/configVariables/#{variable_id}/values/org"
-  raise( ArgumentError, "Argument 'org_value' is not a String or nil" ) unless org_value.is_a?(String) || org_value.nil?
+  raise(ArgumentError, "Argument 'org_value' is not a String or nil") unless org_value.is_a?(String) || org_value.nil?
   payload = { 'OrgValue' => org_value }
   _put(path, payload)
 end
@@ -98,7 +98,7 @@ end
 # REVIEW: Set a new org unit override value for a configuration variable.
 def set_config_var_override_value(variable_id, org_unit_id, org_unit_value)
   path = "/d2l/api/lp/#{$lp_ver}/configVariables/#{variable_id}/values/orgUnits/#{org_unit_id}"
-  raise( ArgumentError, "Argument 'org_unit_value' is not a String or nil" ) unless org_unit_value.is_a?(String) || org_unit_value.nil?
+  raise(ArgumentError, "Argument 'org_unit_value' is not a String or nil") unless org_unit_value.is_a?(String) || org_unit_value.nil?
   payload = { 'OrgUnitValue' => org_unit_value }
   _put(path, payload)
 end
@@ -106,7 +106,7 @@ end
 # REVIEW: Set a new role override value for a configuration variable.
 def set_config_var_role_value(variable_id, role_id, role_value)
   path = "/d2l/api/lp/#{$lp_ver}/configVariables/#{variable_id}/values/roles/#{role_id}"
-  raise( ArgumentError, "Argument 'role_value' is not a String or nil" ) unless role_value.is_a? String || role_value.nil?
+  raise(ArgumentError, "Argument 'role_value' is not a String or nil") unless role_value.is_a? String || role_value.nil?
   payload = { 'RoleValue' => role_value }
   _put(path, payload)
 end
@@ -114,7 +114,7 @@ end
 # REVIEW: Set a new system value for a configuration variable.
 def set_config_var_system_value(variable_id, system_value)
   path = "/d2l/api/lp/#{$lp_ver}/configVariables/#{variable_id}/values/system"
-  raise( ArgumentError, "Argument 'system_value' is not a String or nil" ) unless system_value.is_a?(String) || system_value.nil?
+  raise(ArgumentError, "Argument 'system_value' is not a String or nil") unless system_value.is_a?(String) || system_value.nil?
   payload = { 'SystemValue' => system_value }
   _put(path, payload)
 end

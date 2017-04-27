@@ -272,18 +272,18 @@ end
 
 # TODO: Retrieve the colour scheme for an org unit.
 # RETURNS: ColourScheme JSON data block containing the org unit’s current colour scheme.
-#def get_org_unit_color_scheme(org_unit_id)
+# def get_org_unit_color_scheme(org_unit_id)
 #  path = "/d2l/api/lp/#{$lp_ver}/orgstructure/#{org_unit_id}/colours"
   # RETURNS: ColourScheme JSON data block containing the org unit’s current colour scheme.
-#end
+# end
 
 # TODO: Set a new colour scheme for an org unit.
 # INPUT: JSON PARAM of type +colourScheme+ (OrgUnitEditor.ColourScheme)
 # RETURNS: ColourScheme JSON data block containing the org unit’s new colour scheme.
-#def set_new_org_unit_color_scheme(org_unit_id, colour_scheme)
+# def set_new_org_unit_color_scheme(org_unit_id, colour_scheme)
   # PUT /d2l/api/lp/(version)/orgstructure/(orgUnitId)/colours
   # RETURNS: ColourScheme JSON data block containing the org unit’s new colour scheme.
-#end
+# end
 
 ########################
 # RECYCLE BIN:##########
