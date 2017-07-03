@@ -23,7 +23,7 @@ end
 
 # Retrieve the enrolled users in the classlist for an org unit
 def get_enrolled_users_in_classlist(org_unit_id)
-    path = "/d2l/api/lp/#{$lp_ver}/#{org_unit_id}/classlist/"
+    path = "/d2l/api/le/#{$lp_ver}/#{org_unit_id}/classlist/"
     _get(path)
     # Returns: JSON array of ClasslistUser data blocks.
 end
