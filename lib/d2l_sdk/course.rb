@@ -166,7 +166,7 @@ end
 ########################
 
 def get_copy_job_request_status(org_unit_id, job_token)
-    path = "/d2l/api/le/#{le_ver}/import/#{org_unit_id}/copy/#{job_token}"
+    path = "/d2l/api/le/#{$le_ver}/import/#{org_unit_id}/copy/#{job_token}"
     _get(path)
     # returns GetCopyJobResponse JSON block
     # GetImportJobResponse:
@@ -252,7 +252,7 @@ end
 ########################
 
 def get_course_import_job_request_status(org_unit_id, job_token)
-  path = "/d2l/api/le/#{le_ver}/import/#{org_unit_id}/imports/#{job_token}"
+  path = "/d2l/api/le/#{$le_ver}/import/#{org_unit_id}/imports/#{job_token}"
   _get(path)
   # returns GetImportJobResponse JSON block
   # example:
@@ -261,7 +261,7 @@ def get_course_import_job_request_status(org_unit_id, job_token)
 end
 
 def get_course_import_job_request_logs(org_unit_id, job_token, bookmark = '')
-  path = "/d2l/api/le/#{le_ver}/import/#{org_unit_id}/imports/#{job_token}/logs"
+  path = "/d2l/api/le/#{$le_ver}/import/#{org_unit_id}/imports/#{job_token}/logs"
   path += "?bookmark=#{bookmark}" if bookmark != ''
   _get(path)
   # returns PAGED RESULT of ImportCourseLog JSON blocks following bookmark param
@@ -270,7 +270,7 @@ end
 # REVIEW: Create a new course import job request.
 # INPUT: simple file upload process -- using "course package" as the uploaded file
 def create_course_import_request(org_unit_id, file_path, callback_url = '')
-    path = "/d2l/le/#{le_ver}/import/#{org_unit_id}/imports/"
+    path = "/d2l/le/#{$le_ver}/import/#{org_unit_id}/imports/"
     path += "?callbackUrl=#{callback_url}" if callback_url != ''
     # TODO: (SCHEMA) Find out WTH a 'course package' entails as far as standards.
     _course_package_upload(path, file_path, "POST")

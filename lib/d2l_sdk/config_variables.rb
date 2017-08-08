@@ -134,7 +134,7 @@ def restore_default_org_unit_config_var_resolution(variable_id); end
 # NOTE: UNSTABLE!!!
 # REVIEW: Retrieve the resolution strategy for an org unit configuration variable.
 def get_config_var_resolver(variable_id)
-  path = "/d2l/api/lp/#{lp_ver}/configVariables/#{variable_id}/resolver"
+  path = "/d2l/api/lp/#{$lp_ver}/configVariables/#{variable_id}/resolver"
   _get(path)
 end
 
