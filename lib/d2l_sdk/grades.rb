@@ -280,7 +280,7 @@ end
 # Return: This action returns a GradeValue JSON block containing the final
 # calculated grade value for the provided user.
 def get_user_final_grade(org_unit_id, user_id, grade_type = '')
-    path = "/d2l/api/le/#{le_ver}/#{org_unit_id}/grades/final/values/#{user_id}"
+    path = "/d2l/api/le/#{$le_ver}/#{org_unit_id}/grades/final/values/#{user_id}"
     path += "?gradeType=#{grade_type}" if grade_type != ''
     _get(path)
     # Return: This action returns a GradeValue JSON block containing the final
