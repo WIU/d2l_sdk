@@ -14,5 +14,6 @@ require_relative 'd2l_sdk/logging' # Checked
 require_relative 'd2l_sdk/course_content' # Checked
 require_relative 'd2l_sdk/grades' # Checked -- added 3/21
 require_relative 'd2l_sdk/news' # Checked -- added 3/21
+require_relative 'd2l_sdk/dropbox' # added 8/10
 
 puts "d2l_sdk loaded"
